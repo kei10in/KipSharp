@@ -18,9 +18,8 @@ namespace KipTest
             pc.Add(new PrintSchemaProperty(psk.DisplayName, "value"));
 
             var p = pc.Property(psk.DisplayName);
-            var s = p.Value.AsString();
 
-            Assert.Equal("value", s);
+            Assert.Equal("value", p.Value);
         }
     }
 }
