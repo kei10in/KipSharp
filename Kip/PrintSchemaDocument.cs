@@ -122,5 +122,25 @@ namespace Kip
         {
             return _value as string;
         }
-}
+
+        public static implicit operator PrintSchemaValue(int value)
+        {
+            return new PrintSchemaValue(value);
+        }
+
+        public static implicit operator PrintSchemaValue(float value)
+        {
+            return new PrintSchemaValue(value);
+        }
+
+        public static implicit operator PrintSchemaValue(XName value)
+        {
+            return new PrintSchemaValue(value);
+        }
+
+        public static implicit operator PrintSchemaValue(string value)
+        {
+            return new PrintSchemaValue(value);
+        }
+    }
 }
