@@ -4,11 +4,29 @@ using xsi = Kip.XmlSchemaInstance;
 using xsd = Kip.XmlSchema;
 using System;
 using System.Xml;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kip
 {
     public class PrintSchemaCapabilities
     {
+        List<PrintSchemaProperty> _properties;
+
+        public PrintSchemaCapabilities()
+        {
+            _properties = new List<PrintSchemaProperty>();
+        }
+
+        public void Add(PrintSchemaProperty property)
+        {
+            _properties.Add(property);
+        }
+
+        public PrintSchemaProperty Property(XName name)
+        {
+            return _properties.FirstOrDefault(p => p.Name == name);
+        }
     }
 
     public class PrintSchemaFeature
@@ -21,6 +39,21 @@ namespace Kip
 
     public class PrintSchemaProperty
     {
+        public PrintSchemaProperty(XName name, PrintSchemaValue value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public XName Name
+        {
+            get;
+        }
+
+        public PrintSchemaValue Value
+        {
+            get;
+        }
     }
 
     public class PrintSchemaScoredProperty
