@@ -35,16 +35,28 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Content Include="PrintSchemaKeywords.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PrintSchemaKeywords.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="PrintSchemaDocument.cs" />
     <Compile Include="PrintSchemaFramework.cs" />
+    <Compile Include="PrintSchemaKeywords.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PrintSchemaKeywords.tt</DependentUpon>
+    </Compile>
     <Compile Include="PrintSchemaReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlSchema.cs" />
     <Compile Include="XmlSchemaInstance.cs" />
     <Compile Include="XmlUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
