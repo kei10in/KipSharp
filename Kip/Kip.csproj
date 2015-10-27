@@ -37,9 +37,10 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="PrintSchemaDocument.cs" />
     <Compile Include="PrintSchemaFramework.cs" />
-    <Compile Include="PrintSchemaLoader.cs" />
+    <Compile Include="PrintSchemaReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlSchema.cs" />
     <Compile Include="XmlSchemaInstance.cs" />
