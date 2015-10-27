@@ -61,7 +61,7 @@ namespace Kip
 
     }
 
-    public class PrintSchemaValue
+    public sealed class PrintSchemaValue
     {
         object _value;
 
@@ -156,6 +156,21 @@ namespace Kip
             return _value as string;
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as PrintSchemaValue);
+        }
+
+        public bool Equals(PrintSchemaValue value)
+        {
+            return this == value;
+        }
+
+        public override int GetHashCode()
+        {
+            return _value.GetHashCode();
+        }
+
         public static implicit operator PrintSchemaValue(int value)
         {
             return new PrintSchemaValue(value);
@@ -174,6 +189,26 @@ namespace Kip
         public static implicit operator PrintSchemaValue(string value)
         {
             return new PrintSchemaValue(value);
+        }
+
+        public static bool operator ==(PrintSchemaValue v1, PrintSchemaValue v2)
+        {
+            if (ReferenceEquals(v1, v2)) return true;
+            if ((object)v1 == null || (object)v2 == null) return false;
+
+            if (v1.ValueType != v2.ValueType) return false;
+
+            var type = v1.ValueType;
+
+            if (type == xsd.Integer) return v1.AsInt() == v2.AsInt();
+            else if (type == xsd.Decimal) return v1.AsFloat() == v2.AsFloat();
+            else if (type == xsd.QName) return v1.AsXName() == v2.AsXName();
+            else return v1.AsString() == v2.AsString();
+        }
+
+        public static bool operator !=(PrintSchemaValue v1, PrintSchemaValue v2)
+        {
+            return !(v1 == v2);
         }
     }
 }
