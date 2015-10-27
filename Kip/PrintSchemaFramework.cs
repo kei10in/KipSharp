@@ -19,5 +19,15 @@ namespace Kip
 
         public static readonly XName SelectionType = Url + "SelectionType";
         public static readonly XName IdentityOption = Url + "IdentityOpiton";
+
+        public static readonly XName DataType = Url + "DataType";
+        public static readonly XName DefaultValue = Url + "DefaultValue";
+        public static readonly XName MaxLength = Url + "MaxLength";
+        public static readonly XName MinLength = Url + "MinLength";
+        public static readonly XName MaxValue = Url + "MaxValue";
+        public static readonly XName MinValue = Url + "MinValue";
+        public static readonly XName Mandatory = Url + "Mandatory";
+        public static readonly XName UnitType = Url + "UnitType";
+
     }
 }
