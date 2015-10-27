@@ -12,5 +12,8 @@ namespace Kip
         public static readonly XName Property = Url + "Property";
         public static readonly XName ScoredProperty = Url + "ScoredProperty";
         public static readonly XName Value = Url + "Value";
+
+        public static readonly XName SelectionType = Url + "SelectionType";
+        public static readonly XName IdentityOption = Url + "IdentityOpiton";
     }
 }
