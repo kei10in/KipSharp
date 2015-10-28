@@ -17,7 +17,7 @@ namespace KipTest
     {
 
         [Fact]
-        public void MyTestMethod()
+        public void ReadSimpleFeatureOptionStructure()
         {
             Assembly assembly = this.GetType().GetTypeInfo().Assembly;
             var names = assembly.GetManifestResourceNames();
