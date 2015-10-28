@@ -44,6 +44,37 @@ namespace Kip
             writer.WriteAttributeString("xmlns", "xsi", null, xsi.Url.NamespaceName);
             writer.WriteAttributeString("xmlns", "xsd", null, xsd.Url.NamespaceName);
 
+            foreach (var p in Properties())
+            {
+                writer.WriteStartElement(psf.Property.LocalName, psf.Url.NamespaceName);
+                writer.WriteAttributeString("name", p.Name.ToQName(writer));         
+
+                writer.WriteStartElement(psf.Value.LocalName, psf.Url.NamespaceName);
+                writer.WriteStartAttribute(xsi.Type.LocalName, xsi.Url.NamespaceName);
+                writer.WriteValue(p.Value.ValueType.ToQName(writer));
+                writer.WriteEndAttribute();
+
+                if (p.Value.ValueType == xsd.Integer)
+                {
+                    writer.WriteValue(p.Value.AsInt().GetValueOrDefault());
+                }
+                else if (p.Value.ValueType == xsd.Decimal)
+                {
+                    writer.WriteValue(p.Value.AsFloat().GetValueOrDefault());
+                }
+                else if (p.Value.ValueType == xsd.QName)
+                {
+                    writer.WriteValue(p.Value.AsXName().ToQName(writer));
+                }
+                else
+                {
+                    writer.WriteValue(p.Value.AsString());
+                }
+
+                writer.WriteEndElement();  // Value
+                writer.WriteEndElement();  // Property
+            }
+
             writer.WriteEndElement();
             writer.Flush();
         }

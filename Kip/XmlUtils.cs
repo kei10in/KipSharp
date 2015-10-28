@@ -42,6 +42,11 @@ namespace Kip
             return ns + name;
         }
 
+        public static string ToQName(this XName self, XmlWriter writer)
+        {
+            return writer.LookupPrefix(self.NamespaceName) + ":" + self.LocalName;
+        }
+
         public static string ToQName(this XName self, XElement context)
         {
             return context.GetPrefixOfNamespace(self.Namespace) + ":" + self.LocalName;
