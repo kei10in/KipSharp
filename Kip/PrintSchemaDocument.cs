@@ -71,7 +71,7 @@ namespace Kip
 
     public class Property
     {
-        public Property(XName name, Value value)
+        public Property(XName name, Value value = null)
         {
             Name = name;
             Value = value;
@@ -85,6 +85,7 @@ namespace Kip
         public Value Value
         {
             get;
+            set;
         }
     }
 

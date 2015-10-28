@@ -51,9 +51,9 @@ namespace Kip
             return pc;
         }
 
-        public static IEnumerable<object> ReadChildren(XmlReader reader)
+        public static IEnumerable<PrintSchemaElement> ReadChildren(XmlReader reader)
         {
-            List<object> result = new List<object>();
+            List<PrintSchemaElement> result = new List<PrintSchemaElement>();
 
             while (reader.Read())
             {
@@ -70,7 +70,7 @@ namespace Kip
             return null;
         }
 
-        public static object ReadElement(XmlReader reader)
+        public static PrintSchemaElement ReadElement(XmlReader reader)
         {
             XName tagName = reader.XName();
             if (tagName == psf.Feature) return ReadFeature(reader);
@@ -93,19 +93,19 @@ namespace Kip
             return null;
         }
 
-        public static Feature ReadFeature(XmlReader reader)
+        public static PrintSchemaElement ReadFeature(XmlReader reader)
         {
             reader.Skip();
             return null;
         }
 
-        public static Option ReadOption(XmlReader reader)
+        public static PrintSchemaElement ReadOption(XmlReader reader)
         {
             reader.Skip();
             return null;
         }
 
-        public static Property ReadProperty(XmlReader reader)
+        public static PrintSchemaElement ReadProperty(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
             {
@@ -114,21 +114,17 @@ namespace Kip
             }
 
             var name = reader.ValueAsXName();
-            Value value = null;
-            var children = ReadChildren(reader);
-            foreach (var e in ReadChildren(reader))
+            var property = new PrintSchemaProperty(name);
+
+            foreach (var child in ReadChildren(reader))
             {
-                var v = e as Value;
-                if (v != null)
-                {
-                    value = v;
-                }
+                child.AddTo(property);
             }
 
-            return new Property(name, value);
+            return property;
         }
 
-        private static Value ReadValue(XmlReader reader)
+        private static PrintSchemaElement ReadValue(XmlReader reader)
         {
             XName type = null;
 
@@ -145,23 +141,23 @@ namespace Kip
             // move to text node
             reader.Read();
 
-            Value value = null;
+            PrintSchemaValue value = null;
 
             if (type == xsd.Integer)
             {
-                value = new Value(reader.Value.AsInt32());
+                value = new PrintSchemaValue(reader.Value.AsInt32());
             }
             else if (type == xsd.Decimal)
             {
-                value = new Value(reader.Value.AsFloat());
+                value = new PrintSchemaValue(reader.Value.AsFloat());
             }
             else if (type == xsd.QName)
             {
-                value = new Value(reader.ValueAsXName());
+                value = new PrintSchemaValue(reader.ValueAsXName());
             }
             else
             {
-                value = new Value(reader.Value);
+                value = new PrintSchemaValue(reader.Value);
             }
 
             while (reader.Read())
@@ -177,6 +173,174 @@ namespace Kip
             }
 
             return value;
+        }
+    }
+
+    public class InvalidChildElementException : Exception
+    {
+        public InvalidChildElementException()
+        {
+        }
+
+        public InvalidChildElementException(string message)
+            : base(message)
+        {
+        }
+
+        public InvalidChildElementException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    public interface PrintSchemaElement
+    {
+        void Add(Feature feature);
+
+        void Add(Option feature);
+
+        void Add(ParameterDef parameterDef);
+
+        void Add(ParameterInit parameterInit);
+
+        void Add(ParameterRef parameterRef);
+
+        void Add(Property property);
+
+        void Add(ScoredProperty scoredProperty);
+
+        void Add(Value value);
+
+        void AddTo(PrintSchemaElement element);
+    }
+
+    public abstract class DefaultPrintSchemaElement : PrintSchemaElement
+    {
+        public abstract string TagName
+        {
+            get;
+        }
+
+        public virtual void Add(Feature feature)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain Feature");
+        }
+
+        public virtual void Add(ParameterDef parameterDef)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain ParameterDef");
+        }
+
+        public virtual void Add(ParameterRef parameterRef)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain ParameterRef");
+        }
+
+        public virtual void Add(ScoredProperty scoredProperty)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain ScoredProperty");
+        }
+
+        public virtual void Add(Value value)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain Value");
+        }
+
+        public virtual void Add(Property property)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain Property");
+        }
+
+        public virtual void Add(ParameterInit parameterInit)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain ParameterInit");
+        }
+
+        public virtual void Add(Option feature)
+        {
+            throw new InvalidChildElementException($"{TagName} can't contain Option");
+        }
+
+        public virtual void AddTo(PrintSchemaElement element)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class PrintSchemaCapabilities : DefaultPrintSchemaElement
+    {
+        public Capabilities Result
+        {
+            get;
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.PrintCapabilities.LocalName;
+            }
+        }
+
+        public override void Add(Feature feature)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Add(ParameterDef parameterDef)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Add(Property property)
+        {
+            Result.Add(property);
+        }
+    }
+
+    public class PrintSchemaProperty : DefaultPrintSchemaElement
+    {
+        private Property _property;
+
+        public PrintSchemaProperty(XName name)
+        {
+            _property = new Property(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.Property.LocalName;
+            }
+        }
+
+        public override void Add(Property property)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Add(Value value)
+        {
+            _property.Value = value;
+        }
+    }
+
+    public class PrintSchemaValue : DefaultPrintSchemaElement
+    {
+        private Value _value;
+
+        public PrintSchemaValue(Value value)
+        {
+            _value = value;
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.Value.LocalName;
+            }
         }
     }
 }
