@@ -61,7 +61,7 @@ namespace Kip
     {
     }
 
-    public class PamameterInit
+    public class ParameterInit
     {
     }
 
