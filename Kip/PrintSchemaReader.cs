@@ -162,23 +162,6 @@ namespace Kip
         }
     }
 
-    public class InvalidChildElementException : Exception
-    {
-        public InvalidChildElementException()
-        {
-        }
-
-        public InvalidChildElementException(string message)
-            : base(message)
-        {
-        }
-
-        public InvalidChildElementException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-    }
-
     public interface PrintSchemaChildElement
     {
         void AddTo(PrintSchemaElement element);
