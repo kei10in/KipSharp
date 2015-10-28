@@ -12,11 +12,22 @@ namespace Kip
 {
     public class Capabilities
     {
-        List<Property> _properties;
+        private List<Feature> _features = new List<Feature>();
+        private List<Property> _properties = new List<Property>();
 
-        public Capabilities()
+        public void Add(Feature feature)
         {
-            _properties = new List<Property>();
+            _features.Add(feature);
+        }
+
+        public IEnumerable<Feature> Features()
+        {
+            return _features;
+        }
+
+        public Feature Feature(XName name)
+        {
+            return _features.FirstOrDefault(x => x.Name == name);
         }
 
         public void Add(Property property)
@@ -51,10 +62,60 @@ namespace Kip
 
     public class Feature
     {
+        private List<Option> _options = new List<Option>();
+        private List<Property> _properties = new List<Property>();
+
+        public Feature(XName name)
+        {
+            Name = name;
+        }
+
+        public XName Name
+        {
+            get;
+        }
+
+        public void Add(Property property)
+        {
+            _properties.Add(property);
+        }
+
+        public IEnumerable<Property> Properties()
+        {
+            return _properties;
+        }
+
+        public Property Property(XName name)
+        {
+            return _properties.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void Add(Option option)
+        {
+            _options.Add(option);
+        }
+
+        public IEnumerable<Option> Options()
+        {
+            return _options;
+        }
     }
 
     public class Option
     {
+        public Option()
+        {
+        }
+
+        public Option(XName name)
+        {
+            Name = name;
+        }
+
+        XName Name
+        {
+            get;
+        }
     }
 
     public class ParameterDef

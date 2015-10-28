@@ -192,7 +192,7 @@
 		"PageForceFrontSide",
 			"ForceFrontSide",
 		// Collation
-		"JobCollateAllDocument",
+		"JobCollateAllDocuments",
 		"DocumentCollate",
 			"Collated", "Uncollated",
 		// Roll Sheet Control

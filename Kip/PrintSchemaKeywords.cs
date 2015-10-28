@@ -371,7 +371,7 @@ namespace Kip
         public static readonly XName DuplexMode = Url + "DuplexMode";
         public static readonly XName PageForceFrontSide = Url + "PageForceFrontSide";
         public static readonly XName ForceFrontSide = Url + "ForceFrontSide";
-        public static readonly XName JobCollateAllDocument = Url + "JobCollateAllDocument";
+        public static readonly XName JobCollateAllDocuments = Url + "JobCollateAllDocuments";
         public static readonly XName DocumentCollate = Url + "DocumentCollate";
         public static readonly XName Collated = Url + "Collated";
         public static readonly XName Uncollated = Url + "Uncollated";

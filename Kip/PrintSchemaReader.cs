@@ -39,13 +39,22 @@ namespace Kip
 
         public static IEnumerable<PrintSchemaChildElement> ReadChildren(XmlReader reader)
         {
+            reader.MoveToElement();  // reader mights points Attribute
+            if (reader.IsEmptyElement)
+            {
+                // exactly no children
+                return Enumerable.Empty<PrintSchemaChildElement>();
+            }
+
             List<PrintSchemaChildElement> result = new List<PrintSchemaChildElement>();
 
             while (reader.Read())
             {
                 if (reader.NodeType == XmlNodeType.Element)
                 {
-                    result.Add(ReadElement(reader));
+                    var e = ReadElement(reader);
+                    if (e != null)
+                        result.Add(e);
                 }
                 else if (reader.NodeType == XmlNodeType.EndElement)
                 {
@@ -81,14 +90,34 @@ namespace Kip
 
         public static PrintSchemaChildElement ReadFeature(XmlReader reader)
         {
-            reader.Skip();
-            return null;
+            if (!reader.MoveToAttribute("name"))
+                throw new ReadPrintSchemaDocumentException("Feature element must contains name attribute");
+
+            var name = reader.ValueAsXName();
+            var feature = new PrintSchemaFeature(name);
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(feature);
+            }
+
+            return feature;
         }
 
         public static PrintSchemaChildElement ReadOption(XmlReader reader)
         {
-            reader.Skip();
-            return null;
+            XName name = null;
+            if (reader.MoveToAttribute("name"))
+                name = reader.ValueAsXName();
+
+            var option = new PrintSchemaOption(name);
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(option);
+            }
+
+            return option;
         }
 
         public static PrintSchemaChildElement ReadProperty(XmlReader reader)
@@ -169,7 +198,7 @@ namespace Kip
     {
         void Add(Feature feature);
 
-        void Add(Option feature);
+        void Add(Option option);
 
         void Add(ParameterDef parameterDef);
 
@@ -226,7 +255,7 @@ namespace Kip
             throw new InvalidChildElementException($"{TagName} can't contain ParameterInit");
         }
 
-        public virtual void Add(Option feature)
+        public virtual void Add(Option option)
         {
             throw new InvalidChildElementException($"{TagName} can't contain Option");
         }
@@ -254,7 +283,7 @@ namespace Kip
 
         public override void Add(Feature feature)
         {
-            throw new NotImplementedException();
+            Result.Add(feature);
         }
 
         public override void Add(ParameterDef parameterDef)
@@ -265,6 +294,77 @@ namespace Kip
         public override void Add(Property property)
         {
             Result.Add(property);
+        }
+    }
+
+    public class PrintSchemaFeature : DefaultPrintSchemaElement, PrintSchemaChildElement
+    {
+        private Feature _feature;
+
+        public PrintSchemaFeature(XName name)
+        {
+            _feature = new Feature(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.Feature.LocalName;
+            }
+        }
+
+        public override void Add(Feature feature)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Add(Option option)
+        {
+            _feature.Add(option);
+        }
+
+        public override void Add(Property property)
+        {
+            _feature.Add(property);
+        }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_feature);
+        }
+    }
+
+    public class PrintSchemaOption : DefaultPrintSchemaElement, PrintSchemaChildElement
+    {
+        private Option _option;
+
+        public PrintSchemaOption(XName name)
+        {
+            _option = new Option(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.Option.LocalName;
+            }
+        }
+
+        public override void Add(Property property)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Add(ScoredProperty scoredProperty)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_option);
         }
     }
 
