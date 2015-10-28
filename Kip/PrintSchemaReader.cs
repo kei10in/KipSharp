@@ -94,10 +94,7 @@ namespace Kip
         public static PrintSchemaChildElement ReadProperty(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
-            {
-                reader.Skip();
-                return null;
-            }
+                throw new ReadPrintSchemaDocumentException("Property element must contains name attribute");
 
             var name = reader.ValueAsXName();
             var property = new PrintSchemaProperty(name);

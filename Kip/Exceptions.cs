@@ -22,4 +22,21 @@ namespace Kip
         {
         }
     }
+
+    public class ReadPrintSchemaDocumentException : Exception
+    {
+        public ReadPrintSchemaDocumentException()
+        {
+        }
+
+        public ReadPrintSchemaDocumentException(string message)
+            : base(message)
+        {
+        }
+
+        public ReadPrintSchemaDocumentException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
 }
