@@ -112,7 +112,7 @@ namespace Kip
             Name = name;
         }
 
-        XName Name
+        public XName Name
         {
             get;
         }

@@ -23,6 +23,11 @@ namespace Kip
             writer.WriteAttributeString("xmlns", "xsi", null, xsi.Url.NamespaceName);
             writer.WriteAttributeString("xmlns", "xsd", null, xsd.Url.NamespaceName);
 
+            foreach (var f in pc.Features())
+            {
+                Write(writer, f);
+            }
+
             foreach (var p in pc.Properties())
             {
                 Write(writer, p);
@@ -30,6 +35,31 @@ namespace Kip
 
             writer.WriteEndElement();
             writer.Flush();
+        }
+
+        private static void Write(XmlWriter writer, Feature feature)
+        {
+            writer.WriteStartElement(psf.Feature.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("name", feature.Name.ToQName(writer));
+
+            foreach (var o in feature.Options())
+            {
+                Write(writer, o);
+            }
+
+            writer.WriteEndElement();
+        }
+
+        private static void Write(XmlWriter writer, Option option)
+        {
+            writer.WriteStartElement(psf.Option.LocalName, psf.Url.NamespaceName);
+            if (option.Name != null)
+                writer.WriteAttributeString("name", option.Name.ToQName(writer));
+
+            // TODO: Property
+            // TODO: ScoredProperty
+            
+            writer.WriteEndElement();
         }
 
         private static void Write(XmlWriter writer, Property property)
