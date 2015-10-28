@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using psf = Kip.PrintSchemaFramework;
+using psk = Kip.PrintSchemaKeywords;
 using xsi = Kip.XmlSchemaInstance;
 using xsd = Kip.XmlSchema;
 using System;
@@ -26,6 +27,38 @@ namespace Kip
         public PrintSchemaProperty Property(XName name)
         {
             return _properties.FirstOrDefault(p => p.Name == name);
+        }
+
+        public IEnumerable<PrintSchemaProperty> Properties()
+        {
+            return _properties;
+        }
+
+        public void WriteTo(XmlWriter writer)
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("psf", psf.PrintCapabilities.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("version", "1");
+            writer.WriteAttributeString("xmlns", "psf", null, psf.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "psk", null, psk.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsi", null, xsi.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsd", null, xsd.Url.NamespaceName);
+
+            writer.WriteEndElement();
+            writer.Flush();
+        }
+
+        public static PrintSchemaCapabilities ReadFrom(XmlReader reader)
+        {
+            reader.Read();
+            reader.ReadStartElement(psf.PrintCapabilities.LocalName, psf.Url.NamespaceName);
+
+            var pc = new PrintSchemaCapabilities();
+
+            if (reader.NodeType != XmlNodeType.None)
+                reader.ReadEndElement();
+
+            return pc;
         }
     }
 
