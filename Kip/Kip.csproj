@@ -50,6 +50,7 @@
       <DependentUpon>PrintSchemaKeywords.tt</DependentUpon>
     </Compile>
     <Compile Include="PrintSchemaReader.cs" />
+    <Compile Include="PrintSchemaWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlSchema.cs" />
     <Compile Include="XmlSchemaInstance.cs" />
