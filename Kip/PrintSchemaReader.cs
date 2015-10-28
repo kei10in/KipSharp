@@ -27,33 +27,19 @@ namespace Kip
             if (tagName != psf.PrintCapabilities)
                 return null;
 
-            var pc = new Capabilities();
+            var pc = new PrintSchemaCapabilities();
 
-            while (reader.Read())
+            foreach (var child in ReadChildren(reader))
             {
-                if (reader.NodeType == XmlNodeType.Element)
-                {
-                    if (reader.XName() == psf.Property)
-                    {
-                        var prop = ReadProperty(reader);
-                    }
-                    else
-                    {
-                        reader.Skip();
-                    }
-                }
-                else if (reader.NodeType == XmlNodeType.EndElement)
-                {
-                    break;
-                }
+                child.AddTo(pc);
             }
 
-            return pc;
+            return pc.Result;
         }
 
-        public static IEnumerable<PrintSchemaElement> ReadChildren(XmlReader reader)
+        public static IEnumerable<PrintSchemaChildElement> ReadChildren(XmlReader reader)
         {
-            List<PrintSchemaElement> result = new List<PrintSchemaElement>();
+            List<PrintSchemaChildElement> result = new List<PrintSchemaChildElement>();
 
             while (reader.Read())
             {
@@ -67,10 +53,10 @@ namespace Kip
                 }
             }
 
-            return null;
+            return Enumerable.Empty<PrintSchemaChildElement>();
         }
 
-        public static PrintSchemaElement ReadElement(XmlReader reader)
+        public static PrintSchemaChildElement ReadElement(XmlReader reader)
         {
             XName tagName = reader.XName();
             if (tagName == psf.Feature) return ReadFeature(reader);
@@ -93,19 +79,19 @@ namespace Kip
             return null;
         }
 
-        public static PrintSchemaElement ReadFeature(XmlReader reader)
+        public static PrintSchemaChildElement ReadFeature(XmlReader reader)
         {
             reader.Skip();
             return null;
         }
 
-        public static PrintSchemaElement ReadOption(XmlReader reader)
+        public static PrintSchemaChildElement ReadOption(XmlReader reader)
         {
             reader.Skip();
             return null;
         }
 
-        public static PrintSchemaElement ReadProperty(XmlReader reader)
+        public static PrintSchemaChildElement ReadProperty(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
             {
@@ -124,7 +110,7 @@ namespace Kip
             return property;
         }
 
-        private static PrintSchemaElement ReadValue(XmlReader reader)
+        private static PrintSchemaChildElement ReadValue(XmlReader reader)
         {
             XName type = null;
 
@@ -193,6 +179,12 @@ namespace Kip
         }
     }
 
+    public interface PrintSchemaChildElement
+    {
+        void AddTo(PrintSchemaElement element);
+    }
+
+
     public interface PrintSchemaElement
     {
         void Add(Feature feature);
@@ -210,8 +202,6 @@ namespace Kip
         void Add(ScoredProperty scoredProperty);
 
         void Add(Value value);
-
-        void AddTo(PrintSchemaElement element);
     }
 
     public abstract class DefaultPrintSchemaElement : PrintSchemaElement
@@ -260,15 +250,15 @@ namespace Kip
         {
             throw new InvalidChildElementException($"{TagName} can't contain Option");
         }
-
-        public virtual void AddTo(PrintSchemaElement element)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class PrintSchemaCapabilities : DefaultPrintSchemaElement
     {
+        public PrintSchemaCapabilities()
+        {
+            Result = new Capabilities();
+        }
+
         public Capabilities Result
         {
             get;
@@ -298,7 +288,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaProperty : DefaultPrintSchemaElement
+    public class PrintSchemaProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private Property _property;
 
@@ -324,9 +314,14 @@ namespace Kip
         {
             _property.Value = value;
         }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_property);
+        }
     }
 
-    public class PrintSchemaValue : DefaultPrintSchemaElement
+    public class PrintSchemaValue : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private Value _value;
 
@@ -341,6 +336,11 @@ namespace Kip
             {
                 return psf.Value.LocalName;
             }
+        }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_value);
         }
     }
 }
