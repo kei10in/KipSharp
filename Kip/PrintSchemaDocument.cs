@@ -53,11 +53,27 @@ namespace Kip
         }
     }
 
+    public class PrintSchemaTicket
+    {
+    }
+
     public class PrintSchemaFeature
     {
     }
 
     public class PrintSchemaOption
+    {
+    }
+
+    public class PrintSchemaParameterDef
+    {
+    }
+
+    public class ParameterInit
+    {
+    }
+
+    public class ParameterRef
     {
     }
 
