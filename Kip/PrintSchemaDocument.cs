@@ -10,26 +10,26 @@ using System.Linq;
 
 namespace Kip
 {
-    public class PrintSchemaCapabilities
+    public class Capabilities
     {
-        List<PrintSchemaProperty> _properties;
+        List<Property> _properties;
 
-        public PrintSchemaCapabilities()
+        public Capabilities()
         {
-            _properties = new List<PrintSchemaProperty>();
+            _properties = new List<Property>();
         }
 
-        public void Add(PrintSchemaProperty property)
+        public void Add(Property property)
         {
             _properties.Add(property);
         }
 
-        public PrintSchemaProperty Property(XName name)
+        public Property Property(XName name)
         {
             return _properties.FirstOrDefault(p => p.Name == name);
         }
 
-        public IEnumerable<PrintSchemaProperty> Properties()
+        public IEnumerable<Property> Properties()
         {
             return _properties;
         }
@@ -39,29 +39,29 @@ namespace Kip
             PrintSchemaWriter.Write(writer, this);
         }
 
-        public static PrintSchemaCapabilities ReadFrom(XmlReader reader)
+        public static Capabilities ReadFrom(XmlReader reader)
         {
             return PrintSchemaReader.Read(reader);
         }
     }
 
-    public class PrintSchemaTicket
+    public class Ticket
     {
     }
 
-    public class PrintSchemaFeature
+    public class Feature
     {
     }
 
-    public class PrintSchemaOption
+    public class Option
     {
     }
 
-    public class PrintSchemaParameterDef
+    public class ParameterDef
     {
     }
 
-    public class ParameterInit
+    public class PamameterInit
     {
     }
 
@@ -69,9 +69,9 @@ namespace Kip
     {
     }
 
-    public class PrintSchemaProperty
+    public class Property
     {
-        public PrintSchemaProperty(XName name, PrintSchemaValue value)
+        public Property(XName name, Value value)
         {
             Name = name;
             Value = value;
@@ -82,32 +82,32 @@ namespace Kip
             get;
         }
 
-        public PrintSchemaValue Value
+        public Value Value
         {
             get;
         }
     }
 
-    public class PrintSchemaScoredProperty
+    public class ScoredProperty
     {
 
     }
 
-    public sealed class PrintSchemaValue
+    public sealed class Value
     {
         object _value;
 
-        public PrintSchemaValue(int? value)
+        public Value(int? value)
         {
             _value = value.GetValueOrDefault();
         }
 
-        public PrintSchemaValue(float? value)
+        public Value(float? value)
         {
             _value = value.GetValueOrDefault();
         }
 
-        public PrintSchemaValue(string value)
+        public Value(string value)
         {
             if (string.IsNullOrEmpty(value))
                 _value = string.Empty;
@@ -115,7 +115,7 @@ namespace Kip
                 _value = value;
         }
 
-        public PrintSchemaValue(XName value)
+        public Value(XName value)
         {
             _value = value;
         }
@@ -190,10 +190,10 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as PrintSchemaValue);
+            return Equals(obj as Value);
         }
 
-        public bool Equals(PrintSchemaValue value)
+        public bool Equals(Value value)
         {
             return this == value;
         }
@@ -203,27 +203,27 @@ namespace Kip
             return _value.GetHashCode();
         }
 
-        public static implicit operator PrintSchemaValue(int value)
+        public static implicit operator Value(int value)
         {
-            return new PrintSchemaValue(value);
+            return new Value(value);
         }
 
-        public static implicit operator PrintSchemaValue(float value)
+        public static implicit operator Value(float value)
         {
-            return new PrintSchemaValue(value);
+            return new Value(value);
         }
 
-        public static implicit operator PrintSchemaValue(XName value)
+        public static implicit operator Value(XName value)
         {
-            return new PrintSchemaValue(value);
+            return new Value(value);
         }
 
-        public static implicit operator PrintSchemaValue(string value)
+        public static implicit operator Value(string value)
         {
-            return new PrintSchemaValue(value);
+            return new Value(value);
         }
 
-        public static bool operator ==(PrintSchemaValue v1, PrintSchemaValue v2)
+        public static bool operator ==(Value v1, Value v2)
         {
             if (ReferenceEquals(v1, v2)) return true;
             if ((object)v1 == null || (object)v2 == null) return false;
@@ -238,7 +238,7 @@ namespace Kip
             else return v1.AsString() == v2.AsString();
         }
 
-        public static bool operator !=(PrintSchemaValue v1, PrintSchemaValue v2)
+        public static bool operator !=(Value v1, Value v2)
         {
             return !(v1 == v2);
         }

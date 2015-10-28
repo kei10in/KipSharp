@@ -16,8 +16,8 @@ namespace KipTest
         [Fact]
         public void FindPropertyByNameTest()
         {
-            var pc = new PrintSchemaCapabilities();
-            pc.Add(new PrintSchemaProperty(psk.DisplayName, "value"));
+            var pc = new Capabilities();
+            pc.Add(new Property(psk.DisplayName, "value"));
 
             var p = pc.Property(psk.DisplayName);
 
@@ -27,13 +27,13 @@ namespace KipTest
         [Fact]
         public void RoundTripSafetyForProperties()
         {
-            var pc = new PrintSchemaCapabilities();
+            var pc = new Capabilities();
             var buffer = new StringBuilder();
             var writer = XmlWriter.Create(buffer);
             pc.WriteTo(writer);
 
             var reader = XmlReader.Create(new StringReader(buffer.ToString()));
-            var actual = PrintSchemaCapabilities.ReadFrom(reader);
+            var actual = Capabilities.ReadFrom(reader);
 
             Assert.NotNull(actual);
             Assert.Empty(pc.Properties());
@@ -42,8 +42,8 @@ namespace KipTest
         [Fact]
         public void WriteValueInProperty()
         {
-            var pc = new PrintSchemaCapabilities();
-            pc.Add(new PrintSchemaProperty(psk.JobName, "some job name"));
+            var pc = new Capabilities();
+            pc.Add(new Property(psk.JobName, "some job name"));
 
             var buffer = new StringBuilder();
             var writer = XmlWriter.Create(buffer);

@@ -15,57 +15,57 @@ namespace KipTest
         [Fact]
         public void ComparableWithIntValue()
         {
-            var v = new PrintSchemaValue(1);
+            var v = new Value(1);
             Assert.Equal(1, v);
         }
 
         [Fact]
         public void ComparableWithFloatValue()
         {
-            var v = new PrintSchemaValue(3.14f);
+            var v = new Value(3.14f);
             Assert.Equal(3.14f, v);
         }
 
         [Fact]
         public void ComparableWithXNameValue()
         {
-            var v = new PrintSchemaValue(psf.Feature);
+            var v = new Value(psf.Feature);
             Assert.Equal(psf.Feature, v);
         }
 
         [Fact]
         public void ComparableWithStringValue()
         {
-            var v = new PrintSchemaValue("value");
+            var v = new Value("value");
             Assert.Equal("value", v);
         }
 
         [Fact]
         public void CompareWithNullOfPrintSchemaValue()
         {
-            PrintSchemaValue nullValue = null;
-            var v = new PrintSchemaValue(1);
+            Value nullValue = null;
+            var v = new Value(1);
             Assert.False(v == nullValue);
         }
 
         [Fact]
         public void CompareWithNull()
         {
-            var v = new PrintSchemaValue(1);
+            var v = new Value(1);
             Assert.False(v.Equals(null));
         }
 
         [Fact]
         public void CompareNullValueWithNull()
         {
-            PrintSchemaValue v = null;
+            Value v = null;
             Assert.True(v == null);
         }
 
         [Fact]
         public void ConvertIntValueToXElement()
         {
-            var v = new PrintSchemaValue(1);
+            var v = new Value(1);
             XElement element = v.AsXElement();
             var type = element.Attribute(xsi.Type);
 
@@ -77,7 +77,7 @@ namespace KipTest
         [Fact]
         public void ConvertDecimalValueToXElement()
         {
-            var v = new PrintSchemaValue(3.14f);
+            var v = new Value(3.14f);
             XElement element = v.AsXElement();
             var type = element.Attribute(xsi.Type);
 

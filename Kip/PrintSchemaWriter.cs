@@ -13,7 +13,7 @@ namespace Kip
 {
     public static class PrintSchemaWriter
     {
-        public static void Write(XmlWriter writer, PrintSchemaCapabilities pc)
+        public static void Write(XmlWriter writer, Capabilities pc)
         {
             writer.WriteStartDocument();
             writer.WriteStartElement("psf", psf.PrintCapabilities.LocalName, psf.Url.NamespaceName);
@@ -32,7 +32,7 @@ namespace Kip
             writer.Flush();
         }
 
-        private static void Write(XmlWriter writer, PrintSchemaProperty property)
+        private static void Write(XmlWriter writer, Property property)
         {
             writer.WriteStartElement(psf.Property.LocalName, psf.Url.NamespaceName);
             writer.WriteAttributeString("name", property.Name.ToQName(writer));
@@ -42,7 +42,7 @@ namespace Kip
             writer.WriteEndElement();
         }
 
-        private static void Write(XmlWriter writer, PrintSchemaValue value)
+        private static void Write(XmlWriter writer, Value value)
         {
             writer.WriteStartElement(psf.Value.LocalName, psf.Url.NamespaceName);
             writer.WriteStartAttribute(xsi.Type.LocalName, xsi.Url.NamespaceName);

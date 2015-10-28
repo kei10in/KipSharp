@@ -13,7 +13,7 @@ namespace Kip
 {
     public static class PrintSchemaReader
     {
-        public static PrintSchemaCapabilities Read(XmlReader reader)
+        public static Capabilities Read(XmlReader reader)
         {
             while (reader.Read())
             {
@@ -27,7 +27,7 @@ namespace Kip
             if (tagName != psf.PrintCapabilities)
                 return null;
 
-            var pc = new PrintSchemaCapabilities();
+            var pc = new Capabilities();
 
             while (reader.Read())
             {
@@ -93,19 +93,19 @@ namespace Kip
         return null;
     }
 
-    public static PrintSchemaFeature ReadFeature(XmlReader reader)
+    public static Feature ReadFeature(XmlReader reader)
     {
         reader.Skip();
         return null;
     }
 
-    public static PrintSchemaOption ReadOption(XmlReader reader)
+    public static Option ReadOption(XmlReader reader)
     {
         reader.Skip();
         return null;
     }
 
-    public static PrintSchemaProperty ReadProperty(XmlReader reader)
+    public static Property ReadProperty(XmlReader reader)
     {
         if (!reader.MoveToAttribute("name"))
         {
@@ -114,21 +114,21 @@ namespace Kip
         }
 
         var name = reader.ValueAsXName();
-        PrintSchemaValue value = null;
+        Value value = null;
         var children = ReadChildren(reader);
         foreach (var e in ReadChildren(reader))
         {
-            var v = e as PrintSchemaValue;
+            var v = e as Value;
             if (v != null)
             {
                 value = v;
             }
         }
 
-        return new PrintSchemaProperty(name, value);
+        return new Property(name, value);
     }
 
-    private static PrintSchemaValue ReadValue(XmlReader reader)
+    private static Value ReadValue(XmlReader reader)
     {
         XName type = null;
 
@@ -145,23 +145,23 @@ namespace Kip
         // move to text node
         reader.Read();
 
-        PrintSchemaValue value = null;
+        Value value = null;
 
         if (type == xsd.Integer)
         {
-            value = new PrintSchemaValue(reader.Value.AsInt32());
+            value = new Value(reader.Value.AsInt32());
         }
         else if (type == xsd.Decimal)
         {
-            value = new PrintSchemaValue(reader.Value.AsFloat());
+            value = new Value(reader.Value.AsFloat());
         }
         else if (type == xsd.QName)
         {
-            value = new PrintSchemaValue(reader.ValueAsXName());
+            value = new Value(reader.ValueAsXName());
         }
         else
         {
-            value = new PrintSchemaValue(reader.Value);
+            value = new Value(reader.Value);
         }
 
         while (reader.Read())
