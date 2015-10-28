@@ -51,132 +51,132 @@ namespace Kip
             return pc;
         }
 
-    public static IEnumerable<object> ReadChildren(XmlReader reader)
-    {
-        List<object> result = new List<object>();
-
-        while (reader.Read())
+        public static IEnumerable<object> ReadChildren(XmlReader reader)
         {
-            if (reader.NodeType == XmlNodeType.Element)
+            List<object> result = new List<object>();
+
+            while (reader.Read())
             {
-                result.Add(ReadElement(reader));
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    result.Add(ReadElement(reader));
+                }
+                else if (reader.NodeType == XmlNodeType.EndElement)
+                {
+                    return result;
+                }
             }
-            else if (reader.NodeType == XmlNodeType.EndElement)
+
+            return null;
+        }
+
+        public static object ReadElement(XmlReader reader)
+        {
+            XName tagName = reader.XName();
+            if (tagName == psf.Feature) return ReadFeature(reader);
+            else if (tagName == psf.Option) return ReadOption(reader);
+            else if (tagName == psf.ParameterDef)
             {
-                return result;
+                reader.Skip();
             }
+            else if (tagName == psf.ParameterInit)
+            {
+                reader.Skip();
+            }
+            else if (tagName == psf.ParameterRef)
+            {
+                reader.Skip();
+            }
+            else if (tagName == psf.Property) return ReadProperty(reader);
+            else if (tagName == psf.Value) return ReadValue(reader);
+            else reader.Skip();
+            return null;
         }
 
-        return null;
-    }
-
-    public static object ReadElement(XmlReader reader)
-    {
-        XName tagName = reader.XName();
-        if (tagName == psf.Feature) return ReadFeature(reader);
-        else if (tagName == psf.Option) return ReadOption(reader);
-        else if (tagName == psf.ParameterDef)
-        {
-            reader.Skip();
-        }
-        else if (tagName == psf.ParameterInit)
-        {
-            reader.Skip();
-        }
-        else if (tagName == psf.ParameterRef)
-        {
-            reader.Skip();
-        }
-        else if (tagName == psf.Property) return ReadProperty(reader);
-        else if (tagName == psf.Value) return ReadValue(reader);
-        else reader.Skip();
-        return null;
-    }
-
-    public static Feature ReadFeature(XmlReader reader)
-    {
-        reader.Skip();
-        return null;
-    }
-
-    public static Option ReadOption(XmlReader reader)
-    {
-        reader.Skip();
-        return null;
-    }
-
-    public static Property ReadProperty(XmlReader reader)
-    {
-        if (!reader.MoveToAttribute("name"))
+        public static Feature ReadFeature(XmlReader reader)
         {
             reader.Skip();
             return null;
         }
 
-        var name = reader.ValueAsXName();
-        Value value = null;
-        var children = ReadChildren(reader);
-        foreach (var e in ReadChildren(reader))
+        public static Option ReadOption(XmlReader reader)
         {
-            var v = e as Value;
-            if (v != null)
-            {
-                value = v;
-            }
+            reader.Skip();
+            return null;
         }
 
-        return new Property(name, value);
-    }
-
-    private static Value ReadValue(XmlReader reader)
-    {
-        XName type = null;
-
-        if (!reader.MoveToFirstAttribute()) return null;
-        do
+        public static Property ReadProperty(XmlReader reader)
         {
-            var attrName = reader.XName();
-            if (attrName == xsi.Type)
-            {
-                type = reader.ValueAsXName();
-            }
-        } while (reader.MoveToNextAttribute());
-
-        // move to text node
-        reader.Read();
-
-        Value value = null;
-
-        if (type == xsd.Integer)
-        {
-            value = new Value(reader.Value.AsInt32());
-        }
-        else if (type == xsd.Decimal)
-        {
-            value = new Value(reader.Value.AsFloat());
-        }
-        else if (type == xsd.QName)
-        {
-            value = new Value(reader.ValueAsXName());
-        }
-        else
-        {
-            value = new Value(reader.Value);
-        }
-
-        while (reader.Read())
-        {
-            if (reader.NodeType == XmlNodeType.Element)
+            if (!reader.MoveToAttribute("name"))
             {
                 reader.Skip();
+                return null;
             }
-            else if (reader.NodeType == XmlNodeType.EndElement)
+
+            var name = reader.ValueAsXName();
+            Value value = null;
+            var children = ReadChildren(reader);
+            foreach (var e in ReadChildren(reader))
             {
-                break;
+                var v = e as Value;
+                if (v != null)
+                {
+                    value = v;
+                }
             }
+
+            return new Property(name, value);
         }
 
-        return value;
+        private static Value ReadValue(XmlReader reader)
+        {
+            XName type = null;
+
+            if (!reader.MoveToFirstAttribute()) return null;
+            do
+            {
+                var attrName = reader.XName();
+                if (attrName == xsi.Type)
+                {
+                    type = reader.ValueAsXName();
+                }
+            } while (reader.MoveToNextAttribute());
+
+            // move to text node
+            reader.Read();
+
+            Value value = null;
+
+            if (type == xsd.Integer)
+            {
+                value = new Value(reader.Value.AsInt32());
+            }
+            else if (type == xsd.Decimal)
+            {
+                value = new Value(reader.Value.AsFloat());
+            }
+            else if (type == xsd.QName)
+            {
+                value = new Value(reader.ValueAsXName());
+            }
+            else
+            {
+                value = new Value(reader.Value);
+            }
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    reader.Skip();
+                }
+                else if (reader.NodeType == XmlNodeType.EndElement)
+                {
+                    break;
+                }
+            }
+
+            return value;
+        }
     }
-}
 }
