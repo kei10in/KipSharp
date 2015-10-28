@@ -11,66 +11,172 @@ using System.IO;
 
 namespace Kip
 {
-    public class PrintSchemaReader
+    public static class PrintSchemaReader
     {
-        private XmlReader _reader;
-
-        public PrintSchemaReader(XmlReader reader)
+        public static PrintSchemaCapabilities Read(XmlReader reader)
         {
-            _reader = reader;
-        }
-
-        public PrintSchemaReader(string xml) : this(XmlReader.Create(new StringReader(xml)))
-        {
-        }
-
-        public object Read()
-        {
-            _reader.Read();
-
-            var name = _reader.XName();
-
-            if (name == psf.Value)
+            while (reader.Read())
             {
-                return ReadValue();
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    break;
+                }
             }
 
+            var tagName = reader.XName();
+            if (tagName != psf.PrintCapabilities)
+                return null;
+
+            var pc = new PrintSchemaCapabilities();
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    if (reader.XName() == psf.Property)
+                    {
+                        var prop = ReadProperty(reader);
+                    }
+                    else
+                    {
+                        reader.Skip();
+                    }
+                }
+                else if (reader.NodeType == XmlNodeType.EndElement)
+                {
+                    break;
+                }
+            }
+
+            return pc;
+        }
+
+    public static IEnumerable<object> ReadChildren(XmlReader reader)
+    {
+        List<object> result = new List<object>();
+
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element)
+            {
+                result.Add(ReadElement(reader));
+            }
+            else if (reader.NodeType == XmlNodeType.EndElement)
+            {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    public static object ReadElement(XmlReader reader)
+    {
+        XName tagName = reader.XName();
+        if (tagName == psf.Feature) return ReadFeature(reader);
+        else if (tagName == psf.Option) return ReadOption(reader);
+        else if (tagName == psf.ParameterDef)
+        {
+            reader.Skip();
+        }
+        else if (tagName == psf.ParameterInit)
+        {
+            reader.Skip();
+        }
+        else if (tagName == psf.ParameterRef)
+        {
+            reader.Skip();
+        }
+        else if (tagName == psf.Property) return ReadProperty(reader);
+        else if (tagName == psf.Value) return ReadValue(reader);
+        else reader.Skip();
+        return null;
+    }
+
+    public static PrintSchemaFeature ReadFeature(XmlReader reader)
+    {
+        reader.Skip();
+        return null;
+    }
+
+    public static PrintSchemaOption ReadOption(XmlReader reader)
+    {
+        reader.Skip();
+        return null;
+    }
+
+    public static PrintSchemaProperty ReadProperty(XmlReader reader)
+    {
+        if (!reader.MoveToAttribute("name"))
+        {
+            reader.Skip();
             return null;
         }
 
-        private PrintSchemaValue ReadValue()
+        var name = reader.ValueAsXName();
+        PrintSchemaValue value = null;
+        var children = ReadChildren(reader);
+        foreach (var e in ReadChildren(reader))
         {
-            XName type = null;
-
-            if (!_reader.MoveToFirstAttribute()) return null;
-            do
+            var v = e as PrintSchemaValue;
+            if (v != null)
             {
-                var attrName = _reader.XName();
-                if (attrName == xsi.Type)
-                {
-                    type = _reader.ValueAsXName();
-                }
-            } while (_reader.MoveToNextAttribute());
-
-            // move to text node
-            _reader.Read();
-
-            if (type == xsd.Integer)
-            {
-                return new PrintSchemaValue(_reader.Value.AsInt32());
-            }
-            else if (type == xsd.Decimal)
-            {
-                return new PrintSchemaValue(_reader.Value.AsFloat());
-            }
-            else if (type == xsd.QName)
-            {
-                return new PrintSchemaValue(_reader.ValueAsXName());
-            }
-            else
-            {
-                return new PrintSchemaValue(_reader.Value);
+                value = v;
             }
         }
+
+        return new PrintSchemaProperty(name, value);
     }
+
+    private static PrintSchemaValue ReadValue(XmlReader reader)
+    {
+        XName type = null;
+
+        if (!reader.MoveToFirstAttribute()) return null;
+        do
+        {
+            var attrName = reader.XName();
+            if (attrName == xsi.Type)
+            {
+                type = reader.ValueAsXName();
+            }
+        } while (reader.MoveToNextAttribute());
+
+        // move to text node
+        reader.Read();
+
+        PrintSchemaValue value = null;
+
+        if (type == xsd.Integer)
+        {
+            value = new PrintSchemaValue(reader.Value.AsInt32());
+        }
+        else if (type == xsd.Decimal)
+        {
+            value = new PrintSchemaValue(reader.Value.AsFloat());
+        }
+        else if (type == xsd.QName)
+        {
+            value = new PrintSchemaValue(reader.ValueAsXName());
+        }
+        else
+        {
+            value = new PrintSchemaValue(reader.Value);
+        }
+
+        while (reader.Read())
+        {
+            if (reader.NodeType == XmlNodeType.Element)
+            {
+                reader.Skip();
+            }
+            else if (reader.NodeType == XmlNodeType.EndElement)
+            {
+                break;
+            }
+        }
+
+        return value;
+    }
+}
 }

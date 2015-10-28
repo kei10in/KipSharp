@@ -41,15 +41,7 @@ namespace Kip
 
         public static PrintSchemaCapabilities ReadFrom(XmlReader reader)
         {
-            reader.Read();
-            reader.ReadStartElement(psf.PrintCapabilities.LocalName, psf.Url.NamespaceName);
-
-            var pc = new PrintSchemaCapabilities();
-
-            if (reader.NodeType != XmlNodeType.None)
-                reader.ReadEndElement();
-
-            return pc;
+            return PrintSchemaReader.Read(reader);
         }
     }
 
