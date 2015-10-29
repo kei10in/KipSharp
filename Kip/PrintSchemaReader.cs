@@ -316,7 +316,7 @@ namespace Kip
 
         public override void Add(Feature feature)
         {
-            throw new NotImplementedException();
+            _feature.Add(feature);
         }
 
         public override void Add(Option option)
@@ -344,6 +344,11 @@ namespace Kip
             _option = new Option(name);
         }
 
+        public PrintSchemaOption(XName name, Constraint constrained)
+        {
+            _option = new Option(name, constrained);
+        }
+
         public override string TagName
         {
             get
@@ -354,17 +359,96 @@ namespace Kip
 
         public override void Add(Property property)
         {
-            throw new NotImplementedException();
+            _option.Add(property);
         }
 
         public override void Add(ScoredProperty scoredProperty)
         {
-            throw new NotImplementedException();
+            _option.Add(scoredProperty);
         }
         
         public void AddTo(PrintSchemaElement element)
         {
             element.Add(_option);
+        }
+    }
+
+    public class PrintSchemaParameterDef : DefaultPrintSchemaElement, PrintSchemaChildElement
+    {
+        private ParameterDef _parameterDef;
+
+        public PrintSchemaParameterDef(XName name)
+        {
+            _parameterDef = new ParameterDef(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.ParameterDef.LocalName;
+            }
+        }
+
+        public override void Add(Property property)
+        {
+            _parameterDef.Add(property);
+        }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_parameterDef);
+        }
+    }
+
+    public class PrintSchemaParameterInit : DefaultPrintSchemaElement, PrintSchemaChildElement
+    {
+        private ParameterInit _parameterInit;
+
+        public PrintSchemaParameterInit(XName name)
+        {
+            _parameterInit = new ParameterInit(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.ParameterDef.LocalName;
+            }
+        }
+
+        public override void Add(Value value)
+        {
+            _parameterInit.Value = value;
+        }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_parameterInit);
+        }
+    }
+
+    public class PrintSchemaParameterRef : DefaultPrintSchemaElement, PrintSchemaChildElement
+    {
+        private ParameterRef _parameterRef;
+
+        public PrintSchemaParameterRef(XName name)
+        {
+            _parameterRef = new ParameterRef(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.ParameterDef.LocalName;
+            }
+        }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_parameterRef);
         }
     }
 
@@ -398,6 +482,49 @@ namespace Kip
         public void AddTo(PrintSchemaElement element)
         {
             element.Add(_property);
+        }
+    }
+
+    public class PrintSchemaScoredProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
+    {
+        private ScoredProperty _scoredProperty;
+
+        public PrintSchemaScoredProperty(XName name)
+        {
+            _scoredProperty = new ScoredProperty(name);
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.Property.LocalName;
+            }
+        }
+
+        public override void Add(ParameterRef parameterRef)
+        {
+            _scoredProperty.ParmaeterRef = parameterRef;
+        }
+
+        public override void Add(Property property)
+        {
+            _scoredProperty.Add(property);
+        }
+
+        public override void Add(ScoredProperty scoredProperty)
+        {
+            _scoredProperty.Add(scoredProperty);
+        }
+
+        public override void Add(Value value)
+        {
+            _scoredProperty.Value = value;
+        }
+
+        public void AddTo(PrintSchemaElement element)
+        {
+            element.Add(_scoredProperty);
         }
     }
 
