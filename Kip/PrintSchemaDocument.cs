@@ -13,6 +13,7 @@ namespace Kip
     public class Capabilities
     {
         private List<Feature> _features = new List<Feature>();
+        private List<ParameterDef> _parameters = new List<ParameterDef>();
         private List<Property> _properties = new List<Property>();
 
         public void Add(Feature feature)
@@ -28,6 +29,21 @@ namespace Kip
         public Feature Feature(XName name)
         {
             return _features.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void Add(ParameterDef parameter)
+        {
+            _parameters.Add(parameter);
+        }
+
+        public IEnumerable<ParameterDef> Parameters()
+        {
+            return _parameters;
+        }
+
+        public ParameterDef ParameterDef(XName name)
+        {
+            return _parameters.FirstOrDefault(x => x.Name == name);
         }
 
         public void Add(Property property)
@@ -58,12 +74,61 @@ namespace Kip
 
     public class Ticket
     {
+        private List<Feature> _features = new List<Feature>();
+        private List<ParameterInit> _parameters = new List<ParameterInit>();
+        private List<Property> _properties = new List<Property>();
+
+        public void Add(Feature feature)
+        {
+            _features.Add(feature);
+        }
+
+        public IEnumerable<Feature> Features()
+        {
+            return _features;
+        }
+
+        public Feature Feature(XName name)
+        {
+            return _features.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void Add(ParameterInit parameter)
+        {
+            _parameters.Add(parameter);
+        }
+
+        public IEnumerable<ParameterInit> Parameters()
+        {
+            return _parameters;
+        }
+
+        public ParameterInit ParameterInit(XName name)
+        {
+            return _parameters.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void Add(Property property)
+        {
+            _properties.Add(property);
+        }
+
+        public Property Property(XName name)
+        {
+            return _properties.FirstOrDefault(p => p.Name == name);
+        }
+
+        public IEnumerable<Property> Properties()
+        {
+            return _properties;
+        }
     }
 
     public class Feature
     {
-        private List<Option> _options = new List<Option>();
         private List<Property> _properties = new List<Property>();
+        private List<Option> _options = new List<Option>();
+        private List<Feature> _features = new List<Feature>();
 
         public Feature(XName name)
         {
@@ -99,15 +164,191 @@ namespace Kip
         {
             return _options;
         }
+
+        public void Add(Feature feature)
+        {
+            _features.Add(feature);
+        }
+
+        public IEnumerable<Feature> SubFeatures()
+        {
+            return _features;
+        }
+
+        public Feature SubFeature(XName name)
+        {
+            return _features.FirstOrDefault(x => x.Name == name);
+        }
     }
+
+    public sealed class Constraint
+    {
+        internal Constraint(XName value)
+        {
+            Value = value;
+        }
+
+        public XName Value
+        {
+            get;
+        }
+
+        public override bool Equals(object rhs)
+        {
+            return Equals(rhs as Constraint);
+        }
+
+        public bool Equals(Constraint rhs)
+        {
+            return this == rhs;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public static bool operator ==(Constraint lhs, Constraint rhs)
+        {
+            if (ReferenceEquals(lhs, rhs)) return true;
+            if ((object)lhs == null || (object)rhs == null) return false;
+
+            return lhs.Value == rhs.Value;
+        }
+
+        public static bool operator !=(Constraint lhs, Constraint rhs)
+        {
+            return !(lhs == rhs);
+        }
+    }
+
+    public static class Constraints
+    {
+        public static readonly Constraint None = new Constraint(psk.None);
+        public static readonly Constraint PrintTicket = new Constraint(psk.PrintTicketSettings);
+        public static readonly Constraint Admin = new Constraint(psk.AdminSettings);
+        public static readonly Constraint Device = new Constraint(psk.DeviceSettings);
+    }
+
 
     public class Option
     {
+        private List<Property> _properties = new List<Property>();
+        private List<ScoredProperty> _scoredProperty = new List<ScoredProperty>();
+
         public Option()
         {
         }
 
         public Option(XName name)
+        {
+            Name = name;
+        }
+
+        public Option(XName name, Constraint constrained)
+        {
+            Name = name;
+            Constrained = constrained;
+        }
+
+        public XName Name
+        {
+            get;
+        }
+
+        public Constraint Constrained
+        {
+            get; set;
+        }
+
+        public void Add(Property property)
+        {
+            _properties.Add(property);
+        }
+
+        public IEnumerable<Property> Properties()
+        {
+            return _properties;
+        }
+
+        public Property Property(XName name)
+        {
+            return _properties.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void Add(ScoredProperty scoredProperty)
+        {
+            _scoredProperty.Add(scoredProperty);
+        }
+
+        public IEnumerable<ScoredProperty> ScoredProperties()
+        {
+            return _scoredProperty;
+        }
+
+        public ScoredProperty ScoredProperty(XName name)
+        {
+            return _scoredProperty.FirstOrDefault(x => x.Name == name);
+        }
+    }
+
+    public class ParameterDef
+    {
+        private List<Property> _properties = new List<Property>();
+
+        public ParameterDef(XName name)
+        {
+            Name = name;
+        }
+
+        public XName Name
+        {
+            get;
+        }
+
+        public void Add(Property property)
+        {
+            _properties.Add(property);
+        }
+
+        public IEnumerable<Property> Properties()
+        {
+            return _properties;
+        }
+
+        public Property Property(XName name)
+        {
+            return _properties.FirstOrDefault(x => x.Name == name);
+        }
+    }
+
+    public class ParameterInit
+    {
+        public ParameterInit(XName name)
+            : this(name, null)
+        {
+        }
+
+        public ParameterInit(XName name, Value value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public XName Name
+        {
+            get;
+        }
+
+        public Value Value
+        {
+            get; set;
+        }
+    }
+
+    public class ParameterRef
+    {
+        public ParameterRef(XName name)
         {
             Name = name;
         }
@@ -118,20 +359,10 @@ namespace Kip
         }
     }
 
-    public class ParameterDef
-    {
-    }
-
-    public class ParameterInit
-    {
-    }
-
-    public class ParameterRef
-    {
-    }
-
     public class Property
     {
+        private List<Property> _properties = new List<Property>();
+
         public Property(XName name, Value value = null)
         {
             Name = name;
@@ -148,11 +379,77 @@ namespace Kip
             get;
             set;
         }
+
+        public void Add(Property property)
+        {
+            _properties.Add(property);
+        }
+
+        public IEnumerable<Property> SubProperties()
+        {
+            return _properties;
+        }
+
+        public Property SubProperty(XName name)
+        {
+            return _properties.FirstOrDefault(x => x.Name == name);
+        }
     }
 
     public class ScoredProperty
     {
+        private List<ScoredProperty> _scoredProperties = new List<ScoredProperty>();
+        private List<Property> _properties = new List<Property>();
 
+        public ScoredProperty(XName name)
+        {
+            Name = name;
+        }
+
+        public XName Name
+        {
+            get;
+        }
+
+        public Value Value
+        {
+            get; set;
+        }
+
+        public ParameterRef ParmaeterRef
+        {
+            get; set;
+        }
+
+        public void Add(ScoredProperty scoredProperty)
+        {
+            _scoredProperties.Add(scoredProperty);
+        }
+
+        public IEnumerable<ScoredProperty> SubScoredProperty()
+        {
+            return _scoredProperties;
+        }
+
+        public ScoredProperty SubScoredProperty(XName name)
+        {
+            return _scoredProperties.FirstOrDefault(x => x.Name == name);
+        }
+
+        public void Add(Property property)
+        {
+            _properties.Add(property);
+        }
+
+        public IEnumerable<Property> SubProperty()
+        {
+            return _properties;
+        }
+
+        public Property SubProperty(XName name)
+        {
+            return _properties.FirstOrDefault(x => x.Name == name);
+        }
     }
 
     public sealed class Value

@@ -20,6 +20,9 @@ namespace Kip
         public static readonly XName DisplayUI = Url + "DisplayUI";
         public static readonly XName PickOne = Url + "PickOne";
         public static readonly XName PickMany = Url + "PickMany";
+        public static readonly XName PrintTicketSettings = Url + "PrintTicketSettings";
+        public static readonly XName AdminSettings = Url + "AdminSettings";
+        public static readonly XName DeviceSettings = Url + "DeviceSettings";
         public static readonly XName Conditional = Url + "Conditional";
         public static readonly XName Optional = Url + "Optional";
         public static readonly XName Unconditional = Url + "Unconditional";

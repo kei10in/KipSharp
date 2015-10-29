@@ -26,6 +26,11 @@
 		"PickOne",
 		"PickMany",
 
+		// constrained value
+		"PrintTicketSettings",
+		"AdminSettings",
+		"DeviceSettings",
+
 		// Mandatory values
 		"Conditional",
 		"Optional",
