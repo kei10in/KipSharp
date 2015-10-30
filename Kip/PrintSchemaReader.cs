@@ -70,19 +70,11 @@ namespace Kip
             XName tagName = reader.XName();
             if (tagName == psf.Feature) return ReadFeature(reader);
             else if (tagName == psf.Option) return ReadOption(reader);
-            else if (tagName == psf.ParameterDef)
-            {
-                reader.Skip();
-            }
-            else if (tagName == psf.ParameterInit)
-            {
-                reader.Skip();
-            }
-            else if (tagName == psf.ParameterRef)
-            {
-                reader.Skip();
-            }
+            else if (tagName == psf.ParameterDef) return ReadParameterDef(reader);
+            else if (tagName == psf.ParameterInit) return ReadParameterInit(reader);
+            else if (tagName == psf.ParameterRef) return ReadParameterRef(reader);
             else if (tagName == psf.Property) return ReadProperty(reader);
+            else if (tagName == psf.ScoredProperty) return ReadScoredProperty(reader);
             else if (tagName == psf.Value) return ReadValue(reader);
             else reader.Skip();
             return null;
@@ -94,14 +86,14 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("Feature element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var feature = new PrintSchemaFeature(name);
+            var element = new PrintSchemaFeature(name);
 
             foreach (var child in ReadChildren(reader))
             {
-                child.AddTo(feature);
+                child.AddTo(element);
             }
 
-            return feature;
+            return element;
         }
 
         public static PrintSchemaChildElement ReadOption(XmlReader reader)
@@ -110,14 +102,66 @@ namespace Kip
             if (reader.MoveToAttribute("name"))
                 name = reader.ValueAsXName();
 
-            var option = new PrintSchemaOption(name);
+            XName constrained = null;
+            if (reader.MoveToAttribute("constrained"))
+                constrained = reader.ValueAsXName();
+
+            var element = new PrintSchemaOption(name, constrained);
 
             foreach (var child in ReadChildren(reader))
             {
-                child.AddTo(option);
+                child.AddTo(element);
             }
 
-            return option;
+            return element;
+        }
+
+        public static PrintSchemaChildElement ReadParameterDef(XmlReader reader)
+        {
+            if (!reader.MoveToAttribute("name"))
+                throw new ReadPrintSchemaDocumentException("ParameterDef element must contains name attribute");
+
+            var name = reader.ValueAsXName();
+            var element = new PrintSchemaParameterDef(name);
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(element);
+            }
+
+            return element;
+        }
+
+        public static PrintSchemaChildElement ReadParameterInit(XmlReader reader)
+        {
+            if (!reader.MoveToAttribute("name"))
+                throw new ReadPrintSchemaDocumentException("ParameterInit element must contains name attribute");
+
+            var name = reader.ValueAsXName();
+            var element = new PrintSchemaParameterInit(name);
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(element);
+            }
+
+            return element;
+        }
+
+        public static PrintSchemaChildElement ReadParameterRef(XmlReader reader)
+        {
+            if (!reader.MoveToAttribute("name"))
+                throw new ReadPrintSchemaDocumentException("ParameterRef element must contains name attribute");
+
+            var name = reader.ValueAsXName();
+            var element = new PrintSchemaParameterRef(name);
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(element);
+            }
+
+            return element;
         }
 
         public static PrintSchemaChildElement ReadProperty(XmlReader reader)
@@ -126,14 +170,30 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("Property element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var property = new PrintSchemaProperty(name);
+            var element = new PrintSchemaProperty(name);
 
             foreach (var child in ReadChildren(reader))
             {
-                child.AddTo(property);
+                child.AddTo(element);
             }
 
-            return property;
+            return element;
+        }
+
+        public static PrintSchemaChildElement ReadScoredProperty(XmlReader reader)
+        {
+            if (!reader.MoveToAttribute("name"))
+                throw new ReadPrintSchemaDocumentException("ScoredProperty element must contains name attribute");
+
+            var name = reader.ValueAsXName();
+            var element = new PrintSchemaScoredProperty(name);
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(element);
+            }
+
+            return element;
         }
 
         private static PrintSchemaChildElement ReadValue(XmlReader reader)
@@ -339,12 +399,7 @@ namespace Kip
     {
         private Option _option;
 
-        public PrintSchemaOption(XName name)
-        {
-            _option = new Option(name);
-        }
-
-        public PrintSchemaOption(XName name, Constraint constrained)
+        public PrintSchemaOption(XName name, XName constrained)
         {
             _option = new Option(name, constrained);
         }
@@ -366,7 +421,7 @@ namespace Kip
         {
             _option.Add(scoredProperty);
         }
-        
+
         public void AddTo(PrintSchemaElement element)
         {
             element.Add(_option);

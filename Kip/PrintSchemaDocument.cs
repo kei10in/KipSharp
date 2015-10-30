@@ -245,7 +245,7 @@ namespace Kip
             Name = name;
         }
 
-        public Option(XName name, Constraint constrained)
+        public Option(XName name, XName constrained)
         {
             Name = name;
             Constrained = constrained;
@@ -256,7 +256,7 @@ namespace Kip
             get;
         }
 
-        public Constraint Constrained
+        public XName Constrained
         {
             get; set;
         }
