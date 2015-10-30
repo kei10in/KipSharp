@@ -348,7 +348,7 @@ namespace Kip
 
         public override void Add(ParameterDef parameterDef)
         {
-            throw new NotImplementedException();
+            Result.Add(parameterDef);
         }
 
         public override void Add(Property property)
@@ -526,7 +526,7 @@ namespace Kip
 
         public override void Add(Property property)
         {
-            throw new NotImplementedException();
+            _property.Add(property);
         }
 
         public override void Add(Value value)
