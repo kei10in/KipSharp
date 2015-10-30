@@ -41,7 +41,7 @@ namespace Kip
             return _parameters;
         }
 
-        public ParameterDef ParameterDef(XName name)
+        public ParameterDef Parameter(XName name)
         {
             return _parameters.FirstOrDefault(x => x.Name == name);
         }
