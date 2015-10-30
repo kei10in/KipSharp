@@ -30,8 +30,14 @@ namespace KipTest
             Assert.True(0 < actual.Features().Count());
 
             var f = actual.Feature(psk.JobCollateAllDocuments);
-            Assert.NotNull(f);
-            Assert.True(0 < f.Options().Count());
+            Assert.True(0 < f?.Options()?.Count());
+
+            var d = f.Property(psk.DisplayName);
+            Assert.Equal("Collate Copies", d?.Value);
+
+            var o = f.Options().Select(x => x.Property(psk.DisplayName)?.Value);
+            Assert.Contains(o, x => x == "Yes");
+            Assert.Contains(o, x => x == "No");
         }
     }
 }

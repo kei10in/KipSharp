@@ -9,7 +9,18 @@
     <psf:Property name="psf:SelectionType">
       <psf:Value xsi:type="xsd:QName">psk:PickOne</psf:Value>
     </psf:Property>
-    <psf:Option name="psk:Collated" />
-    <psf:Option name="psk:Uncollated" />
+    <psf:Property name="psk:DisplayName">
+      <psf:Value xsi:type="xsd:string">Collate Copies</psf:Value>
+    </psf:Property>
+    <psf:Option name="psk:Collated" constrained="psk:None">
+      <psf:Property name="psk:DisplayName">
+        <psf:Value xsi:type="xsd:string">Yes</psf:Value>
+      </psf:Property>
+    </psf:Option>
+    <psf:Option name="psk:Uncollated" constrained="psk:None">
+      <psf:Property name="psk:DisplayName">
+        <psf:Value xsi:type="xsd:string">No</psf:Value>
+      </psf:Property>
+    </psf:Option>
   </psf:Feature>
 </psf:PrintCapabilities>
