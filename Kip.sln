@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kip", "Kip\Kip.csproj", "{81D77FC2-4E63-4991-BC20-0A6FD744FD93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KipTest", "KipTest\KipTest.csproj", "{FB881285-BD91-4846-89F9-ECC785A3129A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kip.Tests", "Kip.Tests\Kip.Tests.csproj", "{FB881285-BD91-4846-89F9-ECC785A3129A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

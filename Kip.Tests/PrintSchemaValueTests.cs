@@ -7,7 +7,7 @@ using xsi = Kip.XmlSchemaInstance;
 using xsd = Kip.XmlSchema;
 using Kip;
 
-namespace KipTest
+namespace Kip.Tests
 {
 
     public class PrintSchemaValueTests

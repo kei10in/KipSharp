@@ -11,7 +11,7 @@ using Xunit;
 using psk = Kip.PrintSchemaKeywords;
 using xsd = Kip.XmlSchema;
 
-namespace KipTest
+namespace Kip.Tests
 {
     public class PrintSchemaReaderTests
     {

@@ -9,7 +9,7 @@ using psf = Kip.PrintSchemaFramework;
 using psk = Kip.PrintSchemaKeywords;
 using xsi = Kip.XmlSchemaInstance;
 
-namespace KipTest
+namespace Kip.Tests
 {
     public class PrintSchemaCapabilitiesTests
     {

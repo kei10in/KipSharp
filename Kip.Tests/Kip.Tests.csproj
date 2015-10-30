@@ -10,8 +10,8 @@
     <ProjectGuid>{FB881285-BD91-4846-89F9-ECC785A3129A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KipTest</RootNamespace>
-    <AssemblyName>KipTest</AssemblyName>
+    <RootNamespace>Kip.Tests</RootNamespace>
+    <AssemblyName>Kip.Tests</AssemblyName>
     <DefaultLanguage>ja-JP</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
