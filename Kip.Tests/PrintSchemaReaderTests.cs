@@ -25,7 +25,7 @@ namespace Kip.Tests
             var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.SimpleFeatureOptionStructure.xml");
 
             var reader = XmlReader.Create(stream);
-            var actual = PrintSchemaReader.Read(reader);
+            var actual = PrintSchemaReader.ReadCapabilities(reader);
 
             Assert.NotNull(actual);
             Assert.True(0 < actual.Features().Count());
@@ -55,7 +55,7 @@ namespace Kip.Tests
             {
                 using (var reader = XmlReader.Create(stream))
                 {
-                    _actual = PrintSchemaReader.Read(reader);
+                    _actual = PrintSchemaReader.ReadCapabilities(reader);
                 }
             }
         }

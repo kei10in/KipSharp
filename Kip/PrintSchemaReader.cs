@@ -13,7 +13,7 @@ namespace Kip
 {
     public static class PrintSchemaReader
     {
-        public static Capabilities Read(XmlReader reader)
+        public static Capabilities ReadCapabilities(XmlReader reader)
         {
             while (reader.Read())
             {

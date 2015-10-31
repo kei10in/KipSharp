@@ -68,7 +68,7 @@ namespace Kip
 
         public static Capabilities ReadFrom(XmlReader reader)
         {
-            return PrintSchemaReader.Read(reader);
+            return PrintSchemaReader.ReadCapabilities(reader);
         }
     }
 
