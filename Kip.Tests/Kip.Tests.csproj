@@ -73,6 +73,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\SimpleFeatureOptionStructure.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\BasicPrintCapabilities.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
