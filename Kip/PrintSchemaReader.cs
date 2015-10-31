@@ -37,6 +37,30 @@ namespace Kip
             return pc.Result;
         }
 
+        public static Ticket ReadTicket(XmlReader reader)
+        {
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    break;
+                }
+            }
+
+            var tagName = reader.XName();
+            if (tagName != psf.PrintTicket)
+                return null;
+
+            var pc = new PrintSchemaTicket();
+
+            foreach (var child in ReadChildren(reader))
+            {
+                child.AddTo(pc);
+            }
+
+            return pc.Result;
+        }
+
         public static IEnumerable<PrintSchemaChildElement> ReadChildren(XmlReader reader)
         {
             reader.MoveToElement();  // reader mights points Attribute
@@ -354,6 +378,42 @@ namespace Kip
         public override void Add(Property property)
         {
             Result.Add(property);
+        }
+    }
+
+    public class PrintSchemaTicket : DefaultPrintSchemaElement
+    {
+        public PrintSchemaTicket()
+        {
+            Result = new Ticket();
+        }
+
+        public Ticket Result
+        {
+            get;
+        }
+
+        public override string TagName
+        {
+            get
+            {
+                return psf.PrintTicket.LocalName;
+            }
+        }
+
+        public override void Add(Feature element)
+        {
+            Result.Add(element);
+        }
+
+        public override void Add(ParameterInit element)
+        {
+            Result.Add(element);
+        }
+
+        public override void Add(Property element)
+        {
+            Result.Add(element);
         }
     }
 
