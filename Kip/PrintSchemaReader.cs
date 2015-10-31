@@ -559,7 +559,7 @@ namespace Kip
 
         public override void Add(ParameterRef parameterRef)
         {
-            _scoredProperty.ParmaeterRef = parameterRef;
+            _scoredProperty.ParameterRef = parameterRef;
         }
 
         public override void Add(Property property)
