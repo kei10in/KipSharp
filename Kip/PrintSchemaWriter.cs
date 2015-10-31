@@ -42,6 +42,35 @@ namespace Kip
             writer.Flush();
         }
 
+        public static void Write(XmlWriter writer, Ticket pc)
+        {
+            writer.WriteStartDocument();
+            writer.WriteStartElement("psf", psf.PrintTicket.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("version", "1");
+            writer.WriteAttributeString("xmlns", "psf", null, psf.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "psk", null, psk.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsi", null, xsi.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsd", null, xsd.Url.NamespaceName);
+
+            foreach (var f in pc.Features())
+            {
+                Write(writer, f);
+            }
+
+            foreach (var p in pc.Properties())
+            {
+                Write(writer, p);
+            }
+
+            foreach (var p in pc.Parameters())
+            {
+                Write(writer, p);
+            }
+
+            writer.WriteEndElement();
+            writer.Flush();
+        }
+
         private static void Write(XmlWriter writer, Feature feature)
         {
             writer.WriteStartElement(psf.Feature.LocalName, psf.Url.NamespaceName);
