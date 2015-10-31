@@ -33,6 +33,11 @@ namespace Kip
                 Write(writer, p);
             }
 
+            foreach (var p in pc.Parameters())
+            {
+                Write(writer, p);
+            }
+
             writer.WriteEndElement();
             writer.Flush();
         }
@@ -56,24 +61,91 @@ namespace Kip
             if (option.Name != null)
                 writer.WriteAttributeString("name", option.Name.ToQName(writer));
 
-            // TODO: Property
-            // TODO: ScoredProperty
-            
+            foreach (var p in option.Properties())
+            {
+                Write(writer, p);
+            }
+
+            foreach (var sp in option.ScoredProperties())
+            {
+                Write(writer, sp);
+            }
+
             writer.WriteEndElement();
         }
 
-        private static void Write(XmlWriter writer, Property property)
+        private static void Write(XmlWriter writer, ParameterDef element)
+        {
+            writer.WriteStartElement(psf.ParameterDef.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("name", element.Name.ToQName(writer));
+
+            foreach (var p in element.Properties())
+            {
+                Write(writer, p);
+            }
+
+            writer.WriteEndElement();
+        }
+
+        private static void Write(XmlWriter writer, ParameterInit element)
+        {
+            writer.WriteStartElement(psf.ParameterDef.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("name", element.Name.ToQName(writer));
+
+            Write(writer, element.Value);
+
+            writer.WriteEndElement();
+        }
+
+        private static void Write(XmlWriter writer, ParameterRef element)
+        {
+            if (element == null) return;
+
+            writer.WriteStartElement(psf.ParameterRef.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("name", element.Name.ToQName(writer));
+            writer.WriteEndElement();
+        }
+
+        private static void Write(XmlWriter writer, Property element)
         {
             writer.WriteStartElement(psf.Property.LocalName, psf.Url.NamespaceName);
-            writer.WriteAttributeString("name", property.Name.ToQName(writer));
+            writer.WriteAttributeString("name", element.Name.ToQName(writer));
 
-            Write(writer, property.Value);
+            Write(writer, element.Value);
+
+            foreach (var p in element.SubProperties())
+            {
+                Write(writer, p);
+            }
+
+            writer.WriteEndElement();
+        }
+
+        private static void Write(XmlWriter writer, ScoredProperty element)
+        {
+            writer.WriteStartElement(psf.ScoredProperty.LocalName, psf.Url.NamespaceName);
+            writer.WriteAttributeString("name", element.Name.ToQName(writer));
+
+            Write(writer, element.Value);
+            Write(writer, element.ParameterRef);
+
+            foreach (var p in element.SubProperties())
+            {
+                Write(writer, p);
+            }
+
+            foreach (var sp in element.SubScoredProperties())
+            {
+                Write(writer, sp);
+            }
 
             writer.WriteEndElement();
         }
 
         private static void Write(XmlWriter writer, Value value)
         {
+            if (value == null) return;
+
             writer.WriteStartElement(psf.Value.LocalName, psf.Url.NamespaceName);
             writer.WriteStartAttribute(xsi.Type.LocalName, xsi.Url.NamespaceName);
             writer.WriteValue(value.ValueType.ToQName(writer));

@@ -416,7 +416,7 @@ namespace Kip
             get; set;
         }
 
-        public ParameterRef ParmaeterRef
+        public ParameterRef ParameterRef
         {
             get; set;
         }
@@ -426,7 +426,7 @@ namespace Kip
             _scoredProperties.Add(scoredProperty);
         }
 
-        public IEnumerable<ScoredProperty> SubScoredProperty()
+        public IEnumerable<ScoredProperty> SubScoredProperties()
         {
             return _scoredProperties;
         }
@@ -441,7 +441,7 @@ namespace Kip
             _properties.Add(property);
         }
 
-        public IEnumerable<Property> SubProperty()
+        public IEnumerable<Property> SubProperties()
         {
             return _properties;
         }
