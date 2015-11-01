@@ -11,7 +11,7 @@ using System.IO;
 
 namespace Kip
 {
-    public static class PrintSchemaReader
+    internal static class PrintSchemaReader
     {
         public static Capabilities ReadCapabilities(XmlReader reader)
         {

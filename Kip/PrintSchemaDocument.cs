@@ -74,9 +74,28 @@ namespace Kip
             PrintSchemaWriter.Write(writer, this);
         }
 
-        public static Capabilities ReadFrom(XmlReader reader)
+        public static Capabilities Parse(string text)
         {
-            return PrintSchemaReader.ReadCapabilities(reader);
+            using (var textReader = new System.IO.StringReader(text))
+            {
+                return ReadFrom(textReader);
+            }
+        }
+
+        public static Capabilities ReadFrom(System.IO.Stream stream)
+        {
+            using (var reader = XmlReader.Create(stream))
+            {
+                return PrintSchemaReader.ReadCapabilities(reader);
+            }
+        }
+
+        public static Capabilities ReadFrom(System.IO.TextReader input)
+        {
+            using (var reader = XmlReader.Create(input))
+            {
+                return PrintSchemaReader.ReadCapabilities(reader);
+            }
         }
     }
 

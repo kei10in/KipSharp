@@ -32,11 +32,13 @@ namespace Kip.Tests
             var writer = XmlWriter.Create(buffer);
             pc.WriteTo(writer);
 
-            var reader = XmlReader.Create(new StringReader(buffer.ToString()));
-            var actual = Capabilities.ReadFrom(reader);
+            using (var textReader = new StringReader(buffer.ToString()))
+            {
+                var actual = Capabilities.ReadFrom(textReader);
 
-            Assert.NotNull(actual);
-            Assert.Empty(pc.Properties());
+                Assert.NotNull(actual);
+                Assert.Empty(pc.Properties());
+            }
         }
 
         [Fact]

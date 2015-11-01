@@ -22,23 +22,23 @@ namespace Kip.Tests
         {
             Assembly assembly = this.GetType().GetTypeInfo().Assembly;
             var names = assembly.GetManifestResourceNames();
-            var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.SimpleFeatureOptionStructure.xml");
+            using (var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.SimpleFeatureOptionStructure.xml"))
+            {
+                var actual = Capabilities.ReadFrom(stream);
 
-            var reader = XmlReader.Create(stream);
-            var actual = PrintSchemaReader.ReadCapabilities(reader);
+                Assert.NotNull(actual);
+                Assert.True(0 < actual.Features().Count());
 
-            Assert.NotNull(actual);
-            Assert.True(0 < actual.Features().Count());
+                var f = actual.Feature(psk.JobCollateAllDocuments);
+                Assert.True(0 < f?.Options()?.Count());
 
-            var f = actual.Feature(psk.JobCollateAllDocuments);
-            Assert.True(0 < f?.Options()?.Count());
+                var d = f.Property(psk.DisplayName);
+                Assert.Equal("Collate Copies", d?.Value);
 
-            var d = f.Property(psk.DisplayName);
-            Assert.Equal("Collate Copies", d?.Value);
-
-            var o = f.Options().Select(x => x.Property(psk.DisplayName)?.Value);
-            Assert.Contains(o, x => x == "Yes");
-            Assert.Contains(o, x => x == "No");
+                var o = f.Options().Select(x => x.Property(psk.DisplayName)?.Value);
+                Assert.Contains(o, x => x == "Yes");
+                Assert.Contains(o, x => x == "No");
+            }
         }
     }
 
@@ -53,10 +53,7 @@ namespace Kip.Tests
             var names = assembly.GetManifestResourceNames();
             using (var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.BasicPrintCapabilities.xml"))
             {
-                using (var reader = XmlReader.Create(stream))
-                {
-                    _actual = PrintSchemaReader.ReadCapabilities(reader);
-                }
+                _actual = Capabilities.ReadFrom(stream);
             }
         }
 
@@ -138,8 +135,7 @@ namespace Kip.Tests
 
             var writeResult1 = buffer1.ToString();
 
-            var reader = XmlReader.Create(new StringReader(writeResult1));
-            var pc = PrintSchemaReader.ReadCapabilities(reader);
+            var pc = Capabilities.Parse(writeResult1);
 
             var buffer2 = new StringBuilder();
             var writer2 = XmlWriter.Create(buffer2);
