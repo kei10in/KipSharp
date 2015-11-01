@@ -16,6 +16,14 @@ namespace Kip
         private List<ParameterDef> _parameters = new List<ParameterDef>();
         private List<Property> _properties = new List<Property>();
 
+        public Capabilities(params AddableToCapabilities[] elements)
+        {
+            foreach (var e in elements)
+            {
+                e.AddTo(this);
+            }
+        }
+
         public void Add(Feature feature)
         {
             _features.Add(feature);
@@ -72,11 +80,24 @@ namespace Kip
         }
     }
 
+    public interface AddableToCapabilities
+    {
+        void AddTo(Capabilities capablities);
+    }
+
     public class Ticket
     {
         private List<Feature> _features = new List<Feature>();
         private List<ParameterInit> _parameters = new List<ParameterInit>();
         private List<Property> _properties = new List<Property>();
+
+        public Ticket(params AddableToTicket[] elements)
+        {
+            foreach (var e in elements)
+            {
+                e.AddTo(this);
+            }
+        }
 
         public void Add(Feature feature)
         {
@@ -124,7 +145,12 @@ namespace Kip
         }
     }
 
-    public class Feature
+    public interface AddableToTicket
+    {
+        void AddTo(Ticket ticket);
+    }
+
+    public class Feature : AddableToCapabilities, AddableToTicket, AddableToFeature
     {
         private List<Property> _properties = new List<Property>();
         private List<Option> _options = new List<Option>();
@@ -133,6 +159,15 @@ namespace Kip
         public Feature(XName name)
         {
             Name = name;
+        }
+
+        public Feature(XName name, params AddableToFeature[] elements)
+        {
+            Name = name;
+            foreach (var e in elements)
+            {
+                e.AddTo(this);
+            }
         }
 
         public XName Name
@@ -179,6 +214,26 @@ namespace Kip
         {
             return _features.FirstOrDefault(x => x.Name == name);
         }
+
+        void AddableToCapabilities.AddTo(Capabilities capablities)
+        {
+            capablities.Add(this);
+        }
+
+        void AddableToTicket.AddTo(Ticket ticket)
+        {
+            ticket.Add(this);
+        }
+
+        void AddableToFeature.AddTo(Feature feature)
+        {
+            feature.Add(this);
+        }
+    }
+
+    public interface AddableToFeature
+    {
+        void AddTo(Feature feature);
     }
 
     public sealed class Constraint
@@ -231,24 +286,30 @@ namespace Kip
     }
 
 
-    public class Option
+    public class Option : AddableToFeature
     {
         private List<Property> _properties = new List<Property>();
         private List<ScoredProperty> _scoredProperty = new List<ScoredProperty>();
 
-        public Option()
+        public Option(params AddableToOption[] elements)
+            : this(null, null, elements)
         {
         }
 
-        public Option(XName name)
+        public Option(XName name, params AddableToOption[] elements)
+            : this(name, null, elements)
         {
-            Name = name;
         }
 
-        public Option(XName name, XName constrained)
+        public Option(XName name, XName constrained, params AddableToOption[] elements)
         {
             Name = name;
             Constrained = constrained;
+
+            foreach (var e in elements)
+            {
+                e.AddTo(this);
+            }
         }
 
         public XName Name
@@ -290,15 +351,30 @@ namespace Kip
         {
             return _scoredProperty.FirstOrDefault(x => x.Name == name);
         }
+
+        void AddableToFeature.AddTo(Feature feature)
+        {
+            feature.Add(this);
+        }
     }
 
-    public class ParameterDef
+    public interface AddableToOption
+    {
+        void AddTo(Option option);
+    }
+
+    public class ParameterDef : AddableToCapabilities
     {
         private List<Property> _properties = new List<Property>();
 
-        public ParameterDef(XName name)
+        public ParameterDef(XName name, params Property[] properties)
         {
             Name = name;
+
+            foreach (var p in properties)
+            {
+                Add(p);
+            }
         }
 
         public XName Name
@@ -320,9 +396,14 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
+
+        void AddableToCapabilities.AddTo(Capabilities capablities)
+        {
+            capablities.Add(this);
+        }
     }
 
-    public class ParameterInit
+    public class ParameterInit : AddableToTicket
     {
         public ParameterInit(XName name)
             : this(name, null)
@@ -344,6 +425,11 @@ namespace Kip
         {
             get; set;
         }
+
+        void AddableToTicket.AddTo(Ticket ticket)
+        {
+            ticket.Add(this);
+        }
     }
 
     public class ParameterRef
@@ -360,13 +446,29 @@ namespace Kip
     }
 
     public class Property
+        : AddableToCapabilities
+        , AddableToTicket
+        , AddableToFeature
+        , AddableToOption
+        , AddableToProperty
+        , AddableToScoredProperty
     {
         private List<Property> _properties = new List<Property>();
 
-        public Property(XName name, Value value = null)
+        public Property(XName name, params AddableToProperty[] elements)
+            : this(name, null, elements)
+        {
+        }
+
+        public Property(XName name, Value value, params AddableToProperty[] elements)
         {
             Name = name;
             Value = value;
+
+            foreach (var e in elements)
+            {
+                e.AddTo(this);
+            }
         }
 
         public XName Name
@@ -394,16 +496,68 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
+
+        void AddableToCapabilities.AddTo(Capabilities capablities)
+        {
+            capablities.Add(this);
+        }
+
+        void AddableToTicket.AddTo(Ticket ticket)
+        {
+            ticket.Add(this);
+        }
+
+        void AddableToFeature.AddTo(Feature feature)
+        {
+            feature.Add(this);
+        }
+
+        void AddableToOption.AddTo(Option option)
+        {
+            option.Add(this);
+        }
+
+        void AddableToProperty.AddTo(Property property)
+        {
+            property.Add(this);
+        }
+
+        void AddableToScoredProperty.AddTo(ScoredProperty property)
+        {
+            property.Add(this);
+        }
     }
 
-    public class ScoredProperty
+    public interface AddableToProperty
+    {
+        void AddTo(Property property);
+    }
+
+    public class ScoredProperty : AddableToOption, AddableToScoredProperty
     {
         private List<ScoredProperty> _scoredProperties = new List<ScoredProperty>();
         private List<Property> _properties = new List<Property>();
 
-        public ScoredProperty(XName name)
+        public ScoredProperty(XName name, params AddableToScoredProperty[] elements)
         {
             Name = name;
+
+            foreach (var e in elements)
+            {
+                e.AddTo(this);
+            }
+        }
+
+        public ScoredProperty(XName name, Value value, params AddableToScoredProperty[] elements)
+            : this(name, elements)
+        {
+            Value = value;
+        }
+
+        public ScoredProperty(XName name, ParameterRef parameter, params AddableToScoredProperty[] elements)
+            : this(name, elements)
+        {
+            ParameterRef = parameter;
         }
 
         public XName Name
@@ -450,6 +604,21 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
+
+        void AddableToOption.AddTo(Option option)
+        {
+            option.Add(this);
+        }
+
+        void AddableToScoredProperty.AddTo(ScoredProperty property)
+        {
+            property.Add(this);
+        }
+    }
+
+    public interface AddableToScoredProperty
+    {
+        void AddTo(ScoredProperty property);
     }
 
     public sealed class Value
