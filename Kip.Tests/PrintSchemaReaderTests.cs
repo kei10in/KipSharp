@@ -128,5 +128,26 @@ namespace Kip.Tests
             Assert.Equal(4, _actual.Parameters().Count());
             Assert.Equal(1, _actual.Properties().Count());
         }
+
+        [Fact]
+        public void RoundtripSafeForReadAndWrite()
+        {
+            var buffer1 = new StringBuilder();
+            var writer1 = XmlWriter.Create(buffer1);
+            PrintSchemaWriter.Write(writer1, _actual);
+
+            var writeResult1 = buffer1.ToString();
+
+            var reader = XmlReader.Create(new StringReader(writeResult1));
+            var pc = PrintSchemaReader.ReadCapabilities(reader);
+
+            var buffer2 = new StringBuilder();
+            var writer2 = XmlWriter.Create(buffer2);
+            PrintSchemaWriter.Write(writer2, pc);
+
+            var writeResult2 = buffer2.ToString();
+
+            Assert.Equal(writeResult1, writeResult2);
+        }
     }
 }
