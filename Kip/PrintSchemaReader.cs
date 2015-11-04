@@ -569,11 +569,14 @@ namespace Kip
 
     public class PrintSchemaProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
-        private Property _property;
+        private XName _name;
+        private Value _value;
+        private List<Property> _properties;
 
         public PrintSchemaProperty(XName name)
         {
-            _property = new Property(name);
+            _name = name;
+            _properties = new List<Property>();
         }
 
         public override string TagName
@@ -586,17 +589,18 @@ namespace Kip
 
         public override void Add(Property property)
         {
-            _property.Add(property);
+            _properties.Add(property);
         }
 
         public override void Add(Value value)
         {
-            _property.Value = value;
+            _value = value;
         }
 
         public void AddTo(PrintSchemaElement element)
         {
-            element.Add(_property);
+            var p = new Property(_name, _value, _properties.ToArray());
+            element.Add(p);
         }
     }
 

@@ -469,25 +469,20 @@ namespace Kip
         , AddableToTicket
         , AddableToFeature
         , AddableToOption
-        , AddableToProperty
         , AddableToScoredProperty
     {
-        private List<Property> _properties = new List<Property>();
+        private IReadOnlyCollection<Property> _properties;
 
-        public Property(XName name, params AddableToProperty[] elements)
+        public Property(XName name, params Property[] elements)
             : this(name, null, elements)
         {
         }
 
-        public Property(XName name, Value value, params AddableToProperty[] elements)
+        public Property(XName name, Value value, params Property[] elements)
         {
             Name = name;
             Value = value;
-
-            foreach (var e in elements)
-            {
-                e.AddTo(this);
-            }
+            _properties = elements.ToList();
         }
 
         public XName Name
@@ -498,15 +493,9 @@ namespace Kip
         public Value Value
         {
             get;
-            set;
         }
 
-        public void Add(Property property)
-        {
-            _properties.Add(property);
-        }
-
-        public IEnumerable<Property> SubProperties()
+        public IReadOnlyCollection<Property> SubProperties()
         {
             return _properties;
         }
@@ -536,20 +525,10 @@ namespace Kip
             option.Add(this);
         }
 
-        void AddableToProperty.AddTo(Property property)
-        {
-            property.Add(this);
-        }
-
         void AddableToScoredProperty.AddTo(ScoredProperty property)
         {
             property.Add(this);
         }
-    }
-
-    public interface AddableToProperty
-    {
-        void AddTo(Property property);
     }
 
     public class ScoredProperty : AddableToOption, AddableToScoredProperty
