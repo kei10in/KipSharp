@@ -606,11 +606,15 @@ namespace Kip
 
     public class PrintSchemaScoredProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
-        private ScoredProperty _scoredProperty;
+        private XName _name;
+        private Value _value;
+        private ParameterRef _parameterRef;
+        private List<Property> _properties = new List<Property>();
+        private List<ScoredProperty> _scoredProperties = new List<ScoredProperty>();
 
         public PrintSchemaScoredProperty(XName name)
         {
-            _scoredProperty = new ScoredProperty(name);
+            _name = name;            
         }
 
         public override string TagName
@@ -623,27 +627,28 @@ namespace Kip
 
         public override void Add(ParameterRef parameterRef)
         {
-            _scoredProperty.ParameterRef = parameterRef;
+            _parameterRef = parameterRef;
         }
 
         public override void Add(Property property)
         {
-            _scoredProperty.Add(property);
+            _properties.Add(property);
         }
 
         public override void Add(ScoredProperty scoredProperty)
         {
-            _scoredProperty.Add(scoredProperty);
+            _scoredProperties.Add(scoredProperty);
         }
 
         public override void Add(Value value)
         {
-            _scoredProperty.Value = value;
+            _value = value;
         }
 
         public void AddTo(PrintSchemaElement element)
         {
-            element.Add(_scoredProperty);
+            var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
+            element.Add(sp);
         }
     }
 

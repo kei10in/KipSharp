@@ -525,25 +525,29 @@ namespace Kip
             option.Add(this);
         }
 
-        void AddableToScoredProperty.AddTo(ScoredProperty property)
+        void AddableToScoredProperty.AddTo(ScoredPropertyChildren container)
         {
-            property.Add(this);
+            container.Properties.Add(this);
         }
     }
 
     public class ScoredProperty : AddableToOption, AddableToScoredProperty
     {
-        private List<ScoredProperty> _scoredProperties = new List<ScoredProperty>();
-        private List<Property> _properties = new List<Property>();
+        private IReadOnlyCollection<ScoredProperty> _scoredProperties;
+        private IReadOnlyCollection<Property> _properties;
 
         public ScoredProperty(XName name, params AddableToScoredProperty[] elements)
         {
             Name = name;
 
+            var container = new ScoredPropertyChildren();
             foreach (var e in elements)
             {
-                e.AddTo(this);
+                e.AddTo(container);
             }
+
+            _scoredProperties = container.ScoredProperties;
+            _properties = container.Properties;
         }
 
         public ScoredProperty(XName name, Value value, params AddableToScoredProperty[] elements)
@@ -558,6 +562,20 @@ namespace Kip
             ParameterRef = parameter;
         }
 
+        internal ScoredProperty(
+            XName name,
+            Value value,
+            ParameterRef parameter,
+            IEnumerable<ScoredProperty> scoredProperties,
+            IEnumerable<Property> properties)
+        {
+            Name = name;
+            Value = value;
+            ParameterRef = parameter;
+            _properties = new List<Property>(properties);
+            _scoredProperties = new List<ScoredProperty>(scoredProperties);
+        }
+
         public XName Name
         {
             get;
@@ -565,17 +583,12 @@ namespace Kip
 
         public Value Value
         {
-            get; set;
+            get;
         }
 
         public ParameterRef ParameterRef
         {
-            get; set;
-        }
-
-        public void Add(ScoredProperty scoredProperty)
-        {
-            _scoredProperties.Add(scoredProperty);
+            get;
         }
 
         public IEnumerable<ScoredProperty> SubScoredProperties()
@@ -586,11 +599,6 @@ namespace Kip
         public ScoredProperty SubScoredProperty(XName name)
         {
             return _scoredProperties.FirstOrDefault(x => x.Name == name);
-        }
-
-        public void Add(Property property)
-        {
-            _properties.Add(property);
         }
 
         public IEnumerable<Property> SubProperties()
@@ -608,15 +616,28 @@ namespace Kip
             option.Add(this);
         }
 
-        void AddableToScoredProperty.AddTo(ScoredProperty property)
+        void AddableToScoredProperty.AddTo(ScoredPropertyChildren container)
         {
-            property.Add(this);
+            container.ScoredProperties.Add(this);
         }
+    }
+
+    public class ScoredPropertyChildren
+    {
+        public List<Property> Properties
+        {
+            get;
+        } = new List<Property>();
+
+        public List<ScoredProperty> ScoredProperties
+        {
+            get;
+        } = new List<ScoredProperty>();
     }
 
     public interface AddableToScoredProperty
     {
-        void AddTo(ScoredProperty property);
+        void AddTo(ScoredPropertyChildren container);
     }
 
     public sealed class Value
