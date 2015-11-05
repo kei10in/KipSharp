@@ -642,7 +642,14 @@ namespace Kip
 
     public sealed class Value
     {
+        public static readonly Value Empty = new Value();
+
         object _value;
+
+        private Value()
+        {
+            _value = null;
+        }
 
         public Value(int? value)
         {
