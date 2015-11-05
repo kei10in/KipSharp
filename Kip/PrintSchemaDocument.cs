@@ -255,56 +255,6 @@ namespace Kip
         void AddTo(Feature feature);
     }
 
-    public sealed class Constraint
-    {
-        internal Constraint(XName value)
-        {
-            Value = value;
-        }
-
-        public XName Value
-        {
-            get;
-        }
-
-        public override bool Equals(object rhs)
-        {
-            return Equals(rhs as Constraint);
-        }
-
-        public bool Equals(Constraint rhs)
-        {
-            return this == rhs;
-        }
-
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode();
-        }
-
-        public static bool operator ==(Constraint lhs, Constraint rhs)
-        {
-            if (ReferenceEquals(lhs, rhs)) return true;
-            if ((object)lhs == null || (object)rhs == null) return false;
-
-            return lhs.Value == rhs.Value;
-        }
-
-        public static bool operator !=(Constraint lhs, Constraint rhs)
-        {
-            return !(lhs == rhs);
-        }
-    }
-
-    public static class Constraints
-    {
-        public static readonly Constraint None = new Constraint(psk.None);
-        public static readonly Constraint PrintTicket = new Constraint(psk.PrintTicketSettings);
-        public static readonly Constraint Admin = new Constraint(psk.AdminSettings);
-        public static readonly Constraint Device = new Constraint(psk.DeviceSettings);
-    }
-
-
     public class Option : AddableToFeature
     {
         private List<Property> _properties = new List<Property>();
