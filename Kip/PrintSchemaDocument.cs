@@ -22,6 +22,12 @@ namespace Kip
 
         public void Add(Feature feature)
         {
+            if (_features.Any(x => x.Name == feature.Name))
+            {
+                throw new DuplicateNameException(
+                    $"Feature {feature.Name} is already exists. Name attribute must be unique.");
+            }
+
             _features.Add(feature);
         }
 

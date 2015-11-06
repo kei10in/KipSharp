@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ElementTests.cs" />
     <Compile Include="PrintSchemaCapabilitiesTests.cs" />
     <Compile Include="PrintSchemaReaderTests.cs" />
     <Compile Include="PrintSchemaValueTests.cs" />
