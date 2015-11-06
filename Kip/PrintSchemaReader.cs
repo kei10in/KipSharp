@@ -234,31 +234,37 @@ namespace Kip
                 }
             } while (reader.MoveToNextAttribute());
 
-            // move to text node
-            reader.Read();
+            reader.MoveToElement();
 
-            PrintSchemaValue value = null;
+            if (reader.IsEmptyElement)
+            {
+                return PrintSchemaValue.Empty;
+            }
 
-            if (type == xsd.Integer)
-            {
-                value = new PrintSchemaValue(reader.Value.AsInt32());
-            }
-            else if (type == xsd.Decimal)
-            {
-                value = new PrintSchemaValue(reader.Value.AsFloat());
-            }
-            else if (type == xsd.QName)
-            {
-                value = new PrintSchemaValue(reader.ValueAsXName());
-            }
-            else
-            {
-                value = new PrintSchemaValue(reader.Value);
-            }
+            var value = PrintSchemaValue.Empty;
 
             while (reader.Read())
             {
-                if (reader.NodeType == XmlNodeType.Element)
+                if (reader.NodeType == XmlNodeType.Text)
+                {
+                    if (type == xsd.Integer)
+                    {
+                        value = new PrintSchemaValue(reader.Value.AsInt32());
+                    }
+                    else if (type == xsd.Decimal)
+                    {
+                        value = new PrintSchemaValue(reader.Value.AsFloat());
+                    }
+                    else if (type == xsd.QName)
+                    {
+                        value = new PrintSchemaValue(reader.ValueAsXName());
+                    }
+                    else
+                    {
+                        value = new PrintSchemaValue(reader.Value);
+                    }
+                }
+                else if (reader.NodeType == XmlNodeType.Element)
                 {
                     reader.Skip();
                 }
@@ -654,7 +660,14 @@ namespace Kip
 
     public class PrintSchemaValue : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
+        static public PrintSchemaValue Empty = new PrintSchemaValue();
+
         private Value _value;
+
+        private PrintSchemaValue()
+        {
+            _value = Value.Empty;
+        }
 
         public PrintSchemaValue(Value value)
         {
