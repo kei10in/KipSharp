@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using psf = Kip.PrintSchemaFramework;
-using xsi = Kip.XmlSchemaInstance;
-using xsd = Kip.XmlSchema;
+using psf = Kip.Psf;
+using xsi = Kip.Xsi;
+using xsd = Kip.Xsd;
 using System.IO;
 
 namespace Kip
@@ -24,7 +24,7 @@ namespace Kip
             }
 
             var tagName = reader.XName();
-            if (tagName != psf.PrintCapabilities)
+            if (tagName != Psf.PrintCapabilities)
                 return null;
 
             var pc = new PrintSchemaCapabilities();
@@ -48,7 +48,7 @@ namespace Kip
             }
 
             var tagName = reader.XName();
-            if (tagName != psf.PrintTicket)
+            if (tagName != Psf.PrintTicket)
                 return null;
 
             var pc = new PrintSchemaTicket();
@@ -92,14 +92,14 @@ namespace Kip
         public static PrintSchemaChildElement ReadElement(XmlReader reader)
         {
             XName tagName = reader.XName();
-            if (tagName == psf.Feature) return ReadFeature(reader);
-            else if (tagName == psf.Option) return ReadOption(reader);
-            else if (tagName == psf.ParameterDef) return ReadParameterDef(reader);
-            else if (tagName == psf.ParameterInit) return ReadParameterInit(reader);
-            else if (tagName == psf.ParameterRef) return ReadParameterRef(reader);
-            else if (tagName == psf.Property) return ReadProperty(reader);
-            else if (tagName == psf.ScoredProperty) return ReadScoredProperty(reader);
-            else if (tagName == psf.Value) return ReadValue(reader);
+            if (tagName == Psf.Feature) return ReadFeature(reader);
+            else if (tagName == Psf.Option) return ReadOption(reader);
+            else if (tagName == Psf.ParameterDef) return ReadParameterDef(reader);
+            else if (tagName == Psf.ParameterInit) return ReadParameterInit(reader);
+            else if (tagName == Psf.ParameterRef) return ReadParameterRef(reader);
+            else if (tagName == Psf.Property) return ReadProperty(reader);
+            else if (tagName == Psf.ScoredProperty) return ReadScoredProperty(reader);
+            else if (tagName == Psf.Value) return ReadValue(reader);
             else reader.Skip();
             return null;
         }
@@ -228,7 +228,7 @@ namespace Kip
             do
             {
                 var attrName = reader.XName();
-                if (attrName == xsi.Type)
+                if (attrName == Xsi.Type)
                 {
                     type = reader.ValueAsXName();
                 }
@@ -247,15 +247,15 @@ namespace Kip
             {
                 if (reader.NodeType == XmlNodeType.Text)
                 {
-                    if (type == xsd.Integer)
+                    if (type == Xsd.Integer)
                     {
                         value = new PrintSchemaValue(reader.Value.AsInt32());
                     }
-                    else if (type == xsd.Decimal)
+                    else if (type == Xsd.Decimal)
                     {
                         value = new PrintSchemaValue(reader.Value.AsFloat());
                     }
-                    else if (type == xsd.QName)
+                    else if (type == Xsd.QName)
                     {
                         value = new PrintSchemaValue(reader.ValueAsXName());
                     }
@@ -367,7 +367,7 @@ namespace Kip
         {
             get
             {
-                return psf.PrintCapabilities.LocalName;
+                return Psf.PrintCapabilities.LocalName;
             }
         }
 
@@ -403,7 +403,7 @@ namespace Kip
         {
             get
             {
-                return psf.PrintTicket.LocalName;
+                return Psf.PrintTicket.LocalName;
             }
         }
 
@@ -436,7 +436,7 @@ namespace Kip
         {
             get
             {
-                return psf.Feature.LocalName;
+                return Psf.Feature.LocalName;
             }
         }
 
@@ -474,7 +474,7 @@ namespace Kip
         {
             get
             {
-                return psf.Option.LocalName;
+                return Psf.Option.LocalName;
             }
         }
 
@@ -507,7 +507,7 @@ namespace Kip
         {
             get
             {
-                return psf.ParameterDef.LocalName;
+                return Psf.ParameterDef.LocalName;
             }
         }
 
@@ -535,7 +535,7 @@ namespace Kip
         {
             get
             {
-                return psf.ParameterDef.LocalName;
+                return Psf.ParameterDef.LocalName;
             }
         }
 
@@ -563,7 +563,7 @@ namespace Kip
         {
             get
             {
-                return psf.ParameterDef.LocalName;
+                return Psf.ParameterDef.LocalName;
             }
         }
 
@@ -589,7 +589,7 @@ namespace Kip
         {
             get
             {
-                return psf.Property.LocalName;
+                return Psf.Property.LocalName;
             }
         }
 
@@ -627,7 +627,7 @@ namespace Kip
         {
             get
             {
-                return psf.Property.LocalName;
+                return Psf.Property.LocalName;
             }
         }
 
@@ -678,7 +678,7 @@ namespace Kip
         {
             get
             {
-                return psf.Value.LocalName;
+                return Psf.Value.LocalName;
             }
         }
 

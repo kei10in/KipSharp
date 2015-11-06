@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Xunit;
-using psk = Kip.PrintSchemaKeywords;
-using xsd = Kip.XmlSchema;
 
 namespace Kip.Tests
 {
@@ -29,13 +27,13 @@ namespace Kip.Tests
                 Assert.NotNull(actual);
                 Assert.True(0 < actual.Features().Count());
 
-                var f = actual.Feature(psk.JobCollateAllDocuments);
+                var f = actual.Feature(Psk.JobCollateAllDocuments);
                 Assert.True(0 < f?.Options()?.Count());
 
-                var d = f.Property(psk.DisplayName);
+                var d = f.Property(Psk.DisplayName);
                 Assert.Equal("Collate Copies", d?.Value);
 
-                var o = f.Options().Select(x => x.Property(psk.DisplayName)?.Value);
+                var o = f.Options().Select(x => x.Property(Psk.DisplayName)?.Value);
                 Assert.Contains(o, x => x == "Yes");
                 Assert.Contains(o, x => x == "No");
             }
@@ -113,7 +111,7 @@ namespace Kip.Tests
             //   </psf:Property>
             // </psf:Property>
 
-            var property = _actual.Property(psk.PageImageableSize);
+            var property = _actual.Property(Psk.PageImageableSize);
             Assert.NotNull(property);
             Assert.Equal(3, property.SubProperties().Count());
         }

@@ -2,7 +2,7 @@
 
 namespace Kip
 {
-    public static class PrintSchemaFramework
+    public static class Psf
     {
         public static readonly XNamespace Url = "http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework";
 

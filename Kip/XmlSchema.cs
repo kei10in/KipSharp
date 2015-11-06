@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace Kip
 {
-    public static class XmlSchema
+    public static class Xsd
     {
         public static readonly XNamespace Url = "http://www.w3.org/2001/XMLSchema";
 

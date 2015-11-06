@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Xml.Linq;
 using Xunit;
-using psf = Kip.PrintSchemaFramework;
-using xsi = Kip.XmlSchemaInstance;
-using xsd = Kip.XmlSchema;
+using psf = Kip.Psf;
+using xsi = Kip.Xsi;
+using xsd = Kip.Xsd;
 using Kip;
 
 namespace Kip.Tests
@@ -29,8 +29,8 @@ namespace Kip.Tests
         [Fact]
         public void ComparableWithXNameValue()
         {
-            var v = new Value(psf.Feature);
-            Assert.Equal(psf.Feature, v);
+            var v = new Value(Psf.Feature);
+            Assert.Equal(Psf.Feature, v);
         }
 
         [Fact]
@@ -67,10 +67,10 @@ namespace Kip.Tests
         {
             var v = new Value(1);
             XElement element = v.AsXElement();
-            var type = element.Attribute(xsi.Type);
+            var type = element.Attribute(Xsi.Type);
 
             Assert.NotNull(type);
-            Assert.Equal(xsd.Integer, type.Value.ToXName(element));
+            Assert.Equal(Xsd.Integer, type.Value.ToXName(element));
             Assert.Equal("1", element.Value);
         }
 
@@ -79,10 +79,10 @@ namespace Kip.Tests
         {
             var v = new Value(3.14f);
             XElement element = v.AsXElement();
-            var type = element.Attribute(xsi.Type);
+            var type = element.Attribute(Xsi.Type);
 
             Assert.NotNull(type);
-            Assert.Equal(xsd.Decimal, type.Value.ToXName(element));
+            Assert.Equal(Xsd.Decimal, type.Value.ToXName(element));
             Assert.Equal("3.14", element.Value);
         }
     }

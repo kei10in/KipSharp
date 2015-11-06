@@ -5,9 +5,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Xunit;
-using psf = Kip.PrintSchemaFramework;
-using psk = Kip.PrintSchemaKeywords;
-using xsi = Kip.XmlSchemaInstance;
 
 namespace Kip.Tests
 {
@@ -17,9 +14,9 @@ namespace Kip.Tests
         public void FindPropertyByNameTest()
         {
             var pc = new Capabilities();
-            pc.Add(new Property(psk.DisplayName, "value"));
+            pc.Add(new Property(Psk.DisplayName, "value"));
 
-            var p = pc.Property(psk.DisplayName);
+            var p = pc.Property(Psk.DisplayName);
 
             Assert.Equal("value", p.Value);
         }
@@ -45,7 +42,7 @@ namespace Kip.Tests
         public void WriteValueInProperty()
         {
             var pc = new Capabilities();
-            pc.Add(new Property(psk.JobName, "some job name"));
+            pc.Add(new Property(Psk.JobName, "some job name"));
 
             var buffer = new StringBuilder();
             var writer = XmlWriter.Create(buffer);
@@ -53,13 +50,13 @@ namespace Kip.Tests
 
             var doc = XDocument.Parse(buffer.ToString());
 
-            Assert.Equal(psf.PrintCapabilities, doc.Root.Name);
+            Assert.Equal(Psf.PrintCapabilities, doc.Root.Name);
 
-            var prop = doc.Root.Element(psf.Property);
+            var prop = doc.Root.Element(Psf.Property);
             Assert.Equal("psk:JobName", prop.Attribute("name").Value);
 
-            var value = prop.Element(psf.Value);
-            Assert.Equal("xsd:string", value.Attribute(xsi.Type).Value);
+            var value = prop.Element(Psf.Value);
+            Assert.Equal("xsd:string", value.Attribute(Xsi.Type).Value);
             Assert.Equal("some job name", value.Value);
         }
     }

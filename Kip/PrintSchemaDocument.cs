@@ -1,8 +1,4 @@
 ﻿using System.Xml.Linq;
-using psf = Kip.PrintSchemaFramework;
-using psk = Kip.PrintSchemaKeywords;
-using xsi = Kip.XmlSchemaInstance;
-using xsd = Kip.XmlSchema;
 using System;
 using System.Xml;
 using System.Collections.Generic;
@@ -631,19 +627,19 @@ namespace Kip
                 var type = _value.GetType();
                 if (type == typeof(int))
                 {
-                    return xsd.Integer;
+                    return Xsd.Integer;
                 }
                 else if (type == typeof(float))
                 {
-                    return xsd.Decimal;
+                    return Xsd.Decimal;
                 }
                 else if (type == typeof(XName))
                 {
-                    return xsd.QName;
+                    return Xsd.QName;
                 }
                 else
                 {
-                    return xsd.String;
+                    return Xsd.String;
                 }
             }
         }
@@ -653,13 +649,13 @@ namespace Kip
             var type = ValueType;
 
             var element = new XElement(
-                psf.Value,
-                new XAttribute(XNamespace.Xmlns + "psf", psf.Url),
-                new XAttribute(XNamespace.Xmlns + "xsi", xsi.Url),
-                new XAttribute(XNamespace.Xmlns + "xsd", xsd.Url));
-            element.Add(new XAttribute(xsi.Type, type.ToQName(element)));
+                Psf.Value,
+                new XAttribute(XNamespace.Xmlns + "psf", Psf.Url),
+                new XAttribute(XNamespace.Xmlns + "xsi", Xsi.Url),
+                new XAttribute(XNamespace.Xmlns + "xsd", Xsd.Url));
+            element.Add(new XAttribute(Xsi.Type, type.ToQName(element)));
 
-            if (type == xsd.QName)
+            if (type == Xsd.QName)
             {
                 var value = _value as XName;
                 element.Add(value.ToQName(element));
@@ -736,9 +732,9 @@ namespace Kip
 
             var type = v1.ValueType;
 
-            if (type == xsd.Integer) return v1.AsInt() == v2.AsInt();
-            else if (type == xsd.Decimal) return v1.AsFloat() == v2.AsFloat();
-            else if (type == xsd.QName) return v1.AsXName() == v2.AsXName();
+            if (type == Xsd.Integer) return v1.AsInt() == v2.AsInt();
+            else if (type == Xsd.Decimal) return v1.AsFloat() == v2.AsFloat();
+            else if (type == Xsd.QName) return v1.AsXName() == v2.AsXName();
             else return v1.AsString() == v2.AsString();
         }
 
