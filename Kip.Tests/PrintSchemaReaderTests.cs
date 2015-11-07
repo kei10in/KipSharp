@@ -38,6 +38,17 @@ namespace Kip.Tests
                 Assert.Contains(o, x => x == "No");
             }
         }
+
+        [Fact]
+        public void ReadValueWithUnspecifedType()
+        {
+            Assembly assembly = this.GetType().GetTypeInfo().Assembly;
+            var names = assembly.GetManifestResourceNames();
+            using (var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.ValueWithUnspecifiedType.xml"))
+            {
+                var actual = Capabilities.ReadFrom(stream);
+            }
+        }
     }
 
     public class BasicPrintCapabilitiesReadingTests

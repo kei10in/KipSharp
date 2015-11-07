@@ -224,17 +224,19 @@ namespace Kip
         {
             XName type = null;
 
-            if (!reader.MoveToFirstAttribute()) return null;
-            do
+            if (reader.MoveToFirstAttribute())  // Read value type
             {
-                var attrName = reader.XName();
-                if (attrName == Xsi.Type)
+                do
                 {
-                    type = reader.ValueAsXName();
-                }
-            } while (reader.MoveToNextAttribute());
+                    var attrName = reader.XName();
+                    if (attrName == Xsi.Type)
+                    {
+                        type = reader.ValueAsXName();
+                    }
+                } while (reader.MoveToNextAttribute());
 
-            reader.MoveToElement();
+                reader.MoveToElement();
+            }
 
             if (reader.IsEmptyElement)
             {
@@ -620,7 +622,7 @@ namespace Kip
 
         public PrintSchemaScoredProperty(XName name)
         {
-            _name = name;            
+            _name = name;
         }
 
         public override string TagName
