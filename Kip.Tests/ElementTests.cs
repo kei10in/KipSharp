@@ -23,5 +23,17 @@ namespace Kip.Tests
                 pc.Add(new Feature(someName1));
             });
         }
+
+        [Fact]
+        public void ThrowsExceptionWhenAddParameterWithExistingNameToCapabilites()
+        {
+            var pc = new Capabilities();
+            pc.Add(new ParameterDef(someName1));
+
+            Assert.Throws<DuplicateNameException>(() =>
+            {
+                pc.Add(new ParameterDef(someName1));
+            });
+        }
     }
 }

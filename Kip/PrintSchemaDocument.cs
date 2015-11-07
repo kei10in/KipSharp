@@ -9,7 +9,7 @@ namespace Kip
     public class Capabilities
     {
         private FeatureContainer _features = new FeatureContainer();
-        private List<ParameterDef> _parameters = new List<ParameterDef>();
+        private ParameterDefContainer _parameters = new ParameterDefContainer();
         private List<Property> _properties = new List<Property>();
 
         public Capabilities(params AddableToCapabilities[] elements)
