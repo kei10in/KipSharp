@@ -650,9 +650,9 @@ namespace Kip
 
             var element = new XElement(
                 Psf.Value,
-                new XAttribute(XNamespace.Xmlns + "psf", Psf.Url),
-                new XAttribute(XNamespace.Xmlns + "xsi", Xsi.Url),
-                new XAttribute(XNamespace.Xmlns + "xsd", Xsd.Url));
+                new XAttribute(XNamespace.Xmlns + "psf", Psf.Namespace),
+                new XAttribute(XNamespace.Xmlns + "xsi", Xsi.Namespace),
+                new XAttribute(XNamespace.Xmlns + "xsd", Xsd.Namespace));
             element.Add(new XAttribute(Xsi.Type, type.ToQName(element)));
 
             if (type == Xsd.QName)

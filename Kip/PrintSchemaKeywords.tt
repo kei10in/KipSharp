@@ -379,12 +379,12 @@ namespace Kip
 {
     public static class Psk
     {
-        public static readonly XNamespace Url = "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords";
+        public static readonly XNamespace Namespace = "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords";
 
 <#
 	foreach (var keyword in keywords) {
 #>
-        public static readonly XName <#= keyword.Replace("-", "_") #> = Url + "<#= keyword #>";
+        public static readonly XName <#= keyword.Replace("-", "_") #> = Namespace + "<#= keyword #>";
 <#
 	}
 #>

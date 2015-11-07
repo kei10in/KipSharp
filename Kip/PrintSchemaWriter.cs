@@ -12,12 +12,12 @@ namespace Kip
         public static void Write(XmlWriter writer, Capabilities pc)
         {
             writer.WriteStartDocument();
-            writer.WriteStartElement("psf", Psf.PrintCapabilities.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement("psf", Psf.PrintCapabilities.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("version", "1");
-            writer.WriteAttributeString("xmlns", "psf", null, Psf.Url.NamespaceName);
-            writer.WriteAttributeString("xmlns", "psk", null, Psk.Url.NamespaceName);
-            writer.WriteAttributeString("xmlns", "xsi", null, Xsi.Url.NamespaceName);
-            writer.WriteAttributeString("xmlns", "xsd", null, Xsd.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "psf", null, Psf.Namespace.NamespaceName);
+            writer.WriteAttributeString("xmlns", "psk", null, Psk.Namespace.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsi", null, Xsi.Namespace.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsd", null, Xsd.Namespace.NamespaceName);
 
             foreach (var f in pc.Features())
             {
@@ -41,12 +41,12 @@ namespace Kip
         public static void Write(XmlWriter writer, Ticket pc)
         {
             writer.WriteStartDocument();
-            writer.WriteStartElement("psf", Psf.PrintTicket.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement("psf", Psf.PrintTicket.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("version", "1");
-            writer.WriteAttributeString("xmlns", "psf", null, Psf.Url.NamespaceName);
-            writer.WriteAttributeString("xmlns", "psk", null, Psk.Url.NamespaceName);
-            writer.WriteAttributeString("xmlns", "xsi", null, Xsi.Url.NamespaceName);
-            writer.WriteAttributeString("xmlns", "xsd", null, Xsd.Url.NamespaceName);
+            writer.WriteAttributeString("xmlns", "psf", null, Psf.Namespace.NamespaceName);
+            writer.WriteAttributeString("xmlns", "psk", null, Psk.Namespace.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsi", null, Xsi.Namespace.NamespaceName);
+            writer.WriteAttributeString("xmlns", "xsd", null, Xsd.Namespace.NamespaceName);
 
             foreach (var f in pc.Features())
             {
@@ -69,7 +69,7 @@ namespace Kip
 
         private static void Write(XmlWriter writer, Feature feature)
         {
-            writer.WriteStartElement(Psf.Feature.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.Feature.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", feature.Name.ToQName(writer));
 
             foreach (var o in feature.Options())
@@ -82,7 +82,7 @@ namespace Kip
 
         private static void Write(XmlWriter writer, Option option)
         {
-            writer.WriteStartElement(Psf.Option.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.Option.LocalName, Psf.Namespace.NamespaceName);
             if (option.Name != null)
                 writer.WriteAttributeString("name", option.Name.ToQName(writer));
 
@@ -101,7 +101,7 @@ namespace Kip
 
         private static void Write(XmlWriter writer, ParameterDef element)
         {
-            writer.WriteStartElement(Psf.ParameterDef.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.ParameterDef.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", element.Name.ToQName(writer));
 
             foreach (var p in element.Properties())
@@ -114,7 +114,7 @@ namespace Kip
 
         private static void Write(XmlWriter writer, ParameterInit element)
         {
-            writer.WriteStartElement(Psf.ParameterDef.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.ParameterDef.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", element.Name.ToQName(writer));
 
             Write(writer, element.Value);
@@ -126,14 +126,14 @@ namespace Kip
         {
             if (element == null) return;
 
-            writer.WriteStartElement(Psf.ParameterRef.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.ParameterRef.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", element.Name.ToQName(writer));
             writer.WriteEndElement();
         }
 
         private static void Write(XmlWriter writer, Property element)
         {
-            writer.WriteStartElement(Psf.Property.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.Property.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", element.Name.ToQName(writer));
 
             Write(writer, element.Value);
@@ -148,7 +148,7 @@ namespace Kip
 
         private static void Write(XmlWriter writer, ScoredProperty element)
         {
-            writer.WriteStartElement(Psf.ScoredProperty.LocalName, Psf.Url.NamespaceName);
+            writer.WriteStartElement(Psf.ScoredProperty.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", element.Name.ToQName(writer));
 
             Write(writer, element.Value);
@@ -171,8 +171,8 @@ namespace Kip
         {
             if (value == null) return;
 
-            writer.WriteStartElement(Psf.Value.LocalName, Psf.Url.NamespaceName);
-            writer.WriteStartAttribute(Xsi.Type.LocalName, Xsi.Url.NamespaceName);
+            writer.WriteStartElement(Psf.Value.LocalName, Psf.Namespace.NamespaceName);
+            writer.WriteStartAttribute(Xsi.Type.LocalName, Xsi.Namespace.NamespaceName);
             writer.WriteValue(value.ValueType.ToQName(writer));
             writer.WriteEndAttribute();
 
