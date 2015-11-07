@@ -253,8 +253,8 @@ namespace Kip
 
     public class Option : AddableToFeature
     {
-        private List<Property> _properties = new List<Property>();
-        private List<ScoredProperty> _scoredProperty = new List<ScoredProperty>();
+        private PropertyContainer _properties = new PropertyContainer();
+        private ScoredPropertyContainer _scoredProperty = new ScoredPropertyContainer();
 
         public Option(params AddableToOption[] elements)
             : this(null, null, elements)
