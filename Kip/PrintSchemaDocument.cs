@@ -518,8 +518,8 @@ namespace Kip
             Name = name;
             Value = value;
             ParameterRef = parameter;
-            _properties = new List<Property>(properties);
-            _scoredProperties = new List<ScoredProperty>(scoredProperties);
+            _properties = new PropertyContainer(properties);
+            _scoredProperties = new ScoredPropertyContainer(scoredProperties);
         }
 
         public XName Name
@@ -570,15 +570,15 @@ namespace Kip
 
     public class ScoredPropertyChildren
     {
-        public List<Property> Properties
+        internal PropertyContainer Properties
         {
             get;
-        } = new List<Property>();
+        } = new PropertyContainer();
 
-        public List<ScoredProperty> ScoredProperties
+        internal ScoredPropertyContainer ScoredProperties
         {
             get;
-        } = new List<ScoredProperty>();
+        } = new ScoredPropertyContainer();
     }
 
     public interface AddableToScoredProperty

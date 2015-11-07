@@ -104,6 +104,12 @@ namespace Kip
     internal sealed class ScoredPropertyContainer
         : NamedElementContainer<ScoredProperty>
     {
+        internal ScoredPropertyContainer() : base() { }
+
+        internal ScoredPropertyContainer(IEnumerable<ScoredProperty> collection)
+            : base(collection)
+        { }
+
         protected override XName NameOf(ScoredProperty element)
         {
             return element.Name;
