@@ -6,10 +6,30 @@ using System.Xml.Linq;
 
 namespace Kip
 {
-    internal abstract class NamedElementContainer<T> : IEnumerable<T>
+    internal abstract class NamedElementContainer<T>
+        : IEnumerable<T>
+        , IReadOnlyCollection<T>
         where T : class
     {
         private List<T> _elements = new List<T>();
+
+        public NamedElementContainer() { }
+
+        public NamedElementContainer(IEnumerable<T> collection)
+        {
+            foreach (var element in collection)
+            {
+                Add(element);
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _elements.Count;
+            }
+        }
 
         public void Add(T element)
         {
@@ -69,6 +89,12 @@ namespace Kip
     internal sealed class PropertyContainer
         : NamedElementContainer<Property>
     {
+        internal PropertyContainer() : base() { }
+
+        internal PropertyContainer(IEnumerable<Property> collection)
+            : base(collection)
+        { }
+
         protected override XName NameOf(Property element)
         {
             return element.Name;

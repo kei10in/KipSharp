@@ -11,6 +11,7 @@ namespace Kip.Tests
     public class ElementTests
     {
         static readonly XName someName1 = "SomeName1";
+        static readonly XName someName2 = "SomeName2";
 
         [Fact]
         public void ThrowsExceptionWhenAddFeatureWithExistingNameToCapabilites()
@@ -45,6 +46,17 @@ namespace Kip.Tests
             Assert.Throws<DuplicateNameException>(() =>
             {
                 pc.Add(new Property(someName1));
+            });
+        }
+
+        [Fact]
+        public void ThrowsExceptionWhenAddPropertyWithExistingNameToProperty()
+        {
+            Assert.Throws<DuplicateNameException>(() =>
+            {
+                var parent = new Property(someName1,
+                    new Property(someName2),
+                    new Property(someName2));
             });
         }
     }

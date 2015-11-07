@@ -428,7 +428,7 @@ namespace Kip
         {
             Name = name;
             Value = value;
-            _properties = elements.ToList();
+            _properties = new PropertyContainer(elements);
         }
 
         public XName Name
