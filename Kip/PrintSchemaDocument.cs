@@ -330,7 +330,7 @@ namespace Kip
 
     public class ParameterDef : AddableToCapabilities
     {
-        private List<Property> _properties = new List<Property>();
+        private PropertyContainer _properties = new PropertyContainer();
 
         public ParameterDef(XName name, params Property[] properties)
         {
