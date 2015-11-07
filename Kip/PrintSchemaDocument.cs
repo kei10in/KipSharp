@@ -8,7 +8,7 @@ namespace Kip
 {
     public class Capabilities
     {
-        private List<Feature> _features = new List<Feature>();
+        private FeatureContainer _features = new FeatureContainer();
         private List<ParameterDef> _parameters = new List<ParameterDef>();
         private List<Property> _properties = new List<Property>();
 
@@ -22,12 +22,6 @@ namespace Kip
 
         public void Add(Feature feature)
         {
-            if (_features.Any(x => x.Name == feature.Name))
-            {
-                throw new DuplicateNameException(
-                    $"Feature {feature.Name} is already exists. Name attribute must be unique.");
-            }
-
             _features.Add(feature);
         }
 
@@ -38,7 +32,7 @@ namespace Kip
 
         public Feature Feature(XName name)
         {
-            return _features.FirstOrDefault(x => x.Name == name);
+            return _features.Get(name);
         }
 
         public void Add(ParameterDef parameter)
