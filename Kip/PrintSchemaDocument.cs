@@ -32,7 +32,7 @@ namespace Kip
 
         public Feature Feature(XName name)
         {
-            return _features.Get(name);
+            return _features.FirstOrDefault(x => x.Name == name);
         }
 
         public void Add(ParameterDef parameter)

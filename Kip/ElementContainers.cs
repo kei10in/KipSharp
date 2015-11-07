@@ -41,11 +41,6 @@ namespace Kip
             _elements.Add(element);
         }
 
-        public T Get(XName name)
-        {
-            return _elements.FirstOrDefault(x => NameOf(x) == name);
-        }
-
         public IEnumerator<T> GetEnumerator()
         {
             return _elements.GetEnumerator();
