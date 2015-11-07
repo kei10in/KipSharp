@@ -254,7 +254,7 @@ namespace Kip
     public class Option : AddableToFeature
     {
         private PropertyContainer _properties = new PropertyContainer();
-        private ScoredPropertyContainer _scoredProperty = new ScoredPropertyContainer();
+        private ScoredPropertyContainer _scoredProperties = new ScoredPropertyContainer();
 
         public Option(params AddableToOption[] elements)
             : this(null, null, elements)
@@ -304,17 +304,17 @@ namespace Kip
 
         public void Add(ScoredProperty scoredProperty)
         {
-            _scoredProperty.Add(scoredProperty);
+            _scoredProperties.Add(scoredProperty);
         }
 
         public IEnumerable<ScoredProperty> ScoredProperties()
         {
-            return _scoredProperty;
+            return _scoredProperties;
         }
 
         public ScoredProperty ScoredProperty(XName name)
         {
-            return _scoredProperty.FirstOrDefault(x => x.Name == name);
+            return _scoredProperties.FirstOrDefault(x => x.Name == name);
         }
 
         void AddableToFeature.AddTo(Feature feature)
