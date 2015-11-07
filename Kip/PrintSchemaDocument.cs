@@ -102,9 +102,9 @@ namespace Kip
 
     public class Ticket
     {
-        private List<Feature> _features = new List<Feature>();
-        private List<ParameterInit> _parameters = new List<ParameterInit>();
-        private List<Property> _properties = new List<Property>();
+        private FeatureContainer _features = new FeatureContainer();
+        private ParameterInitContainer _parameters = new ParameterInitContainer();
+        private PropertyContainer _properties = new PropertyContainer();
 
         public Ticket(params AddableToTicket[] elements)
         {
@@ -167,9 +167,9 @@ namespace Kip
 
     public class Feature : AddableToCapabilities, AddableToTicket, AddableToFeature
     {
-        private List<Property> _properties = new List<Property>();
+        private PropertyContainer _properties = new PropertyContainer();
         private List<Option> _options = new List<Option>();
-        private List<Feature> _features = new List<Feature>();
+        private FeatureContainer _features = new FeatureContainer();
 
         public Feature(XName name)
         {
