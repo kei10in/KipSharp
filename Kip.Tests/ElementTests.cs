@@ -35,5 +35,17 @@ namespace Kip.Tests
                 pc.Add(new ParameterDef(someName1));
             });
         }
+
+        [Fact]
+        public void ThrowsExceptionWhenAddPropertyWithExistingNameToCapabilites()
+        {
+            var pc = new Capabilities();
+            pc.Add(new Property(someName1));
+
+            Assert.Throws<DuplicateNameException>(() =>
+            {
+                pc.Add(new Property(someName1));
+            });
+        }
     }
 }
