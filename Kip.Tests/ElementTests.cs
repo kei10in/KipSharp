@@ -13,7 +13,7 @@ namespace Kip.Tests
         static readonly XName someName1 = "SomeName1";
 
         [Fact]
-        public void ThrowsExceptionWhenAddingElementWithExistingName()
+        public void ThrowsExceptionWhenAddFeatureWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
             pc.Add(new Feature(someName1));
@@ -23,6 +23,5 @@ namespace Kip.Tests
                 pc.Add(new Feature(someName1));
             });
         }
-
     }
 }
