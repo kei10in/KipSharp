@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Kip
 {
+    /// <summary>
+    /// Represents a PrintCapabilities document defined in the Print Schema
+    /// Specification.
+    /// </summary>
     public class Capabilities
     {
         private FeatureContainer _features = new FeatureContainer();
@@ -119,6 +123,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Wrapper class that representing a child elements of the
+    /// PrintCapabilities document.
+    /// </summary>
     public class CapabilitiesChild
     {
         private ElementHolder _holder;
@@ -152,6 +160,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a PrintTicket document defined in the Print Schema
+    /// Specification.
+    /// </summary>
     public class Ticket
     {
         private FeatureContainer _features = new FeatureContainer();
@@ -265,6 +277,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Wrapper class that representing a child elements of the PrintTicket
+    /// document.
+    /// </summary>
     public class TicketChild
     {
         private ElementHolder _holder;
@@ -298,6 +314,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents an Feature element defined in the Print Schema
+    /// Specification.
+    /// </summary>
     public class Feature
     {
         private PropertyContainer _properties = new PropertyContainer();
@@ -400,6 +420,9 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents an Option element defined in the Print Schema Specificaiton.
+    /// </summary>
     public class Option
     {
         private PropertyContainer _properties = new PropertyContainer();
@@ -495,6 +518,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a ParameterDef element defined in the Print Schema
+    /// Specificaiton.
+    /// </summary>
     public class ParameterDef
     {
         private PropertyContainer _properties = new PropertyContainer();
@@ -530,6 +557,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a ParameterInit element defined in the Print Schema
+    /// Specificaiton.
+    /// </summary>
     public class ParameterInit
     {
         public ParameterInit(XName name)
@@ -554,6 +585,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a ParameterRef element defined in the Print Schema
+    /// Specificaiton.
+    /// </summary>
     public class ParameterRef
     {
         public ParameterRef(XName name)
@@ -567,6 +602,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a Property element defined in the Print Schema
+    /// Specificaiton.
+    /// </summary>
     public class Property
     {
         private IReadOnlyCollection<Property> _properties;
@@ -604,6 +643,10 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a ScoredProeprty element defined in the Print Schema
+    /// Specificaiton.
+    /// </summary>
     public class ScoredProperty
     {
         private IReadOnlyCollection<ScoredProperty> _scoredProperties;
@@ -714,6 +757,9 @@ namespace Kip
         }
     }
 
+    /// <summary>
+    /// Represents a Value element defined in the Print Schema Specificaiton.
+    /// </summary>
     public sealed class Value
     {
         public static readonly Value Empty = new Value();
