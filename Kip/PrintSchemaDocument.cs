@@ -179,6 +179,56 @@ namespace Kip
         {
             return _properties;
         }
+
+        public void Save(System.IO.Stream stream)
+        {
+            using (var writer = XmlWriter.Create(stream))
+            {
+                Save(writer);
+            }
+        }
+
+        public void Save(System.IO.TextWriter textWriter)
+        {
+            using (var writer = XmlWriter.Create(textWriter))
+            {
+                Save(writer);
+            }
+        }
+
+        public void Save(XmlWriter writer)
+        {
+            PrintSchemaWriter.Write(writer, this);
+        }
+
+        public static Ticket Parse(string text)
+        {
+            using (var textReader = new System.IO.StringReader(text))
+            {
+                return Load(textReader);
+            }
+        }
+
+        public static Ticket Load(System.IO.Stream stream)
+        {
+            using (var reader = XmlReader.Create(stream))
+            {
+                return PrintSchemaReader.ReadTicket(reader);
+            }
+        }
+
+        public static Ticket Load(System.IO.TextReader input)
+        {
+            using (var reader = XmlReader.Create(input))
+            {
+                return PrintSchemaReader.ReadTicket(reader);
+            }
+        }
+
+        public static Ticket Load(XmlReader reader)
+        {
+            return PrintSchemaReader.ReadTicket(reader);
+        }
     }
 
     public interface AddableToTicket
