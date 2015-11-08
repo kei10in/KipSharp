@@ -12,11 +12,14 @@ namespace Kip
         private ParameterDefContainer _parameters = new ParameterDefContainer();
         private PropertyContainer _properties = new PropertyContainer();
 
-        public Capabilities(params AddableToCapabilities[] elements)
+        public Capabilities(params CapabilitiesChild[] elements)
         {
             foreach (var e in elements)
             {
-                e.AddTo(this);
+                e.Apply(
+                    onFeature: f => _features.Add(f),
+                    onParameterDef: pd => _parameters.Add(pd),
+                    onProperty: p => _properties.Add(p));
             }
         }
 
@@ -116,9 +119,37 @@ namespace Kip
         }
     }
 
-    public interface AddableToCapabilities
+    public class CapabilitiesChild
     {
-        void AddTo(Capabilities capablities);
+        private ElementHolder _holder;
+
+        private CapabilitiesChild(ElementHolder holder) { _holder = holder; }
+
+        internal void Apply(
+            Action<Feature> onFeature,
+            Action<ParameterDef> onParameterDef,
+            Action<Property> onProperty)
+        {
+            _holder.Apply(
+                onFeature: onFeature,
+                onParameterDef: onParameterDef,
+                onProperty: onProperty);
+        }
+
+        public static implicit operator CapabilitiesChild(Feature element)
+        {
+            return new CapabilitiesChild(new FeatureHolder { Element = element });
+        }
+
+        public static implicit operator CapabilitiesChild(ParameterDef element)
+        {
+            return new CapabilitiesChild(new ParameterDefHolder { Element = element });
+        }
+
+        public static implicit operator CapabilitiesChild(Property element)
+        {
+            return new CapabilitiesChild(new PropertyHolder { Element = element });
+        }
     }
 
     public class Ticket
@@ -127,11 +158,14 @@ namespace Kip
         private ParameterInitContainer _parameters = new ParameterInitContainer();
         private PropertyContainer _properties = new PropertyContainer();
 
-        public Ticket(params AddableToTicket[] elements)
+        public Ticket(params TicketChild[] elements)
         {
             foreach (var e in elements)
             {
-                e.AddTo(this);
+                e.Apply(
+                    onFeature: x => _features.Add(x),
+                    onParameterInit: x => _parameters.Add(x),
+                    onProperty: x => _properties.Add(x));
             }
         }
 
@@ -231,12 +265,40 @@ namespace Kip
         }
     }
 
-    public interface AddableToTicket
+    public class TicketChild
     {
-        void AddTo(Ticket ticket);
+        private ElementHolder _holder;
+
+        private TicketChild(ElementHolder holder) { _holder = holder; }
+
+        internal void Apply(
+            Action<Feature> onFeature,
+            Action<ParameterInit> onParameterInit,
+            Action<Property> onProperty)
+        {
+            _holder.Apply(
+                onFeature: onFeature,
+                onParameterInit: onParameterInit,
+                onProperty: onProperty);
+        }
+
+        public static implicit operator TicketChild(Feature element)
+        {
+            return new TicketChild(new FeatureHolder { Element = element });
+        }
+
+        public static implicit operator TicketChild(ParameterInit element)
+        {
+            return new TicketChild(new ParameterInitHolder { Element = element });
+        }
+
+        public static implicit operator TicketChild(Property element)
+        {
+            return new TicketChild(new PropertyHolder { Element = element });
+        }
     }
 
-    public class Feature : AddableToCapabilities, AddableToTicket, AddableToFeature
+    public class Feature
     {
         private PropertyContainer _properties = new PropertyContainer();
         private List<Option> _options = new List<Option>();
@@ -247,12 +309,15 @@ namespace Kip
             Name = name;
         }
 
-        public Feature(XName name, params AddableToFeature[] elements)
+        public Feature(XName name, params FeatureChild[] elements)
         {
             Name = name;
             foreach (var e in elements)
             {
-                e.AddTo(this);
+                e.Apply(
+                    onProperty: x => _properties.Add(x),
+                    onOption: x => _options.Add(x),
+                    onFeature: x => _features.Add(x));
             }
         }
 
@@ -300,51 +365,66 @@ namespace Kip
         {
             return _features.FirstOrDefault(x => x.Name == name);
         }
-
-        void AddableToCapabilities.AddTo(Capabilities capablities)
-        {
-            capablities.Add(this);
-        }
-
-        void AddableToTicket.AddTo(Ticket ticket)
-        {
-            ticket.Add(this);
-        }
-
-        void AddableToFeature.AddTo(Feature feature)
-        {
-            feature.Add(this);
-        }
     }
 
-    public interface AddableToFeature
+    public class FeatureChild
     {
-        void AddTo(Feature feature);
+        private ElementHolder _holder;
+
+        private FeatureChild(ElementHolder holder) { _holder = holder; }
+
+        internal void Apply(
+            Action<Property> onProperty,
+            Action<Option> onOption,
+            Action<Feature> onFeature)
+        {
+            _holder.Apply(
+                onProperty: onProperty,
+                onOption: onOption,
+                onFeature: onFeature);
+        }
+
+        public static implicit operator FeatureChild(Property element)
+        {
+            return new FeatureChild(new PropertyHolder { Element = element });
+        }
+
+        public static implicit operator FeatureChild(Option element)
+        {
+            return new FeatureChild(new OptionHolder { Element = element });
+        }
+
+        public static implicit operator FeatureChild(Feature element)
+        {
+            return new FeatureChild(new FeatureHolder { Element = element });
+        }
     }
 
-    public class Option : AddableToFeature
+    public class Option
     {
         private PropertyContainer _properties = new PropertyContainer();
         private ScoredPropertyContainer _scoredProperties = new ScoredPropertyContainer();
 
-        public Option(params AddableToOption[] elements)
+        public Option(params OptionChild[] elements)
             : this(null, null, elements)
         {
         }
 
-        public Option(XName name, params AddableToOption[] elements)
+        public Option(XName name, params OptionChild[] elements)
             : this(name, null, elements)
         {
         }
 
-        public Option(XName name, XName constrained, params AddableToOption[] elements)
+        public Option(XName name, XName constrained, params OptionChild[] elements)
         {
             Name = name;
             Constrained = constrained;
 
             foreach (var e in elements)
             {
-                e.AddTo(this);
+                e.Apply(
+                    onProperty: x => _properties.Add(x),
+                    onScoredProperty: x => _scoredProperties.Add(x));
             }
         }
 
@@ -387,19 +467,35 @@ namespace Kip
         {
             return _scoredProperties.FirstOrDefault(x => x.Name == name);
         }
+    }
 
-        void AddableToFeature.AddTo(Feature feature)
+    public class OptionChild
+    {
+        private ElementHolder _holder;
+
+        private OptionChild(ElementHolder holder) { _holder = holder; }
+
+        internal void Apply(
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
         {
-            feature.Add(this);
+            _holder.Apply(
+                onProperty: onProperty,
+                onScoredProperty: onScoredProperty);
+        }
+
+        public static implicit operator OptionChild(Property element)
+        {
+            return new OptionChild(new PropertyHolder { Element = element });
+        }
+
+        public static implicit operator OptionChild(ScoredProperty element)
+        {
+            return new OptionChild(new ScoredPropertyHolder { Element = element });
         }
     }
 
-    public interface AddableToOption
-    {
-        void AddTo(Option option);
-    }
-
-    public class ParameterDef : AddableToCapabilities
+    public class ParameterDef
     {
         private PropertyContainer _properties = new PropertyContainer();
 
@@ -432,14 +528,9 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
-
-        void AddableToCapabilities.AddTo(Capabilities capablities)
-        {
-            capablities.Add(this);
-        }
     }
 
-    public class ParameterInit : AddableToTicket
+    public class ParameterInit
     {
         public ParameterInit(XName name)
             : this(name, null)
@@ -461,11 +552,6 @@ namespace Kip
         {
             get; set;
         }
-
-        void AddableToTicket.AddTo(Ticket ticket)
-        {
-            ticket.Add(this);
-        }
     }
 
     public class ParameterRef
@@ -482,11 +568,6 @@ namespace Kip
     }
 
     public class Property
-        : AddableToCapabilities
-        , AddableToTicket
-        , AddableToFeature
-        , AddableToOption
-        , AddableToScoredProperty
     {
         private IReadOnlyCollection<Property> _properties;
 
@@ -521,59 +602,37 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
-
-        void AddableToCapabilities.AddTo(Capabilities capablities)
-        {
-            capablities.Add(this);
-        }
-
-        void AddableToTicket.AddTo(Ticket ticket)
-        {
-            ticket.Add(this);
-        }
-
-        void AddableToFeature.AddTo(Feature feature)
-        {
-            feature.Add(this);
-        }
-
-        void AddableToOption.AddTo(Option option)
-        {
-            option.Add(this);
-        }
-
-        void AddableToScoredProperty.AddTo(ScoredPropertyChildren container)
-        {
-            container.Properties.Add(this);
-        }
     }
 
-    public class ScoredProperty : AddableToOption, AddableToScoredProperty
+    public class ScoredProperty
     {
         private IReadOnlyCollection<ScoredProperty> _scoredProperties;
         private IReadOnlyCollection<Property> _properties;
 
-        public ScoredProperty(XName name, params AddableToScoredProperty[] elements)
+        public ScoredProperty(XName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
 
-            var container = new ScoredPropertyChildren();
+            var scoredProperties = new ScoredPropertyContainer();
+            var properties = new PropertyContainer();
             foreach (var e in elements)
             {
-                e.AddTo(container);
+                e.Apply(
+                    onScoredProperty: x => scoredProperties.Add(x),
+                    onProperty: x => properties.Add(x));
             }
 
-            _scoredProperties = container.ScoredProperties;
-            _properties = container.Properties;
+            _scoredProperties = scoredProperties;
+            _properties = properties;
         }
 
-        public ScoredProperty(XName name, Value value, params AddableToScoredProperty[] elements)
+        public ScoredProperty(XName name, Value value, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
             Value = value;
         }
 
-        public ScoredProperty(XName name, ParameterRef parameter, params AddableToScoredProperty[] elements)
+        public ScoredProperty(XName name, ParameterRef parameter, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
             ParameterRef = parameter;
@@ -627,34 +686,32 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
-
-        void AddableToOption.AddTo(Option option)
-        {
-            option.Add(this);
-        }
-
-        void AddableToScoredProperty.AddTo(ScoredPropertyChildren container)
-        {
-            container.ScoredProperties.Add(this);
-        }
     }
 
-    public class ScoredPropertyChildren
+    public class ScoredPropertyChild
     {
-        internal PropertyContainer Properties
-        {
-            get;
-        } = new PropertyContainer();
+        private ElementHolder _holder;
 
-        internal ScoredPropertyContainer ScoredProperties
-        {
-            get;
-        } = new ScoredPropertyContainer();
-    }
+        private ScoredPropertyChild(ElementHolder holder) { _holder = holder; }
 
-    public interface AddableToScoredProperty
-    {
-        void AddTo(ScoredPropertyChildren container);
+        internal void Apply(
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            _holder.Apply(
+                onProperty: onProperty,
+                onScoredProperty: onScoredProperty);
+        }
+
+        public static implicit operator ScoredPropertyChild(Property element)
+        {
+            return new ScoredPropertyChild(new PropertyHolder { Element = element });
+        }
+
+        public static implicit operator ScoredPropertyChild(ScoredProperty element)
+        {
+            return new ScoredPropertyChild(new ScoredPropertyHolder { Element = element });
+        }
     }
 
     public sealed class Value
@@ -812,6 +869,137 @@ namespace Kip
         public static bool operator !=(Value v1, Value v2)
         {
             return !(v1 == v2);
+        }
+    }
+
+    internal interface ElementHolder
+    {
+        void Apply(
+            Action<Feature> onFeature = null,
+            Action<Option> onOption = null,
+            Action<ParameterDef> onParameterDef = null,
+            Action<ParameterInit> onParameterInit = null,
+            Action<ParameterRef> onParameterRef = null,
+            Action<Property> onProperty = null,
+            Action<ScoredProperty> onScoredProperty = null);
+    }
+
+    internal class FeatureHolder : ElementHolder
+    {
+        public Feature Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onFeature?.Invoke(Element);
+        }
+    }
+
+    internal class OptionHolder : ElementHolder
+    {
+        public Option Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onOption?.Invoke(Element);
+        }
+    }
+
+    internal class ParameterDefHolder : ElementHolder
+    {
+        public ParameterDef Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onParameterDef?.Invoke(Element);
+        }
+    }
+
+    internal class ParameterInitHolder : ElementHolder
+    {
+        public ParameterInit Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onParameterInit?.Invoke(Element);
+        }
+    }
+
+    internal class ParameterRefHolder : ElementHolder
+    {
+        public ParameterRef Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onParameterRef?.Invoke(Element);
+        }
+    }
+
+    internal class PropertyHolder : ElementHolder
+    {
+        public Property Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onProperty?.Invoke(Element);
+        }
+    }
+
+    internal class ScoredPropertyHolder : ElementHolder
+    {
+        public ScoredProperty Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty)
+        {
+            onScoredProperty?.Invoke(Element);
         }
     }
 }
