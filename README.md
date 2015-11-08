@@ -23,7 +23,7 @@ using Kip;
 var pt = Ticket.Load(inputStream);
 pt.SetFeatureOption(Psk.PageMediaSize,
     new Option(Psk.ISOA4,
-        new Property(Psk.MediaSizeWidth, 210000),
-        new Property(Psk.MediaSizeHeight, 297000)));
+        new ScoredProperty(Psk.MediaSizeWidth, 210000),
+        new ScoredProperty(Psk.MediaSizeHeight, 297000)));
 pt.Save(outputStream);
 ```
