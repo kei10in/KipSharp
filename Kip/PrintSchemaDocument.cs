@@ -65,7 +65,23 @@ namespace Kip
             return _properties;
         }
 
-        public void WriteTo(XmlWriter writer)
+        public void Save(System.IO.Stream stream)
+        {
+            using (var writer = XmlWriter.Create(stream))
+            {
+                Save(writer);
+            }
+        }
+
+        public void Save(System.IO.TextWriter textWriter)
+        {
+            using (var writer = XmlWriter.Create(textWriter))
+            {
+                Save(writer);
+            }
+        }
+
+        public void Save(XmlWriter writer)
         {
             PrintSchemaWriter.Write(writer, this);
         }
@@ -74,11 +90,11 @@ namespace Kip
         {
             using (var textReader = new System.IO.StringReader(text))
             {
-                return ReadFrom(textReader);
+                return Load(textReader);
             }
         }
 
-        public static Capabilities ReadFrom(System.IO.Stream stream)
+        public static Capabilities Load(System.IO.Stream stream)
         {
             using (var reader = XmlReader.Create(stream))
             {
@@ -86,12 +102,17 @@ namespace Kip
             }
         }
 
-        public static Capabilities ReadFrom(System.IO.TextReader input)
+        public static Capabilities Load(System.IO.TextReader input)
         {
             using (var reader = XmlReader.Create(input))
             {
                 return PrintSchemaReader.ReadCapabilities(reader);
             }
+        }
+
+        public static Capabilities Load(XmlReader reader)
+        {
+            return PrintSchemaReader.ReadCapabilities(reader);
         }
     }
 

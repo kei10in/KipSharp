@@ -27,11 +27,11 @@ namespace Kip.Tests
             var pc = new Capabilities();
             var buffer = new StringBuilder();
             var writer = XmlWriter.Create(buffer);
-            pc.WriteTo(writer);
+            pc.Save(writer);
 
             using (var textReader = new StringReader(buffer.ToString()))
             {
-                var actual = Capabilities.ReadFrom(textReader);
+                var actual = Capabilities.Load(textReader);
 
                 Assert.NotNull(actual);
                 Assert.Empty(pc.Properties());
@@ -46,7 +46,7 @@ namespace Kip.Tests
 
             var buffer = new StringBuilder();
             var writer = XmlWriter.Create(buffer);
-            pc.WriteTo(writer);
+            pc.Save(writer);
 
             var doc = XDocument.Parse(buffer.ToString());
 

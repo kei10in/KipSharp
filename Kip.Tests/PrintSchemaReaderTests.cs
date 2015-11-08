@@ -22,7 +22,7 @@ namespace Kip.Tests
             var names = assembly.GetManifestResourceNames();
             using (var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.SimpleFeatureOptionStructure.xml"))
             {
-                var actual = Capabilities.ReadFrom(stream);
+                var actual = Capabilities.Load(stream);
 
                 Assert.NotNull(actual);
                 Assert.True(0 < actual.Features().Count());
@@ -46,7 +46,7 @@ namespace Kip.Tests
             var names = assembly.GetManifestResourceNames();
             using (var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.ValueWithUnspecifiedType.xml"))
             {
-                var actual = Capabilities.ReadFrom(stream);
+                var actual = Capabilities.Load(stream);
             }
         }
     }
@@ -62,7 +62,7 @@ namespace Kip.Tests
             var names = assembly.GetManifestResourceNames();
             using (var stream = assembly.GetManifestResourceStream("Kip.Tests.Data.BasicPrintCapabilities.xml"))
             {
-                _actual = Capabilities.ReadFrom(stream);
+                _actual = Capabilities.Load(stream);
             }
         }
 
