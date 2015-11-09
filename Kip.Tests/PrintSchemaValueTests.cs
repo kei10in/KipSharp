@@ -85,5 +85,33 @@ namespace Kip.Tests
             Assert.Equal(Xsd.Decimal, type.Value.ToXName(element));
             Assert.Equal("3.14", element.Value);
         }
+
+        [Fact]
+        public void IntegetToString()
+        {
+            Value value = 1;
+            Assert.Equal("1", value.ToString());
+        }
+
+        [Fact]
+        public void DecimalToString()
+        {
+            Value value = 3.14f;
+            Assert.Equal("3.14", value.ToString());
+        }
+
+        [Fact]
+        public void StringToString()
+        {
+            Value value = "abc";
+            Assert.Equal("abc", value.ToString());
+        }
+
+        [Fact]
+        public void QNameValueToString()
+        {
+            Value v = Xsd.Integer;
+            Assert.Equal(Xsd.Integer.ToString(), v.ToString());
+        }
     }
 }

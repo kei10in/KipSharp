@@ -877,6 +877,11 @@ namespace Kip
             return _value.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return _value.ToString();
+        }
+
         public static implicit operator Value(int value)
         {
             return new Value(value);
