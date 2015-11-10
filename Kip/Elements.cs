@@ -908,7 +908,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit = null,
             Action<ParameterRef> onParameterRef = null,
             Action<Property> onProperty = null,
-            Action<ScoredProperty> onScoredProperty = null);
+            Action<ScoredProperty> onScoredProperty = null,
+            Action<Value> onValue = null);
     }
 
     internal class FeatureHolder : ElementHolder
@@ -922,7 +923,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onFeature?.Invoke(Element);
         }
@@ -939,7 +941,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onOption?.Invoke(Element);
         }
@@ -956,7 +959,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onParameterDef?.Invoke(Element);
         }
@@ -973,7 +977,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onParameterInit?.Invoke(Element);
         }
@@ -990,7 +995,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onParameterRef?.Invoke(Element);
         }
@@ -1007,7 +1013,8 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onProperty?.Invoke(Element);
         }
@@ -1024,9 +1031,28 @@ namespace Kip
             Action<ParameterInit> onParameterInit,
             Action<ParameterRef> onParameterRef,
             Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
         {
             onScoredProperty?.Invoke(Element);
+        }
+    }
+
+    internal class ValueHolder : ElementHolder
+    {
+        public Value Element { get; set; }
+
+        void ElementHolder.Apply(
+            Action<Feature> onFeature,
+            Action<Option> onOption,
+            Action<ParameterDef> onParameterDef,
+            Action<ParameterInit> onParameterInit,
+            Action<ParameterRef> onParameterRef,
+            Action<Property> onProperty,
+            Action<ScoredProperty> onScoredProperty,
+            Action<Value> onValue)
+        {
+            onValue?.Invoke(Element);
         }
     }
 }
