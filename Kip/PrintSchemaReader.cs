@@ -235,10 +235,10 @@ namespace Kip
 
             if (reader.IsEmptyElement)
             {
-                return PrintSchemaValue.Empty;
+                return new ValueHolder { Element = Value.Empty };
             }
 
-            var value = PrintSchemaValue.Empty;
+            var value = Value.Empty;
 
             while (reader.Read())
             {
@@ -246,19 +246,19 @@ namespace Kip
                 {
                     if (type == Xsd.Integer)
                     {
-                        value = new PrintSchemaValue(reader.Value.AsInt32());
+                        value = reader.Value.AsInt32();
                     }
                     else if (type == Xsd.Decimal)
                     {
-                        value = new PrintSchemaValue(reader.Value.AsFloat());
+                        value = reader.Value.AsFloat();
                     }
                     else if (type == Xsd.QName)
                     {
-                        value = new PrintSchemaValue(reader.ValueAsXName());
+                        value = reader.ValueAsXName();
                     }
                     else
                     {
-                        value = new PrintSchemaValue(reader.Value);
+                        value = reader.Value;
                     }
                 }
                 else if (reader.NodeType == XmlNodeType.Element)
@@ -271,7 +271,7 @@ namespace Kip
                 }
             }
 
-            return value;
+            return new ValueHolder { Element = value };
         }
     }
 
@@ -535,41 +535,6 @@ namespace Kip
         {
             var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
             onScoredProperty?.Invoke(sp);
-        }
-    }
-
-    internal class PrintSchemaValue : PrintSchemaElement, ElementHolder
-    {
-        static public PrintSchemaValue Empty = new PrintSchemaValue();
-
-        private Value _value;
-
-        private PrintSchemaValue()
-        {
-            _value = Value.Empty;
-        }
-
-        public PrintSchemaValue(Value value)
-        {
-            _value = value;
-        }
-
-        public void Add(ElementHolder element)
-        {
-            throw new InvalidChildElementException("Value element can't contains any element");
-        }
-
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
-        {
-            onValue?.Invoke(_value);
         }
     }
 }
