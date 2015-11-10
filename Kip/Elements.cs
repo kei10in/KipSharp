@@ -818,30 +818,6 @@ namespace Kip
             }
         }
 
-        public XElement AsXElement()
-        {
-            var type = ValueType;
-
-            var element = new XElement(
-                Psf.Value,
-                new XAttribute(XNamespace.Xmlns + "psf", Psf.Namespace),
-                new XAttribute(XNamespace.Xmlns + "xsi", Xsi.Namespace),
-                new XAttribute(XNamespace.Xmlns + "xsd", Xsd.Namespace));
-            element.Add(new XAttribute(Xsi.Type, type.ToQName(element)));
-
-            if (type == Xsd.QName)
-            {
-                var value = _value as XName;
-                element.Add(value.ToQName(element));
-            }
-            else
-            {
-                element.Add(_value);
-            }
-
-            return element;
-        }
-
         public int? AsInt()
         {
             return _value as int?;

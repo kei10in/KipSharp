@@ -57,30 +57,6 @@ namespace Kip.Tests
         }
 
         [Fact]
-        public void ConvertIntValueToXElement()
-        {
-            var v = new Value(1);
-            XElement element = v.AsXElement();
-            var type = element.Attribute(Xsi.Type);
-
-            Assert.NotNull(type);
-            Assert.Equal(Xsd.Integer, type.Value.ToXName(element));
-            Assert.Equal("1", element.Value);
-        }
-
-        [Fact]
-        public void ConvertDecimalValueToXElement()
-        {
-            var v = new Value(3.14f);
-            XElement element = v.AsXElement();
-            var type = element.Attribute(Xsi.Type);
-
-            Assert.NotNull(type);
-            Assert.Equal(Xsd.Decimal, type.Value.ToXName(element));
-            Assert.Equal("3.14", element.Value);
-        }
-
-        [Fact]
         public void IntegetToString()
         {
             Value value = 1;
