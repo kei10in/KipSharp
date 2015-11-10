@@ -44,13 +44,14 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ElementContainers.cs" />
-    <Compile Include="PrintSchemaDocument.cs" />
+    <Compile Include="Elements.cs" />
     <Compile Include="PrintSchemaFramework.cs" />
     <Compile Include="PrintSchemaKeywords.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PrintSchemaKeywords.tt</DependentUpon>
     </Compile>
+    <Compile Include="PrintSchemaKeywordsV11.cs" />
     <Compile Include="PrintSchemaReader.cs" />
     <Compile Include="PrintSchemaWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
