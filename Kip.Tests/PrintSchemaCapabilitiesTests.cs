@@ -1,6 +1,4 @@
-﻿using Kip;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;

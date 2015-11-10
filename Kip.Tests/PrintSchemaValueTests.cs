@@ -1,11 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Xunit;
-using psf = Kip.Psf;
-using xsi = Kip.Xsi;
-using xsd = Kip.Xsd;
-using Kip;
 
 namespace Kip.Tests
 {

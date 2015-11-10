@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using psf = Kip.Psf;
-using xsi = Kip.Xsi;
-using xsd = Kip.Xsd;
-using System.IO;
 
 namespace Kip
 {
