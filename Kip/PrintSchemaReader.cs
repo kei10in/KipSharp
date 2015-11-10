@@ -278,75 +278,9 @@ namespace Kip
     internal interface PrintSchemaElement
     {
         void Add(ElementHolder element);
-
-        void Add(Feature feature);
-
-        void Add(Option option);
-
-        void Add(ParameterDef parameterDef);
-
-        void Add(ParameterInit parameterInit);
-
-        void Add(ParameterRef parameterRef);
-
-        void Add(Property property);
-
-        void Add(ScoredProperty scoredProperty);
-
-        void Add(Value value);
     }
 
-    internal abstract class DefaultPrintSchemaElement : PrintSchemaElement
-    {
-        public abstract string TagName
-        {
-            get;
-        }
-
-        public abstract void Add(ElementHolder element);
-
-        public virtual void Add(Feature feature)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain Feature");
-        }
-
-        public virtual void Add(ParameterDef parameterDef)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain ParameterDef");
-        }
-
-        public virtual void Add(ParameterRef parameterRef)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain ParameterRef");
-        }
-
-        public virtual void Add(ScoredProperty scoredProperty)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain ScoredProperty");
-        }
-
-        public virtual void Add(Value value)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain Value");
-        }
-
-        public virtual void Add(Property property)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain Property");
-        }
-
-        public virtual void Add(ParameterInit parameterInit)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain ParameterInit");
-        }
-
-        public virtual void Add(Option option)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain Option");
-        }
-    }
-
-    internal class PrintSchemaCapabilities : DefaultPrintSchemaElement
+    internal class PrintSchemaCapabilities : PrintSchemaElement
     {
         public PrintSchemaCapabilities()
         {
@@ -358,39 +292,16 @@ namespace Kip
             get;
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.PrintCapabilities.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(
                 onFeature: x => Result.Add(x),
                 onParameterDef: x => Result.Add(x),
                 onProperty: x => Result.Add(x));
         }
-
-        public override void Add(Feature feature)
-        {
-            Result.Add(feature);
-        }
-
-        public override void Add(ParameterDef parameterDef)
-        {
-            Result.Add(parameterDef);
-        }
-
-        public override void Add(Property property)
-        {
-            Result.Add(property);
-        }
     }
 
-    internal class PrintSchemaTicket : DefaultPrintSchemaElement
+    internal class PrintSchemaTicket : PrintSchemaElement
     {
         public PrintSchemaTicket()
         {
@@ -402,39 +313,16 @@ namespace Kip
             get;
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.PrintTicket.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(
                 onFeature: x => Result.Add(x),
                 onParameterInit: x => Result.Add(x),
                 onProperty: x => Result.Add(x));
         }
-
-        public override void Add(Feature element)
-        {
-            Result.Add(element);
-        }
-
-        public override void Add(ParameterInit element)
-        {
-            Result.Add(element);
-        }
-
-        public override void Add(Property element)
-        {
-            Result.Add(element);
-        }
     }
 
-    internal class PrintSchemaFeature : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaFeature : PrintSchemaElement, ElementHolder
     {
         private Feature _feature;
 
@@ -443,40 +331,12 @@ namespace Kip
             _feature = new Feature(name);
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.Feature.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(
                 onFeature: x => _feature.Add(x),
                 onOption: x => _feature.Add(x),
                 onProperty: x => _feature.Add(x));
-        }
-
-        public override void Add(Feature feature)
-        {
-            _feature.Add(feature);
-        }
-
-        public override void Add(Option option)
-        {
-            _feature.Add(option);
-        }
-
-        public override void Add(Property property)
-        {
-            _feature.Add(property);
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            element.Add(_feature);
         }
 
         void ElementHolder.Apply(
@@ -493,7 +353,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaOption : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaOption : PrintSchemaElement, ElementHolder
     {
         private Option _option;
 
@@ -502,34 +362,11 @@ namespace Kip
             _option = new Option(name, constrained);
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.Option.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(
                 onScoredProperty: x => _option.Add(x),
                 onProperty: x => _option.Add(x));
-        }
-
-        public override void Add(Property property)
-        {
-            _option.Add(property);
-        }
-
-        public override void Add(ScoredProperty scoredProperty)
-        {
-            _option.Add(scoredProperty);
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            element.Add(_option);
         }
 
         void ElementHolder.Apply(
@@ -546,7 +383,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaParameterDef : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaParameterDef : PrintSchemaElement, ElementHolder
     {
         private ParameterDef _parameterDef;
 
@@ -555,27 +392,9 @@ namespace Kip
             _parameterDef = new ParameterDef(name);
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.ParameterDef.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(onProperty: x => _parameterDef.Add(x));
-        }
-
-        public override void Add(Property property)
-        {
-            _parameterDef.Add(property);
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            element.Add(_parameterDef);
         }
 
         void ElementHolder.Apply(
@@ -592,7 +411,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaParameterInit : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaParameterInit : PrintSchemaElement, ElementHolder
     {
         private ParameterInit _parameterInit;
 
@@ -601,27 +420,9 @@ namespace Kip
             _parameterInit = new ParameterInit(name);
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.ParameterDef.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(onValue: x => _parameterInit.Value = x);
-        }
-
-        public override void Add(Value value)
-        {
-            _parameterInit.Value = value;
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            element.Add(_parameterInit);
         }
 
         void ElementHolder.Apply(
@@ -638,7 +439,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaParameterRef : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaParameterRef : PrintSchemaElement, ElementHolder
     {
         private ParameterRef _parameterRef;
 
@@ -647,22 +448,9 @@ namespace Kip
             _parameterRef = new ParameterRef(name);
         }
 
-        public override string TagName
+        public void Add(ElementHolder element)
         {
-            get
-            {
-                return Psf.ParameterDef.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
-        {
-            throw new InvalidChildElementException($"{TagName} can't contain any element");
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            element.Add(_parameterRef);
+            throw new InvalidChildElementException("ParameterRef can't contain any element");
         }
 
         void ElementHolder.Apply(
@@ -679,7 +467,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaProperty : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaProperty : PrintSchemaElement, ElementHolder
     {
         private XName _name;
         private Value _value;
@@ -691,35 +479,11 @@ namespace Kip
             _properties = new List<Property>();
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.Property.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(
                 onProperty: x => _properties.Add(x),
                 onValue: x => _value = x);
-        }
-
-        public override void Add(Property property)
-        {
-            _properties.Add(property);
-        }
-
-        public override void Add(Value value)
-        {
-            _value = value;
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            var p = new Property(_name, _value, _properties.ToArray());
-            element.Add(p);
         }
 
         void ElementHolder.Apply(
@@ -737,7 +501,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaScoredProperty : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaScoredProperty : PrintSchemaElement, ElementHolder
     {
         private XName _name;
         private Value _value;
@@ -750,46 +514,12 @@ namespace Kip
             _name = name;
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.Property.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             element.Apply(
                 onScoredProperty: x => _scoredProperties.Add(x),
                 onProperty: x => _properties.Add(x),
                 onValue: x => _value = x);
-        }
-
-        public override void Add(ParameterRef parameterRef)
-        {
-            _parameterRef = parameterRef;
-        }
-
-        public override void Add(Property property)
-        {
-            _properties.Add(property);
-        }
-
-        public override void Add(ScoredProperty scoredProperty)
-        {
-            _scoredProperties.Add(scoredProperty);
-        }
-
-        public override void Add(Value value)
-        {
-            _value = value;
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
-            element.Add(sp);
         }
 
         void ElementHolder.Apply(
@@ -807,7 +537,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaValue : DefaultPrintSchemaElement, ElementHolder
+    internal class PrintSchemaValue : PrintSchemaElement, ElementHolder
     {
         static public PrintSchemaValue Empty = new PrintSchemaValue();
 
@@ -823,22 +553,9 @@ namespace Kip
             _value = value;
         }
 
-        public override string TagName
-        {
-            get
-            {
-                return Psf.Value.LocalName;
-            }
-        }
-
-        public override void Add(ElementHolder element)
+        public void Add(ElementHolder element)
         {
             throw new InvalidChildElementException("Value element can't contains any element");
-        }
-
-        public void AddTo(PrintSchemaElement element)
-        {
-            element.Add(_value);
         }
 
         void ElementHolder.Apply(
