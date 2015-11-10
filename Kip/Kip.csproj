@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="ElementContainers.cs" />
+    <Compile Include="ElementCollection.cs" />
     <Compile Include="Elements.cs" />
     <Compile Include="PrintSchemaFramework.cs" />
     <Compile Include="PrintSchemaKeywords.cs">
