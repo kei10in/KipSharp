@@ -274,13 +274,13 @@ namespace Kip
         }
     }
 
-    public interface PrintSchemaChildElement
+    internal interface PrintSchemaChildElement
     {
         void AddTo(PrintSchemaElement element);
     }
 
 
-    public interface PrintSchemaElement
+    internal interface PrintSchemaElement
     {
         void Add(Feature feature);
 
@@ -299,7 +299,7 @@ namespace Kip
         void Add(Value value);
     }
 
-    public abstract class DefaultPrintSchemaElement : PrintSchemaElement
+    internal abstract class DefaultPrintSchemaElement : PrintSchemaElement
     {
         public abstract string TagName
         {
@@ -347,7 +347,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaCapabilities : DefaultPrintSchemaElement
+    internal class PrintSchemaCapabilities : DefaultPrintSchemaElement
     {
         public PrintSchemaCapabilities()
         {
@@ -383,7 +383,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaTicket : DefaultPrintSchemaElement
+    internal class PrintSchemaTicket : DefaultPrintSchemaElement
     {
         public PrintSchemaTicket()
         {
@@ -419,7 +419,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaFeature : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaFeature : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private Feature _feature;
 
@@ -457,7 +457,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaOption : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaOption : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private Option _option;
 
@@ -490,7 +490,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaParameterDef : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaParameterDef : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private ParameterDef _parameterDef;
 
@@ -518,7 +518,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaParameterInit : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaParameterInit : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private ParameterInit _parameterInit;
 
@@ -546,7 +546,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaParameterRef : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaParameterRef : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private ParameterRef _parameterRef;
 
@@ -569,7 +569,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private XName _name;
         private Value _value;
@@ -606,7 +606,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaScoredProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaScoredProperty : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         private XName _name;
         private Value _value;
@@ -654,7 +654,7 @@ namespace Kip
         }
     }
 
-    public class PrintSchemaValue : DefaultPrintSchemaElement, PrintSchemaChildElement
+    internal class PrintSchemaValue : DefaultPrintSchemaElement, PrintSchemaChildElement
     {
         static public PrintSchemaValue Empty = new PrintSchemaValue();
 
