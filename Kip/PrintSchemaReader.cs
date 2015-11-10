@@ -519,6 +519,7 @@ namespace Kip
             element.Apply(
                 onScoredProperty: x => _scoredProperties.Add(x),
                 onProperty: x => _properties.Add(x),
+                onParameterRef: x => _parameterRef = x,
                 onValue: x => _value = x);
         }
 
