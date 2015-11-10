@@ -12,9 +12,9 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities
     {
-        private FeatureContainer _features = new FeatureContainer();
-        private ParameterDefContainer _parameters = new ParameterDefContainer();
-        private PropertyContainer _properties = new PropertyContainer();
+        private FeatureCollection _features = new FeatureCollection();
+        private ParameterDefCollection _parameters = new ParameterDefCollection();
+        private PropertyCollection _properties = new PropertyCollection();
 
         public Capabilities(params CapabilitiesChild[] elements)
         {
@@ -166,9 +166,9 @@ namespace Kip
     /// </summary>
     public sealed class Ticket
     {
-        private FeatureContainer _features = new FeatureContainer();
-        private ParameterInitContainer _parameters = new ParameterInitContainer();
-        private PropertyContainer _properties = new PropertyContainer();
+        private FeatureCollection _features = new FeatureCollection();
+        private ParameterInitCollection _parameters = new ParameterInitCollection();
+        private PropertyCollection _properties = new PropertyCollection();
 
         public Ticket(params TicketChild[] elements)
         {
@@ -320,9 +320,9 @@ namespace Kip
     /// </summary>
     public sealed class Feature
     {
-        private PropertyContainer _properties = new PropertyContainer();
+        private PropertyCollection _properties = new PropertyCollection();
         private List<Option> _options = new List<Option>();
-        private FeatureContainer _features = new FeatureContainer();
+        private FeatureCollection _features = new FeatureCollection();
 
         public Feature(XName name)
         {
@@ -425,8 +425,8 @@ namespace Kip
     /// </summary>
     public sealed class Option
     {
-        private PropertyContainer _properties = new PropertyContainer();
-        private ScoredPropertyContainer _scoredProperties = new ScoredPropertyContainer();
+        private PropertyCollection _properties = new PropertyCollection();
+        private ScoredPropertyCollection _scoredProperties = new ScoredPropertyCollection();
 
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
@@ -524,7 +524,7 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef
     {
-        private PropertyContainer _properties = new PropertyContainer();
+        private PropertyCollection _properties = new PropertyCollection();
 
         public ParameterDef(XName name, params Property[] properties)
         {
@@ -619,7 +619,7 @@ namespace Kip
         {
             Name = name;
             Value = value;
-            _properties = new PropertyContainer(elements);
+            _properties = new PropertyCollection(elements);
         }
 
         public XName Name
@@ -656,8 +656,8 @@ namespace Kip
         {
             Name = name;
 
-            var scoredProperties = new ScoredPropertyContainer();
-            var properties = new PropertyContainer();
+            var scoredProperties = new ScoredPropertyCollection();
+            var properties = new PropertyCollection();
             foreach (var e in elements)
             {
                 e.Apply(
@@ -691,8 +691,8 @@ namespace Kip
             Name = name;
             Value = value;
             ParameterRef = parameter;
-            _properties = new PropertyContainer(properties);
-            _scoredProperties = new ScoredPropertyContainer(scoredProperties);
+            _properties = new PropertyCollection(properties);
+            _scoredProperties = new ScoredPropertyCollection(scoredProperties);
         }
 
         public XName Name

@@ -5,16 +5,16 @@ using System.Xml.Linq;
 
 namespace Kip
 {
-    internal abstract class NamedElementContainer<T>
+    internal abstract class NamedElementCollection<T>
         : IEnumerable<T>
         , IReadOnlyCollection<T>
         where T : class
     {
         private List<T> _elements = new List<T>();
 
-        public NamedElementContainer() { }
+        public NamedElementCollection() { }
 
-        public NamedElementContainer(IEnumerable<T> collection)
+        public NamedElementCollection(IEnumerable<T> collection)
         {
             foreach (var element in collection)
             {
@@ -53,8 +53,8 @@ namespace Kip
         protected abstract XName NameOf(T element);
     }
 
-    internal sealed class FeatureContainer
-        : NamedElementContainer<Feature>
+    internal sealed class FeatureCollection
+        : NamedElementCollection<Feature>
     {
         protected override XName NameOf(Feature element)
         {
@@ -62,8 +62,8 @@ namespace Kip
         }
     }
 
-    internal sealed class ParameterDefContainer
-        : NamedElementContainer<ParameterDef>
+    internal sealed class ParameterDefCollection
+        : NamedElementCollection<ParameterDef>
     {
         protected override XName NameOf(ParameterDef element)
         {
@@ -71,8 +71,8 @@ namespace Kip
         }
     }
 
-    internal sealed class ParameterInitContainer
-        : NamedElementContainer<ParameterInit>
+    internal sealed class ParameterInitCollection
+        : NamedElementCollection<ParameterInit>
     {
         protected override XName NameOf(ParameterInit element)
         {
@@ -80,12 +80,12 @@ namespace Kip
         }
     }
 
-    internal sealed class PropertyContainer
-        : NamedElementContainer<Property>
+    internal sealed class PropertyCollection
+        : NamedElementCollection<Property>
     {
-        internal PropertyContainer() : base() { }
+        internal PropertyCollection() : base() { }
 
-        internal PropertyContainer(IEnumerable<Property> collection)
+        internal PropertyCollection(IEnumerable<Property> collection)
             : base(collection)
         { }
 
@@ -95,12 +95,12 @@ namespace Kip
         }
     }
 
-    internal sealed class ScoredPropertyContainer
-        : NamedElementContainer<ScoredProperty>
+    internal sealed class ScoredPropertyCollection
+        : NamedElementCollection<ScoredProperty>
     {
-        internal ScoredPropertyContainer() : base() { }
+        internal ScoredPropertyCollection() : base() { }
 
-        internal ScoredPropertyContainer(IEnumerable<ScoredProperty> collection)
+        internal ScoredPropertyCollection(IEnumerable<ScoredProperty> collection)
             : base(collection)
         { }
 
