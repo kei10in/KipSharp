@@ -56,16 +56,16 @@ namespace Kip
             return pc.Result;
         }
 
-        public static IEnumerable<ElementHolder> ReadChildren(XmlReader reader)
+        public static IEnumerable<Element> ReadChildren(XmlReader reader)
         {
             reader.MoveToElement();  // reader mights points Attribute
             if (reader.IsEmptyElement)
             {
                 // exactly no children
-                return Enumerable.Empty<ElementHolder>();
+                return Enumerable.Empty<Element>();
             }
 
-            List<ElementHolder> result = new List<ElementHolder>();
+            List<Element> result = new List<Element>();
 
             while (reader.Read())
             {
@@ -81,10 +81,10 @@ namespace Kip
                 }
             }
 
-            return Enumerable.Empty<ElementHolder>();
+            return Enumerable.Empty<Element>();
         }
 
-        public static ElementHolder ReadElement(XmlReader reader)
+        public static Element ReadElement(XmlReader reader)
         {
             XName tagName = reader.XName();
             if (tagName == Psf.Feature) return ReadFeature(reader);
@@ -99,7 +99,7 @@ namespace Kip
             return null;
         }
 
-        public static ElementHolder ReadFeature(XmlReader reader)
+        public static Element ReadFeature(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
                 throw new ReadPrintSchemaDocumentException("Feature element must contains name attribute");
@@ -115,7 +115,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        public static ElementHolder ReadOption(XmlReader reader)
+        public static Element ReadOption(XmlReader reader)
         {
             XName name = null;
             if (reader.MoveToAttribute("name"))
@@ -135,7 +135,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        public static ElementHolder ReadParameterDef(XmlReader reader)
+        public static Element ReadParameterDef(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
                 throw new ReadPrintSchemaDocumentException("ParameterDef element must contains name attribute");
@@ -151,7 +151,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        public static ElementHolder ReadParameterInit(XmlReader reader)
+        public static Element ReadParameterInit(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
                 throw new ReadPrintSchemaDocumentException("ParameterInit element must contains name attribute");
@@ -167,7 +167,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        public static ElementHolder ReadParameterRef(XmlReader reader)
+        public static Element ReadParameterRef(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
                 throw new ReadPrintSchemaDocumentException("ParameterRef element must contains name attribute");
@@ -183,7 +183,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        public static ElementHolder ReadProperty(XmlReader reader)
+        public static Element ReadProperty(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
                 throw new ReadPrintSchemaDocumentException("Property element must contains name attribute");
@@ -199,7 +199,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        public static ElementHolder ReadScoredProperty(XmlReader reader)
+        public static Element ReadScoredProperty(XmlReader reader)
         {
             if (!reader.MoveToAttribute("name"))
                 throw new ReadPrintSchemaDocumentException("ScoredProperty element must contains name attribute");
@@ -215,7 +215,7 @@ namespace Kip
             return element.GetResult();
         }
 
-        private static ElementHolder ReadValue(XmlReader reader)
+        private static Element ReadValue(XmlReader reader)
         {
             XName type = null;
 
@@ -235,7 +235,7 @@ namespace Kip
 
             if (reader.IsEmptyElement)
             {
-                return new ValueHolder { Element = Value.Empty };
+                return Value.Empty;
             }
 
             var value = Value.Empty;
@@ -271,13 +271,13 @@ namespace Kip
                 }
             }
 
-            return new ValueHolder { Element = value };
+            return value;
         }
     }
 
     internal interface PrintSchemaElement
     {
-        void Add(ElementHolder element);
+        void Add(Element element);
     }
 
     internal class PrintSchemaCapabilities : PrintSchemaElement
@@ -292,7 +292,7 @@ namespace Kip
             get;
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(
                 onFeature: x => Result.Add(x),
@@ -313,7 +313,7 @@ namespace Kip
             get;
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(
                 onFeature: x => Result.Add(x),
@@ -322,7 +322,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaFeature : PrintSchemaElement 
+    internal class PrintSchemaFeature : PrintSchemaElement
     {
         private Feature _feature;
 
@@ -331,7 +331,7 @@ namespace Kip
             _feature = new Feature(name);
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(
                 onFeature: x => _feature.Add(x),
@@ -339,9 +339,9 @@ namespace Kip
                 onProperty: x => _feature.Add(x));
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
-            return new FeatureHolder { Element = _feature };
+            return _feature;
         }
     }
 
@@ -354,16 +354,16 @@ namespace Kip
             _option = new Option(name, constrained);
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(
                 onScoredProperty: x => _option.Add(x),
                 onProperty: x => _option.Add(x));
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
-            return new OptionHolder { Element = _option };
+            return _option;
         }
     }
 
@@ -376,14 +376,14 @@ namespace Kip
             _parameterDef = new ParameterDef(name);
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(onProperty: x => _parameterDef.Add(x));
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
-            return new ParameterDefHolder { Element = _parameterDef };
+            return _parameterDef;
         }
     }
 
@@ -396,14 +396,14 @@ namespace Kip
             _parameterInit = new ParameterInit(name);
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(onValue: x => _parameterInit.Value = x);
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
-            return new ParameterInitHolder { Element = _parameterInit };
+            return _parameterInit;
         }
     }
 
@@ -416,14 +416,14 @@ namespace Kip
             _parameterRef = new ParameterRef(name);
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             throw new InvalidChildElementException("ParameterRef can't contain any element");
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
-            return new ParameterRefHolder { Element = _parameterRef };
+            return _parameterRef;
         }
     }
 
@@ -439,17 +439,17 @@ namespace Kip
             _properties = new List<Property>();
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(
                 onProperty: x => _properties.Add(x),
                 onValue: x => _value = x);
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
             var p = new Property(_name, _value, _properties.ToArray());
-            return new PropertyHolder { Element = p };
+            return p;
         }
     }
 
@@ -466,7 +466,7 @@ namespace Kip
             _name = name;
         }
 
-        public void Add(ElementHolder element)
+        public void Add(Element element)
         {
             element.Apply(
                 onScoredProperty: x => _scoredProperties.Add(x),
@@ -475,10 +475,10 @@ namespace Kip
                 onValue: x => _value = x);
         }
 
-        public ElementHolder GetResult()
+        public Element GetResult()
         {
             var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
-            return new ScoredPropertyHolder { Element = sp };
+            return sp;
         }
     }
 }

@@ -129,9 +129,9 @@ namespace Kip
     /// </summary>
     public sealed class CapabilitiesChild
     {
-        private ElementHolder _holder;
+        private Element _holder;
 
-        private CapabilitiesChild(ElementHolder holder) { _holder = holder; }
+        private CapabilitiesChild(Element holder) { _holder = holder; }
 
         internal void Apply(
             Action<Feature> onFeature,
@@ -146,17 +146,17 @@ namespace Kip
 
         public static implicit operator CapabilitiesChild(Feature element)
         {
-            return new CapabilitiesChild(new FeatureHolder { Element = element });
+            return new CapabilitiesChild(element);
         }
 
         public static implicit operator CapabilitiesChild(ParameterDef element)
         {
-            return new CapabilitiesChild(new ParameterDefHolder { Element = element });
+            return new CapabilitiesChild(element);
         }
 
         public static implicit operator CapabilitiesChild(Property element)
         {
-            return new CapabilitiesChild(new PropertyHolder { Element = element });
+            return new CapabilitiesChild(element);
         }
     }
 
@@ -283,9 +283,9 @@ namespace Kip
     /// </summary>
     public sealed class TicketChild
     {
-        private ElementHolder _holder;
+        private Element _holder;
 
-        private TicketChild(ElementHolder holder) { _holder = holder; }
+        private TicketChild(Element holder) { _holder = holder; }
 
         internal void Apply(
             Action<Feature> onFeature,
@@ -300,17 +300,17 @@ namespace Kip
 
         public static implicit operator TicketChild(Feature element)
         {
-            return new TicketChild(new FeatureHolder { Element = element });
+            return new TicketChild(element);
         }
 
         public static implicit operator TicketChild(ParameterInit element)
         {
-            return new TicketChild(new ParameterInitHolder { Element = element });
+            return new TicketChild(element);
         }
 
         public static implicit operator TicketChild(Property element)
         {
-            return new TicketChild(new PropertyHolder { Element = element });
+            return new TicketChild(element);
         }
     }
 
@@ -389,9 +389,9 @@ namespace Kip
 
     public sealed class FeatureChild
     {
-        private ElementHolder _holder;
+        private Element _holder;
 
-        private FeatureChild(ElementHolder holder) { _holder = holder; }
+        private FeatureChild(Element holder) { _holder = holder; }
 
         internal void Apply(
             Action<Property> onProperty,
@@ -406,17 +406,17 @@ namespace Kip
 
         public static implicit operator FeatureChild(Property element)
         {
-            return new FeatureChild(new PropertyHolder { Element = element });
+            return new FeatureChild(element);
         }
 
         public static implicit operator FeatureChild(Option element)
         {
-            return new FeatureChild(new OptionHolder { Element = element });
+            return new FeatureChild(element);
         }
 
         public static implicit operator FeatureChild(Feature element)
         {
-            return new FeatureChild(new FeatureHolder { Element = element });
+            return new FeatureChild(element);
         }
     }
 
@@ -494,9 +494,9 @@ namespace Kip
 
     public sealed class OptionChild
     {
-        private ElementHolder _holder;
+        private Element _holder;
 
-        private OptionChild(ElementHolder holder) { _holder = holder; }
+        private OptionChild(Element holder) { _holder = holder; }
 
         internal void Apply(
             Action<Property> onProperty,
@@ -509,12 +509,12 @@ namespace Kip
 
         public static implicit operator OptionChild(Property element)
         {
-            return new OptionChild(new PropertyHolder { Element = element });
+            return new OptionChild(element);
         }
 
         public static implicit operator OptionChild(ScoredProperty element)
         {
-            return new OptionChild(new ScoredPropertyHolder { Element = element });
+            return new OptionChild(element);
         }
     }
 
@@ -733,9 +733,9 @@ namespace Kip
 
     public sealed class ScoredPropertyChild
     {
-        private ElementHolder _holder;
+        private Element _holder;
 
-        private ScoredPropertyChild(ElementHolder holder) { _holder = holder; }
+        private ScoredPropertyChild(Element holder) { _holder = holder; }
 
         internal void Apply(
             Action<Property> onProperty,
@@ -748,12 +748,12 @@ namespace Kip
 
         public static implicit operator ScoredPropertyChild(Property element)
         {
-            return new ScoredPropertyChild(new PropertyHolder { Element = element });
+            return new ScoredPropertyChild(element);
         }
 
         public static implicit operator ScoredPropertyChild(ScoredProperty element)
         {
-            return new ScoredPropertyChild(new ScoredPropertyHolder { Element = element });
+            return new ScoredPropertyChild(element);
         }
     }
 
