@@ -41,6 +41,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Element.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ElementCollection.cs" />
