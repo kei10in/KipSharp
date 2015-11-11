@@ -45,7 +45,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ElementCollection.cs" />
-    <Compile Include="Elements.cs" />
+    <Compile Include="PrintSchemaElements.cs" />
     <Compile Include="PrintSchemaFramework.cs" />
     <Compile Include="PrintSchemaKeywords.cs">
       <AutoGen>True</AutoGen>
