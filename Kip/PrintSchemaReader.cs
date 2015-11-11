@@ -112,7 +112,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         public static ElementHolder ReadOption(XmlReader reader)
@@ -132,7 +132,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         public static ElementHolder ReadParameterDef(XmlReader reader)
@@ -148,7 +148,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         public static ElementHolder ReadParameterInit(XmlReader reader)
@@ -164,7 +164,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         public static ElementHolder ReadParameterRef(XmlReader reader)
@@ -180,7 +180,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         public static ElementHolder ReadProperty(XmlReader reader)
@@ -196,7 +196,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         public static ElementHolder ReadScoredProperty(XmlReader reader)
@@ -212,7 +212,7 @@ namespace Kip
                 element.Add(child);
             }
 
-            return element;
+            return element.GetResult();
         }
 
         private static ElementHolder ReadValue(XmlReader reader)
@@ -322,7 +322,7 @@ namespace Kip
         }
     }
 
-    internal class PrintSchemaFeature : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaFeature : PrintSchemaElement 
     {
         private Feature _feature;
 
@@ -339,21 +339,13 @@ namespace Kip
                 onProperty: x => _feature.Add(x));
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
-            onFeature?.Invoke(_feature);
+            return new FeatureHolder { Element = _feature };
         }
     }
 
-    internal class PrintSchemaOption : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaOption : PrintSchemaElement
     {
         private Option _option;
 
@@ -369,21 +361,13 @@ namespace Kip
                 onProperty: x => _option.Add(x));
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
-            onOption?.Invoke(_option);
+            return new OptionHolder { Element = _option };
         }
     }
 
-    internal class PrintSchemaParameterDef : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaParameterDef : PrintSchemaElement
     {
         private ParameterDef _parameterDef;
 
@@ -397,21 +381,13 @@ namespace Kip
             element.Apply(onProperty: x => _parameterDef.Add(x));
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
-            onParameterDef?.Invoke(_parameterDef);
+            return new ParameterDefHolder { Element = _parameterDef };
         }
     }
 
-    internal class PrintSchemaParameterInit : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaParameterInit : PrintSchemaElement
     {
         private ParameterInit _parameterInit;
 
@@ -425,21 +401,13 @@ namespace Kip
             element.Apply(onValue: x => _parameterInit.Value = x);
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
-            onParameterInit?.Invoke(_parameterInit);
+            return new ParameterInitHolder { Element = _parameterInit };
         }
     }
 
-    internal class PrintSchemaParameterRef : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaParameterRef : PrintSchemaElement
     {
         private ParameterRef _parameterRef;
 
@@ -453,21 +421,13 @@ namespace Kip
             throw new InvalidChildElementException("ParameterRef can't contain any element");
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
-            onParameterRef?.Invoke(_parameterRef);
+            return new ParameterRefHolder { Element = _parameterRef };
         }
     }
 
-    internal class PrintSchemaProperty : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaProperty : PrintSchemaElement
     {
         private XName _name;
         private Value _value;
@@ -486,22 +446,14 @@ namespace Kip
                 onValue: x => _value = x);
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
             var p = new Property(_name, _value, _properties.ToArray());
-            onProperty?.Invoke(p);
+            return new PropertyHolder { Element = p };
         }
     }
 
-    internal class PrintSchemaScoredProperty : PrintSchemaElement, ElementHolder
+    internal class PrintSchemaScoredProperty : PrintSchemaElement
     {
         private XName _name;
         private Value _value;
@@ -523,18 +475,10 @@ namespace Kip
                 onValue: x => _value = x);
         }
 
-        void ElementHolder.Apply(
-            Action<Feature> onFeature,
-            Action<Option> onOption,
-            Action<ParameterDef> onParameterDef,
-            Action<ParameterInit> onParameterInit,
-            Action<ParameterRef> onParameterRef,
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty,
-            Action<Value> onValue)
+        public ElementHolder GetResult()
         {
             var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
-            onScoredProperty?.Invoke(sp);
+            return new ScoredPropertyHolder { Element = sp };
         }
     }
 }
