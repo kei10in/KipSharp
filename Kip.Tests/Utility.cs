@@ -19,7 +19,7 @@ namespace Kip.Tests
                 xmlns:xsd='http://www.w3.org/2001/XMLSchema'>";
         private static readonly string PrintCapabilitiesFooter = "</psf:PrintCapabilities>";
 
-        internal static string CreatePrintCapabilities(string content)
+        internal static string PrintCapabilitiesWith(string content)
         {
             return string.Join(
                 Environment.NewLine,

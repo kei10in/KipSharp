@@ -9,7 +9,7 @@ namespace Kip.Tests
         [Fact]
         public void ReadSimpleFeatureOptionStructure()
         {
-            var pc = CreatePrintCapabilities(@"
+            var pc = PrintCapabilitiesWith(@"
                 <psf:Feature name='psk:JobCollateAllDocuments'>
                   <psf:Property name='psf:SelectionType'>
                     <psf:Value xsi:type='xsd:QName'>psk:PickOne</psf:Value>
@@ -48,7 +48,7 @@ namespace Kip.Tests
         [Fact]
         public void ReadValueWithUnspecifedType()
         {
-            var pc = CreatePrintCapabilities(@"
+            var pc = PrintCapabilitiesWith(@"
                 <psf:Feature name='psk:JobCollateAllDocuments'>
                   <psf:Property name='psk:DisplayName'>
                     <psf:Value>Copies Collate</psf:Value>
