@@ -27,6 +27,23 @@ namespace Kip
             }
         }
 
+        public IEnumerable<Option> GetFeatureOptions(XName featureName)
+        {
+            var options = Feature(featureName)?.Options();
+            return options ?? Enumerable.Empty<Option>();
+        }
+
+        public IEnumerable<Option> GetFeatureOptions(XName featureName, params XName[] nestedFeatureNames)
+        {
+            var ft = Feature(featureName);
+            foreach (var nestedFeatureName in nestedFeatureNames)
+            {
+                ft = ft?.SubFeature(nestedFeatureName);
+            }
+            var options = ft?.Options();
+            return options ?? Enumerable.Empty<Option>();
+        }
+
         public void Add(Feature feature)
         {
             _features.Add(feature);
