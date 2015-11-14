@@ -471,14 +471,30 @@ namespace Kip
             element.Apply(
                 onScoredProperty: x => _scoredProperties.Add(x),
                 onProperty: x => _properties.Add(x),
-                onParameterRef: x => _parameterRef = x,
-                onValue: x => _value = x);
+                onParameterRef: x =>
+                {
+                    ThrowIfValueOrParameterRefExists();
+                    _parameterRef = x;
+                },
+                onValue: x =>
+                {
+                    ThrowIfValueOrParameterRefExists();
+                    _value = x;
+                });
         }
 
         public Element GetResult()
         {
             var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
             return sp;
+        }
+
+        private void ThrowIfValueOrParameterRefExists()
+        {
+            if (_value == null && _parameterRef == null)
+                return;
+
+            throw new InvalidChildElementException("ScoredProperty can contain only one Value or ParameterRef");
         }
     }
 }

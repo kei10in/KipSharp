@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit;
 using static Kip.Tests.Utility;
 
@@ -46,6 +47,22 @@ namespace Kip.Tests
         }
 
         [Fact]
+        public void ReadEmptyOption()
+        {
+            var pc = PrintCapabilitiesWith(@"
+                <psf:Feature name='psk:JobCollateAllDocuments'>
+                  <psf:Option name='psk:Collated' constrained='psk:None'/>
+                  <psf:Option name='psk:Uncollated' constrained='psk:None'/>
+                </psf:Feature>");
+
+            var actual = Capabilities.Parse(pc);
+            Assert.True(0 < actual.Features().Count());
+
+            var f = actual.Feature(Psk.JobCollateAllDocuments);
+            Assert.Equal(2, f?.Options()?.Count());
+        }
+        
+        [Fact]
         public void ReadValueWithUnspecifedType()
         {
             var pc = PrintCapabilitiesWith(@"
@@ -62,6 +79,26 @@ namespace Kip.Tests
             Assert.NotNull(value);
             Assert.Equal(Xsd.String, value?.ValueType);
             Assert.Equal("Copies Collate", value?.AsString());
+        }
+
+        [Fact]
+        public void ThrowsExceptionWhenScoredPropertyContainsBothValueAndParameterRef()
+        {
+            var pc = PrintCapabilitiesWith(@"
+                <psf:Feature name='exp:SomeFeature'>
+                  <psf:Option name='exp:SomeOption'>
+                    <psf:ScoredProperty name='exp:SomeScoredProperty'>
+                      <psf:Value xsi:type='xsd:string'>some value</psf:Value>
+                      <psf:ParameterRef name='exp:SomeParameter'></psf:ParameterRef>
+                    </psf:ScoredProperty>
+                  </psf:Option>                  
+                </psf:Feature>
+                <psf:ParameterDef name='exp:SomeParameter'></psf:ParameterDef>");
+
+            Assert.ThrowsAny<InvalidChildElementException>(() =>
+            {
+                var actual = Capabilities.Parse(pc);
+            });
         }
     }
 }
