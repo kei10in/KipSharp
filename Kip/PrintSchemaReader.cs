@@ -46,14 +46,14 @@ namespace Kip
             if (tagName != Psf.PrintTicket)
                 return null;
 
-            var pc = new PrintSchemaTicket();
+            var pt = new PrintSchemaTicket();
 
             foreach (var child in ReadChildren(reader))
             {
-                pc.Add(child);
+                pt.Add(child);
             }
 
-            return pc.Result;
+            return pt.Result;
         }
 
         public static IEnumerable<Element> ReadChildren(XmlReader reader)
