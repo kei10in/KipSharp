@@ -38,7 +38,7 @@ namespace Kip
             var ft = Feature(featureName);
             foreach (var nestedFeatureName in nestedFeatureNames)
             {
-                ft = ft?.SubFeature(nestedFeatureName);
+                ft = ft?.NestedFeature(nestedFeatureName);
             }
             var options = ft?.Options();
             return options ?? Enumerable.Empty<Option>();
@@ -393,12 +393,12 @@ namespace Kip
             _features.Add(feature);
         }
 
-        public IEnumerable<Feature> SubFeatures()
+        public IEnumerable<Feature> NestedFeatures()
         {
             return _features;
         }
 
-        public Feature SubFeature(XName name)
+        public Feature NestedFeature(XName name)
         {
             return _features.FirstOrDefault(x => x.Name == name);
         }
@@ -644,12 +644,12 @@ namespace Kip
             get;
         }
 
-        public IReadOnlyCollection<Property> SubProperties()
+        public IReadOnlyCollection<Property> NestedProperties()
         {
             return _properties;
         }
 
-        public Property SubProperty(XName name)
+        public Property NestedProperty(XName name)
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
@@ -722,22 +722,22 @@ namespace Kip
             get;
         }
 
-        public IEnumerable<ScoredProperty> SubScoredProperties()
+        public IEnumerable<ScoredProperty> NestedScoredProperties()
         {
             return _scoredProperties;
         }
 
-        public ScoredProperty SubScoredProperty(XName name)
+        public ScoredProperty NestedScoredProperty(XName name)
         {
             return _scoredProperties.FirstOrDefault(x => x.Name == name);
         }
 
-        public IEnumerable<Property> SubProperties()
+        public IEnumerable<Property> Properties()
         {
             return _properties;
         }
 
-        public Property SubProperty(XName name)
+        public Property Property(XName name)
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }

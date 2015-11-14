@@ -133,7 +133,7 @@ namespace Kip
 
             Write(writer, element.Value);
 
-            foreach (var p in element.SubProperties())
+            foreach (var p in element.NestedProperties())
             {
                 Write(writer, p);
             }
@@ -149,12 +149,12 @@ namespace Kip
             Write(writer, element.Value);
             Write(writer, element.ParameterRef);
 
-            foreach (var p in element.SubProperties())
+            foreach (var p in element.Properties())
             {
                 Write(writer, p);
             }
 
-            foreach (var sp in element.SubScoredProperties())
+            foreach (var sp in element.NestedScoredProperties())
             {
                 Write(writer, sp);
             }

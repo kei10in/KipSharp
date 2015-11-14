@@ -80,7 +80,7 @@ namespace Kip.Tests
 
             var property = _actual.Property(Psk.PageImageableSize);
             Assert.NotNull(property);
-            Assert.Equal(3, property.SubProperties().Count());
+            Assert.Equal(3, property.NestedProperties().Count());
         }
 
         [Fact]
