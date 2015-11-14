@@ -40,6 +40,8 @@ namespace Kip.Tests
 
         internal static readonly XName SomeParameter = Namespace + "SomeParameter";
 
+        internal static readonly XName SomeProperty = Namespace + "SomeProperty";
+
         internal static readonly XName SomeScoredProperty = Namespace + "SomeScoredProperty";
     }
 }

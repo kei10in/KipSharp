@@ -61,7 +61,7 @@ namespace Kip.Tests
             var f = actual.Feature(Psk.JobCollateAllDocuments);
             Assert.Equal(2, f?.Options()?.Count());
         }
-        
+
         [Fact]
         public void ReadValueWithUnspecifedType()
         {
@@ -79,6 +79,34 @@ namespace Kip.Tests
             Assert.NotNull(value);
             Assert.Equal(Xsd.String, value?.ValueType);
             Assert.Equal("Copies Collate", value?.AsString());
+        }
+
+        [Fact]
+        public void ReadEmptyValue()
+        {
+            var pc = PrintCapabilitiesWith(@"
+                <psf:Property name='exp:SomeProperty'>
+                  <psf:Value/>
+                </psf:Property>");
+
+            var actual = Capabilities.Parse(pc);
+            var value = actual.Property(Exp.SomeProperty)?.Value;
+            Assert.NotNull(value);
+            Assert.Equal(Value.Empty, value);
+        }
+
+        [Fact]
+        public void ReadUnassingnedValue()
+        {
+            var pc = PrintCapabilitiesWith(@"
+                <psf:Property name='exp:SomeProperty'>
+                  <psf:Value></psf:Value>
+                </psf:Property>");
+
+            var actual = Capabilities.Parse(pc);
+            var value = actual.Property(Exp.SomeProperty)?.Value;
+            Assert.NotNull(value);
+            Assert.Equal(Value.Empty, value);
         }
 
         [Fact]
