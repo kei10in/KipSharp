@@ -563,11 +563,6 @@ namespace Kip
     /// </summary>
     public sealed class ParameterInit
     {
-        public ParameterInit(XName name)
-            : this(name, null)
-        {
-        }
-
         public ParameterInit(XName name, Value value)
         {
             Name = name;
@@ -581,7 +576,7 @@ namespace Kip
 
         public Value Value
         {
-            get; set;
+            get;
         }
     }
 

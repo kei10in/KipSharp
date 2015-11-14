@@ -389,21 +389,22 @@ namespace Kip
 
     internal class PrintSchemaParameterInit : PrintSchemaElement
     {
-        private ParameterInit _parameterInit;
+        private XName _name;
+        private Value _value;
 
         public PrintSchemaParameterInit(XName name)
         {
-            _parameterInit = new ParameterInit(name);
+            _name = name;
         }
 
         public void Add(Element element)
         {
-            element.Apply(onValue: x => _parameterInit.Value = x);
+            element.Apply(onValue: x => _value = x);
         }
 
         public Element GetResult()
         {
-            return _parameterInit;
+            return new ParameterInit(_name, _value);
         }
     }
 
