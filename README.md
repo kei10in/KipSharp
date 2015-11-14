@@ -4,7 +4,7 @@
 
 Handle PrintCapabilities and PrintTicket documents on .NET Framework.
 
-## Examples
+## Usage
 
 ### Read option in Print Capabilities document
 
