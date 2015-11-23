@@ -1,21 +1,26 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace Kip
 {
-    internal abstract class NamedElementCollection<T>
+    internal class NamedElementCollection<T>
         : IEnumerable<T>
         , IReadOnlyCollection<T>
         where T : class
     {
+        private Func<T, XName> _nameOf;
         private List<T> _elements = new List<T>();
 
-        public NamedElementCollection() { }
+        internal NamedElementCollection(Func<T, XName> nameOf)
+            : this(new List<T>(), nameOf)
+        { }
 
-        public NamedElementCollection(IEnumerable<T> collection)
+        internal NamedElementCollection(IEnumerable<T> collection, Func<T, XName> nameOf)
         {
+            _nameOf = nameOf;
             foreach (var element in collection)
             {
                 Add(element);
@@ -32,10 +37,10 @@ namespace Kip
 
         public void Add(T element)
         {
-            if (_elements.Any(x => NameOf(x) == NameOf(element)))
+            if (_elements.Any(x => _nameOf(x) == _nameOf(element)))
             {
                 throw new DuplicateNameException(
-                    $"{NameOf(element)} is already exists. The attribute \"name\" must be unique.");
+                    $"{_nameOf(element)} is already exists. The attribute \"name\" must be unique.");
             }
             _elements.Add(element);
         }
@@ -49,64 +54,58 @@ namespace Kip
         {
             return _elements.GetEnumerator();
         }
-
-        protected abstract XName NameOf(T element);
     }
 
-    internal sealed class FeatureCollection
-        : NamedElementCollection<Feature>
+    internal static class NamedElementCollection
     {
-        protected override XName NameOf(Feature element)
+        public static NamedElementCollection<Feature> CreateFeatureCollection()
         {
-            return element.Name;
+            return new NamedElementCollection<Feature>(x => x.Name);
         }
-    }
 
-    internal sealed class ParameterDefCollection
-        : NamedElementCollection<ParameterDef>
-    {
-        protected override XName NameOf(ParameterDef element)
+        public static NamedElementCollection<Feature> CreateFeatureCollection(IEnumerable<Feature> elements)
         {
-            return element.Name;
+            return new NamedElementCollection<Feature>(elements, x => x.Name);
         }
-    }
 
-    internal sealed class ParameterInitCollection
-        : NamedElementCollection<ParameterInit>
-    {
-        protected override XName NameOf(ParameterInit element)
+        public static NamedElementCollection<ParameterDef> CreateParameterDefCollection()
         {
-            return element.Name;
+            return new NamedElementCollection<ParameterDef>(x => x.Name);
         }
-    }
 
-    internal sealed class PropertyCollection
-        : NamedElementCollection<Property>
-    {
-        internal PropertyCollection() : base() { }
-
-        internal PropertyCollection(IEnumerable<Property> collection)
-            : base(collection)
-        { }
-
-        protected override XName NameOf(Property element)
+        public static NamedElementCollection<ParameterDef> CreateParameterDefCollection(IEnumerable<ParameterDef> elements)
         {
-            return element.Name;
+            return new NamedElementCollection<ParameterDef>(elements, x => x.Name);
         }
-    }
 
-    internal sealed class ScoredPropertyCollection
-        : NamedElementCollection<ScoredProperty>
-    {
-        internal ScoredPropertyCollection() : base() { }
-
-        internal ScoredPropertyCollection(IEnumerable<ScoredProperty> collection)
-            : base(collection)
-        { }
-
-        protected override XName NameOf(ScoredProperty element)
+        public static NamedElementCollection<ParameterInit> CreateParameterInitCollection()
         {
-            return element.Name;
+            return new NamedElementCollection<ParameterInit>(x => x.Name);
+        }
+
+        public static NamedElementCollection<ParameterInit> CreateParameterInitCollection(IEnumerable<ParameterInit> elements)
+        {
+            return new NamedElementCollection<ParameterInit>(elements, x => x.Name);
+        }
+
+        public static NamedElementCollection<Property> CreatePropertyCollection()
+        {
+            return new NamedElementCollection<Property>(x => x.Name);
+        }
+
+        public static NamedElementCollection<Property> CreatePropertyCollection(IEnumerable<Property> elements)
+        {
+            return new NamedElementCollection<Property>(elements, x => x.Name);
+        }
+
+        public static NamedElementCollection<ScoredProperty> CreateScoredPropertyCollection()
+        {
+            return new NamedElementCollection<ScoredProperty>(x => x.Name);
+        }
+
+        public static NamedElementCollection<ScoredProperty> CreateScoredPropertyCollection(IEnumerable<ScoredProperty> elements)
+        {
+            return new NamedElementCollection<ScoredProperty>(elements, x => x.Name);
         }
     }
 }

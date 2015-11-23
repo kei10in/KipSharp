@@ -12,9 +12,9 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities
     {
-        private FeatureCollection _features = new FeatureCollection();
-        private ParameterDefCollection _parameters = new ParameterDefCollection();
-        private PropertyCollection _properties = new PropertyCollection();
+        private NamedElementCollection<Feature> _features = NamedElementCollection.CreateFeatureCollection();
+        private NamedElementCollection<ParameterDef> _parameters = NamedElementCollection.CreateParameterDefCollection();
+        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
 
         public Capabilities(params CapabilitiesChild[] elements)
         {
@@ -183,9 +183,9 @@ namespace Kip
     /// </summary>
     public sealed class Ticket
     {
-        private FeatureCollection _features = new FeatureCollection();
-        private ParameterInitCollection _parameters = new ParameterInitCollection();
-        private PropertyCollection _properties = new PropertyCollection();
+        private NamedElementCollection<Feature> _features = NamedElementCollection.CreateFeatureCollection();
+        private NamedElementCollection<ParameterInit> _parameters = NamedElementCollection.CreateParameterInitCollection();
+        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
 
         public Ticket(params TicketChild[] elements)
         {
@@ -337,9 +337,9 @@ namespace Kip
     /// </summary>
     public sealed class Feature
     {
-        private PropertyCollection _properties = new PropertyCollection();
+        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
         private List<Option> _options = new List<Option>();
-        private FeatureCollection _features = new FeatureCollection();
+        private NamedElementCollection<Feature> _features = NamedElementCollection.CreateFeatureCollection();
 
         public Feature(XName name)
         {
@@ -442,8 +442,8 @@ namespace Kip
     /// </summary>
     public sealed class Option
     {
-        private PropertyCollection _properties = new PropertyCollection();
-        private ScoredPropertyCollection _scoredProperties = new ScoredPropertyCollection();
+        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
+        private NamedElementCollection<ScoredProperty> _scoredProperties = NamedElementCollection.CreateScoredPropertyCollection();
 
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
@@ -541,7 +541,7 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef
     {
-        private PropertyCollection _properties = new PropertyCollection();
+        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
 
         public ParameterDef(XName name, params Property[] properties)
         {
@@ -631,7 +631,7 @@ namespace Kip
         {
             Name = name;
             Value = value;
-            _properties = new PropertyCollection(elements);
+            _properties = NamedElementCollection.CreatePropertyCollection(elements);
         }
 
         public XName Name
@@ -668,8 +668,8 @@ namespace Kip
         {
             Name = name;
 
-            var scoredProperties = new ScoredPropertyCollection();
-            var properties = new PropertyCollection();
+            var scoredProperties = NamedElementCollection.CreateScoredPropertyCollection();
+            var properties = NamedElementCollection.CreatePropertyCollection();
             foreach (var e in elements)
             {
                 e.Apply(
@@ -703,8 +703,8 @@ namespace Kip
             Name = name;
             Value = value;
             ParameterRef = parameter;
-            _properties = new PropertyCollection(properties);
-            _scoredProperties = new ScoredPropertyCollection(scoredProperties);
+            _properties = NamedElementCollection.CreatePropertyCollection(properties);
+            _scoredProperties = NamedElementCollection.CreateScoredPropertyCollection(scoredProperties);
         }
 
         public XName Name
