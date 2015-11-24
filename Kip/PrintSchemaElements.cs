@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -337,9 +338,9 @@ namespace Kip
     /// </summary>
     public sealed class Feature
     {
-        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
-        private List<Option> _options = new List<Option>();
-        private NamedElementCollection<Feature> _features = NamedElementCollection.CreateFeatureCollection();
+        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableList<Option> _options = ImmutableList.Create<Option>();
+        private ImmutableNamedElementCollection<Feature> _features = ImmutableNamedElementCollection.CreateFeatureCollection();
 
         public Feature(XName name)
         {
@@ -352,10 +353,31 @@ namespace Kip
             foreach (var e in elements)
             {
                 e.Apply(
-                    onProperty: x => _properties.Add(x),
-                    onOption: x => _options.Add(x),
-                    onFeature: x => _features.Add(x));
+                    onProperty: x =>
+                    {
+                        _properties = _properties.Add(x);
+                    },
+                    onOption: x =>
+                    {
+                        _options = _options.Add(x);
+                    },
+                    onFeature: x =>
+                    {
+                        _features = _features.Add(x);
+                    });
             }
+        }
+
+        private Feature(
+            XName name,
+            ImmutableNamedElementCollection<Property> properties,
+            ImmutableList<Option> options,
+            ImmutableNamedElementCollection<Feature> nestedFeature)
+        {
+            Name = name;
+            _properties = properties;
+            _options = options;
+            _features = nestedFeature;
         }
 
         public XName Name
@@ -363,9 +385,9 @@ namespace Kip
             get;
         }
 
-        public void Add(Property property)
+        public Feature Add(Property property)
         {
-            _properties.Add(property);
+            return new Feature(Name, _properties.Add(property), _options, _features);
         }
 
         public IEnumerable<Property> Properties()
@@ -378,9 +400,9 @@ namespace Kip
             return _properties.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Add(Option option)
+        public Feature Add(Option option)
         {
-            _options.Add(option);
+            return new Feature(Name, _properties, _options.Add(option), _features);
         }
 
         public IEnumerable<Option> Options()
@@ -388,9 +410,9 @@ namespace Kip
             return _options;
         }
 
-        public void Add(Feature feature)
+        public Feature Add(Feature feature)
         {
-            _features.Add(feature);
+            return new Feature(Name, _properties, _options, _features.Add(feature));
         }
 
         public IEnumerable<Feature> NestedFeatures()

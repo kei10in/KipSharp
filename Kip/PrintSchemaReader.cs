@@ -324,24 +324,28 @@ namespace Kip
 
     internal class PrintSchemaFeature : PrintSchemaElement
     {
+        private XName _name;
+        private List<FeatureChild> _children = new List<FeatureChild>();
+
         private Feature _feature;
 
         public PrintSchemaFeature(XName name)
         {
+            _name = name;
             _feature = new Feature(name);
         }
 
         public void Add(Element element)
         {
             element.Apply(
-                onFeature: x => _feature.Add(x),
-                onOption: x => _feature.Add(x),
-                onProperty: x => _feature.Add(x));
+                onFeature: x => _children.Add(x),
+                onOption: x => _children.Add(x),
+                onProperty: x => _children.Add(x));
         }
 
         public Element GetResult()
         {
-            return _feature;
+            return new Feature(_name, _children.ToArray());
         }
     }
 
