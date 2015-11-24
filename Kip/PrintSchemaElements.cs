@@ -442,8 +442,8 @@ namespace Kip
     /// </summary>
     public sealed class Option
     {
-        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
-        private NamedElementCollection<ScoredProperty> _scoredProperties = NamedElementCollection.CreateScoredPropertyCollection();
+        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
 
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
@@ -463,9 +463,27 @@ namespace Kip
             foreach (var e in elements)
             {
                 e.Apply(
-                    onProperty: x => _properties.Add(x),
-                    onScoredProperty: x => _scoredProperties.Add(x));
+                    onProperty: x =>
+                    {
+                        _properties = _properties.Add(x);
+                    },
+                    onScoredProperty: x =>
+                    {
+                        _scoredProperties = _scoredProperties.Add(x);
+                    });
             }
+        }
+
+        private Option(
+            XName name,
+            XName constrained,
+            ImmutableNamedElementCollection<Property> properties,
+            ImmutableNamedElementCollection<ScoredProperty> scoredPropertis)
+        {
+            Name = name;
+            Constrained = constrained;
+            _properties = properties;
+            _scoredProperties = scoredPropertis;
         }
 
         public XName Name
@@ -475,12 +493,17 @@ namespace Kip
 
         public XName Constrained
         {
-            get; set;
+            get;
         }
 
-        public void Add(Property property)
+        public Option SetConstrained(XName constrained)
         {
-            _properties.Add(property);
+            return new Option(Name, constrained, _properties, _scoredProperties);
+        }
+
+        public Option Add(Property property)
+        {
+            return new Option(Name, Constrained, _properties.Add(property), _scoredProperties);
         }
 
         public IEnumerable<Property> Properties()
@@ -493,9 +516,9 @@ namespace Kip
             return _properties.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Add(ScoredProperty scoredProperty)
+        public Option Add(ScoredProperty scoredProperty)
         {
-            _scoredProperties.Add(scoredProperty);
+            return new Option(Name, Constrained, _properties, _scoredProperties.Add(scoredProperty));
         }
 
         public IEnumerable<ScoredProperty> ScoredProperties()

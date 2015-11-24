@@ -348,22 +348,27 @@ namespace Kip
     internal class PrintSchemaOption : PrintSchemaElement
     {
         private Option _option;
+        private XName _name;
+        private XName _constrained;
+        private List<OptionChild> _children = new List<OptionChild>();
 
         public PrintSchemaOption(XName name, XName constrained)
         {
             _option = new Option(name, constrained);
+            _name = name;
+            _constrained = constrained;
         }
 
         public void Add(Element element)
         {
             element.Apply(
-                onScoredProperty: x => _option.Add(x),
-                onProperty: x => _option.Add(x));
+                onScoredProperty: x => _children.Add(x),
+                onProperty: x => _children.Add(x));
         }
 
         public Element GetResult()
         {
-            return _option;
+            return new Option(_name, _constrained, _children.ToArray());
         }
     }
 
