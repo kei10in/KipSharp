@@ -54,7 +54,7 @@ namespace Kip
                 pt.Add(child);
             }
 
-            return pt.Result;
+            return pt.GetResult();
         }
 
         public static IEnumerable<Element> ReadChildren(XmlReader reader)
@@ -304,22 +304,35 @@ namespace Kip
 
     internal class PrintSchemaTicket : PrintSchemaElement
     {
-        public PrintSchemaTicket()
-        {
-            Result = new Ticket();
-        }
+        private ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        private ImmutableNamedElementCollection<ParameterInit> _parameters
+            = ImmutableNamedElementCollection.CreateParameterInitCollection();
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
-        public Ticket Result
+        public PrintSchemaTicket() { }
+
+        public Ticket GetResult()
         {
-            get;
+            return new Ticket(_features, _parameters, _properties);
         }
 
         public void Add(Element element)
         {
             element.Apply(
-                onFeature: x => Result.Add(x),
-                onParameterInit: x => Result.Add(x),
-                onProperty: x => Result.Add(x));
+                onFeature: x =>
+                {
+                    _features = _features.Add(x);
+                },
+                onParameterInit: x =>
+                {
+                    _parameters = _parameters.Add(x);
+                },
+                onProperty: x =>
+                {
+                    _properties = _properties.Add(x);
+                });
         }
     }
 

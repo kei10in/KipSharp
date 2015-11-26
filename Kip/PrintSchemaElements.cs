@@ -184,24 +184,46 @@ namespace Kip
     /// </summary>
     public sealed class Ticket
     {
-        private NamedElementCollection<Feature> _features = NamedElementCollection.CreateFeatureCollection();
-        private NamedElementCollection<ParameterInit> _parameters = NamedElementCollection.CreateParameterInitCollection();
-        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<Feature> _features = ImmutableNamedElementCollection.CreateFeatureCollection();
+        private ImmutableNamedElementCollection<ParameterInit> _parameters = ImmutableNamedElementCollection.CreateParameterInitCollection();
+        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public Ticket(params TicketChild[] elements)
         {
             foreach (var e in elements)
             {
                 e.Apply(
-                    onFeature: x => _features.Add(x),
-                    onParameterInit: x => _parameters.Add(x),
-                    onProperty: x => _properties.Add(x));
+                    onFeature: x =>
+                    {
+                        _features = _features.Add(x);
+                    },
+                    onParameterInit: x =>
+                    {
+                        _parameters = _parameters.Add(x);
+                    },
+                    onProperty: x =>
+                    {
+                        _properties = _properties.Add(x);
+                    });
             }
         }
 
-        public void Add(Feature feature)
+        internal Ticket(
+            ImmutableNamedElementCollection<Feature> features,
+            ImmutableNamedElementCollection<ParameterInit> parameters,
+            ImmutableNamedElementCollection<Property> properties)
         {
-            _features.Add(feature);
+            _features = features;
+            _parameters = parameters;
+            _properties = properties;
+        }
+
+        public Ticket Add(Feature feature)
+        {
+            return new Ticket(
+                _features.Add(feature),
+                _parameters,
+                _properties);
         }
 
         public IEnumerable<Feature> Features()
@@ -214,9 +236,12 @@ namespace Kip
             return _features.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Add(ParameterInit parameter)
+        public Ticket Add(ParameterInit parameter)
         {
-            _parameters.Add(parameter);
+            return new Ticket(
+                _features,
+                _parameters.Add(parameter),
+                _properties);
         }
 
         public IEnumerable<ParameterInit> Parameters()
@@ -229,9 +254,12 @@ namespace Kip
             return _parameters.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Add(Property property)
+        public Ticket Add(Property property)
         {
-            _properties.Add(property);
+            return new Ticket(
+                _features,
+                _parameters,
+                _properties.Add(property));
         }
 
         public Property Property(XName name)
