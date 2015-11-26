@@ -368,7 +368,7 @@ namespace Kip
             }
         }
 
-        private Feature(
+        internal Feature(
             XName name,
             ImmutableNamedElementCollection<Property> properties,
             ImmutableList<Option> options,
@@ -496,7 +496,7 @@ namespace Kip
             }
         }
 
-        private Option(
+        internal Option(
             XName name,
             XName constrained,
             ImmutableNamedElementCollection<Property> properties,
@@ -504,7 +504,7 @@ namespace Kip
         {
             Name = name;
             Constrained = constrained;
-            _properties = properties;
+            _properties =  properties;
             _scoredProperties = scoredPropertis;
         }
 

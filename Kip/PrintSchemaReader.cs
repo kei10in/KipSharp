@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -325,40 +326,49 @@ namespace Kip
     internal class PrintSchemaFeature : PrintSchemaElement
     {
         private XName _name;
-        private List<FeatureChild> _children = new List<FeatureChild>();
-
-        private Feature _feature;
+        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableList<Option> _options = ImmutableList.Create<Option>();
+        private ImmutableNamedElementCollection<Feature> _features = ImmutableNamedElementCollection.CreateFeatureCollection();
 
         public PrintSchemaFeature(XName name)
         {
             _name = name;
-            _feature = new Feature(name);
         }
 
         public void Add(Element element)
         {
             element.Apply(
-                onFeature: x => _children.Add(x),
-                onOption: x => _children.Add(x),
-                onProperty: x => _children.Add(x));
+                onFeature: x =>
+                {
+                    _features = _features.Add(x);
+                },
+                onOption: x =>
+                {
+                    _options = _options.Add(x);
+                },
+                onProperty: x =>
+                {
+                    _properties = _properties.Add(x);
+                });
         }
 
         public Element GetResult()
         {
-            return new Feature(_name, _children.ToArray());
+            return new Feature(_name, _properties, _options, _features);
         }
     }
 
     internal class PrintSchemaOption : PrintSchemaElement
     {
-        private Option _option;
         private XName _name;
         private XName _constrained;
-        private List<OptionChild> _children = new List<OptionChild>();
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
 
         public PrintSchemaOption(XName name, XName constrained)
         {
-            _option = new Option(name, constrained);
             _name = name;
             _constrained = constrained;
         }
@@ -366,13 +376,23 @@ namespace Kip
         public void Add(Element element)
         {
             element.Apply(
-                onScoredProperty: x => _children.Add(x),
-                onProperty: x => _children.Add(x));
+                onProperty: x =>
+                {
+                    _properties = _properties.Add(x);
+                },
+                onScoredProperty: x =>
+                {
+                    _scoredProperties = _scoredProperties.Add(x);
+                });
         }
 
         public Element GetResult()
         {
-            return new Option(_name, _constrained, _children.ToArray());
+            return new Option(
+                _name,
+                _constrained,
+                _properties,
+                _scoredProperties);
         }
     }
 

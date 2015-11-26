@@ -11,14 +11,14 @@ namespace Kip
         : IEnumerable<T>, IReadOnlyCollection<T>
         where T : class
     {
-        private readonly ImmutableDictionary<XName, T> _elements;
         private Func<T, XName> _nameOf;
+        private readonly ImmutableDictionary<XName, T> _elements;
 
         internal ImmutableNamedElementCollection(Func<T, XName> nameOf)
             : this(ImmutableDictionary.Create<XName, T>(), nameOf)
         { }
 
-        internal ImmutableNamedElementCollection(IDictionary<XName, T> elements, Func<T, XName> nameOf)
+        private ImmutableNamedElementCollection(IDictionary<XName, T> elements, Func<T, XName> nameOf)
         {
             _elements = elements.ToImmutableDictionary();
             _nameOf = nameOf;
