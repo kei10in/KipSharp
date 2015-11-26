@@ -504,7 +504,7 @@ namespace Kip
         {
             Name = name;
             Constrained = constrained;
-            _properties =  properties;
+            _properties = properties;
             _scoredProperties = scoredPropertis;
         }
 
@@ -586,7 +586,7 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef
     {
-        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public ParameterDef(XName name, params Property[] properties)
         {
@@ -597,15 +597,20 @@ namespace Kip
                 Add(p);
             }
         }
+        internal ParameterDef(XName name, ImmutableNamedElementCollection<Property> properties)
+        {
+            Name = name;
+            _properties = properties;
+        }
 
         public XName Name
         {
             get;
         }
 
-        public void Add(Property property)
+        public ParameterDef Add(Property property)
         {
-            _properties.Add(property);
+            return new ParameterDef(Name, _properties);
         }
 
         public IEnumerable<Property> Properties()

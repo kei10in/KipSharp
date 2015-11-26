@@ -398,21 +398,26 @@ namespace Kip
 
     internal class PrintSchemaParameterDef : PrintSchemaElement
     {
-        private ParameterDef _parameterDef;
+        private XName _name;
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public PrintSchemaParameterDef(XName name)
         {
-            _parameterDef = new ParameterDef(name);
+            _name = name;
         }
 
         public void Add(Element element)
         {
-            element.Apply(onProperty: x => _parameterDef.Add(x));
+            element.Apply(onProperty: x =>
+            {
+                _properties = _properties.Add(x);
+            });
         }
 
         public Element GetResult()
         {
-            return _parameterDef;
+            return new ParameterDef(_name, _properties);
         }
     }
 
