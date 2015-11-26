@@ -645,6 +645,11 @@ namespace Kip
         {
             get;
         }
+
+        public ParameterInit SetValue(Value value)
+        {
+            return new ParameterInit(Name, value);
+        }
     }
 
     /// <summary>
