@@ -12,11 +12,11 @@ namespace Kip.Tests
         public void ThrowsExceptionWhenAddFeatureWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc.Add(new Feature(someName1));
+            pc = pc.Add(new Feature(someName1));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc.Add(new Feature(someName1));
+                pc = pc.Add(new Feature(someName1));
             });
         }
 
@@ -24,11 +24,11 @@ namespace Kip.Tests
         public void ThrowsExceptionWhenAddParameterWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc.Add(new ParameterDef(someName1));
+            pc = pc.Add(new ParameterDef(someName1));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc.Add(new ParameterDef(someName1));
+                pc = pc.Add(new ParameterDef(someName1));
             });
         }
 
@@ -36,11 +36,11 @@ namespace Kip.Tests
         public void ThrowsExceptionWhenAddPropertyWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc.Add(new Property(someName1));
+            pc = pc.Add(new Property(someName1));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc.Add(new Property(someName1));
+                pc = pc.Add(new Property(someName1));
             });
         }
 

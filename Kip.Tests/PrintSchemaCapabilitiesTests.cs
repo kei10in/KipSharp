@@ -12,7 +12,7 @@ namespace Kip.Tests
         public void FindPropertyByNameTest()
         {
             var pc = new Capabilities();
-            pc.Add(new Property(Psk.DisplayName, "value"));
+            pc = pc.Add(new Property(Psk.DisplayName, "value"));
 
             var p = pc.Property(Psk.DisplayName);
 
@@ -40,7 +40,7 @@ namespace Kip.Tests
         public void WriteValueInProperty()
         {
             var pc = new Capabilities();
-            pc.Add(new Property(Psk.JobName, "some job name"));
+            pc = pc.Add(new Property(Psk.JobName, "some job name"));
 
             var buffer = new StringBuilder();
             var writer = XmlWriter.Create(buffer);
@@ -51,6 +51,7 @@ namespace Kip.Tests
             Assert.Equal(Psf.PrintCapabilities, doc.Root.Name);
 
             var prop = doc.Root.Element(Psf.Property);
+            Assert.NotNull(prop);
             Assert.Equal("psk:JobName", prop.Attribute("name").Value);
 
             var value = prop.Element(Psf.Value);

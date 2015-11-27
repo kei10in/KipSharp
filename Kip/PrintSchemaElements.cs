@@ -13,19 +13,41 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities
     {
-        private NamedElementCollection<Feature> _features = NamedElementCollection.CreateFeatureCollection();
-        private NamedElementCollection<ParameterDef> _parameters = NamedElementCollection.CreateParameterDefCollection();
-        private NamedElementCollection<Property> _properties = NamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        private ImmutableNamedElementCollection<ParameterDef> _parameters
+            = ImmutableNamedElementCollection.CreateParameterDefCollection();
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public Capabilities(params CapabilitiesChild[] elements)
         {
             foreach (var e in elements)
             {
                 e.Apply(
-                    onFeature: f => _features.Add(f),
-                    onParameterDef: pd => _parameters.Add(pd),
-                    onProperty: p => _properties.Add(p));
+                    onFeature: f =>
+                    {
+                        _features = _features.Add(f);
+                    },
+                    onParameterDef: pd =>
+                    {
+                        _parameters = _parameters.Add(pd);
+                    },
+                    onProperty: p =>
+                    {
+                        _properties = _properties.Add(p);
+                    });
             }
+        }
+
+        internal Capabilities(
+            ImmutableNamedElementCollection<Feature> features,
+            ImmutableNamedElementCollection<ParameterDef> parameters,
+            ImmutableNamedElementCollection<Property> properties)
+        {
+            _features = features;
+            _parameters = parameters;
+            _properties = properties;
         }
 
         public IEnumerable<Option> GetFeatureOptions(XName featureName)
@@ -45,9 +67,9 @@ namespace Kip
             return options ?? Enumerable.Empty<Option>();
         }
 
-        public void Add(Feature feature)
+        public Capabilities Add(Feature feature)
         {
-            _features.Add(feature);
+            return new Capabilities(_features.Add(feature), _parameters, _properties);
         }
 
         public IEnumerable<Feature> Features()
@@ -60,9 +82,9 @@ namespace Kip
             return _features.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Add(ParameterDef parameter)
+        public Capabilities Add(ParameterDef parameter)
         {
-            _parameters.Add(parameter);
+            return new Capabilities(_features, _parameters.Add(parameter), _properties);
         }
 
         public IEnumerable<ParameterDef> Parameters()
@@ -75,9 +97,9 @@ namespace Kip
             return _parameters.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Add(Property property)
+        public Capabilities Add(Property property)
         {
-            _properties.Add(property);
+            return new Capabilities(_features, _parameters, _properties.Add(property));
         }
 
         public Property Property(XName name)
