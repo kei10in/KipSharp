@@ -24,6 +24,12 @@ namespace Kip
             _nameOf = nameOf;
         }
 
+        private ImmutableNamedElementCollection(Func<T, XName> nameOf, ImmutableDictionary<XName, T> elements)
+        {
+            _nameOf = nameOf;
+            _elements = elements;
+        }
+
         public int Count
         {
             get
@@ -53,6 +59,34 @@ namespace Kip
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _elements.Values.GetEnumerator();
+        }
+
+        internal sealed class Builder
+        {
+            private Func<T, XName> _nameOf;
+            private readonly ImmutableDictionary<XName, T>.Builder _elements;
+
+            internal Builder(Func<T, XName> nameOf)
+            {
+                _nameOf = nameOf;
+            }
+
+            internal void Add(T element)
+            {
+                XName name = _nameOf(element);
+                if (_elements.ContainsKey(name))
+                {
+                    throw new DuplicateNameException(
+                        $"{_nameOf(element)} is already exists. The attribute \"name\" must be unique.");
+                }
+                _elements.Add(name, element);
+            }
+
+            internal ImmutableNamedElementCollection<T> ToImmutableNamedElementCollection()
+            {
+                return new ImmutableNamedElementCollection<T>(
+                    _nameOf, _elements.ToImmutableDictionary());
+            }
         }
     }
 
