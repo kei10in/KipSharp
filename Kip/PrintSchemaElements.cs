@@ -725,7 +725,8 @@ namespace Kip
     /// </summary>
     public sealed class Property
     {
-        private IReadOnlyCollection<Property> _properties;
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public Property(XName name, params Property[] elements)
             : this(name, null, elements)
@@ -736,7 +737,21 @@ namespace Kip
         {
             Name = name;
             Value = value;
-            _properties = NamedElementCollection.CreatePropertyCollection(elements);
+
+            foreach (var e in elements)
+            {
+                _properties = _properties.Add(e);
+            }
+        }
+
+        internal Property(
+            XName name,
+            Value value,
+            ImmutableNamedElementCollection<Property> properties)
+        {
+            Name = name;
+            Value = value;
+            _properties = properties;
         }
 
         public XName Name
@@ -766,20 +781,26 @@ namespace Kip
     /// </summary>
     public sealed class ScoredProperty
     {
-        private IReadOnlyCollection<ScoredProperty> _scoredProperties;
-        private IReadOnlyCollection<Property> _properties;
+        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
+        private ImmutableNamedElementCollection<Property> _properties;
 
         public ScoredProperty(XName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
 
-            var scoredProperties = NamedElementCollection.CreateScoredPropertyCollection();
-            var properties = NamedElementCollection.CreatePropertyCollection();
+            var scoredProperties = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollection();
             foreach (var e in elements)
             {
                 e.Apply(
-                    onScoredProperty: x => scoredProperties.Add(x),
-                    onProperty: x => properties.Add(x));
+                    onScoredProperty: x =>
+                    {
+                        scoredProperties = scoredProperties.Add(x);
+                    },
+                    onProperty: x =>
+                    {
+                        properties = properties.Add(x);
+                    });
             }
 
             _scoredProperties = scoredProperties;
@@ -802,14 +823,14 @@ namespace Kip
             XName name,
             Value value,
             ParameterRef parameter,
-            IEnumerable<ScoredProperty> scoredProperties,
-            IEnumerable<Property> properties)
+            ImmutableNamedElementCollection<ScoredProperty> scoredProperties,
+            ImmutableNamedElementCollection<Property> properties)
         {
             Name = name;
             Value = value;
             ParameterRef = parameter;
-            _properties = NamedElementCollection.CreatePropertyCollection(properties);
-            _scoredProperties = NamedElementCollection.CreateScoredPropertyCollection(scoredProperties);
+            _scoredProperties = scoredProperties;
+            _properties = properties;
         }
 
         public XName Name

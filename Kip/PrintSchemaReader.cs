@@ -492,18 +492,18 @@ namespace Kip
     {
         private XName _name;
         private Value _value;
-        private List<Property> _properties;
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public PrintSchemaProperty(XName name)
         {
             _name = name;
-            _properties = new List<Property>();
         }
 
         public void Add(Element element)
         {
             element.Apply(
-                onProperty: x => _properties.Add(x),
+                onProperty: x => _properties = _properties.Add(x),
                 onValue: x => _value = x);
         }
 
@@ -519,8 +519,10 @@ namespace Kip
         private XName _name;
         private Value _value;
         private ParameterRef _parameterRef;
-        private List<Property> _properties = new List<Property>();
-        private List<ScoredProperty> _scoredProperties = new List<ScoredProperty>();
+        private ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
 
         public PrintSchemaScoredProperty(XName name)
         {
