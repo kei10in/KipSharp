@@ -283,78 +283,69 @@ namespace Kip
 
     internal class PrintSchemaCapabilities : PrintSchemaElement
     {
-        private ImmutableNamedElementCollection<Feature> _features
-            = ImmutableNamedElementCollection.CreateFeatureCollection();
-        private ImmutableNamedElementCollection<ParameterDef> _parameters
-            = ImmutableNamedElementCollection.CreateParameterDefCollection();
-        private ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private readonly ImmutableNamedElementCollection<Feature>.Builder _features
+            = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
+        private readonly ImmutableNamedElementCollection<ParameterDef>.Builder _parameters
+            = ImmutableNamedElementCollection.CreateParameterDefCollectionBuilder();
+        private readonly ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
         public PrintSchemaCapabilities() { }
 
         public void Add(Element element)
         {
             element.Apply(
-                onFeature: x =>
-                {
-                    _features = _features.Add(x);
-                },
-                onParameterDef: x =>
-                {
-                    _parameters = _parameters.Add(x);
-                },
-                onProperty: x =>
-                {
-                    _properties = _properties.Add(x);
-                });
+                onFeature: x => _features.Add(x),
+                onParameterDef: x => _parameters.Add(x),
+                onProperty: x => _properties.Add(x));
         }
 
         public Capabilities GetResult()
         {
-            return new Capabilities(_features, _parameters, _properties);
+            return new Capabilities(
+                _features.ToImmutableNamedElementCollection(),
+                _parameters.ToImmutableNamedElementCollection(),
+                _properties.ToImmutableNamedElementCollection());
         }
     }
 
     internal class PrintSchemaTicket : PrintSchemaElement
     {
-        private ImmutableNamedElementCollection<Feature> _features
-            = ImmutableNamedElementCollection.CreateFeatureCollection();
-        private ImmutableNamedElementCollection<ParameterInit> _parameters
-            = ImmutableNamedElementCollection.CreateParameterInitCollection();
-        private ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private readonly ImmutableNamedElementCollection<Feature>.Builder _features
+            = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
+        private readonly ImmutableNamedElementCollection<ParameterInit>.Builder _parameters
+            = ImmutableNamedElementCollection.CreateParameterInitCollectionBuilder();
+        private readonly ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
         public PrintSchemaTicket() { }
-
-        public Ticket GetResult()
-        {
-            return new Ticket(_features, _parameters, _properties);
-        }
 
         public void Add(Element element)
         {
             element.Apply(
-                onFeature: x =>
-                {
-                    _features = _features.Add(x);
-                },
-                onParameterInit: x =>
-                {
-                    _parameters = _parameters.Add(x);
-                },
-                onProperty: x =>
-                {
-                    _properties = _properties.Add(x);
-                });
+                onFeature: x => _features.Add(x),
+                onParameterInit: x => _parameters.Add(x),
+                onProperty: x => _properties.Add(x));
+        }
+
+        public Ticket GetResult()
+        {
+            return new Ticket(
+                _features.ToImmutableNamedElementCollection(),
+                _parameters.ToImmutableNamedElementCollection(),
+                _properties.ToImmutableNamedElementCollection());
         }
     }
 
     internal class PrintSchemaFeature : PrintSchemaElement
     {
         private XName _name;
-        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private ImmutableList<Option> _options = ImmutableList.Create<Option>();
-        private ImmutableNamedElementCollection<Feature> _features = ImmutableNamedElementCollection.CreateFeatureCollection();
+        private readonly ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+        private readonly ImmutableList<Option>.Builder _options
+            = ImmutableList.CreateBuilder<Option>();
+        private readonly ImmutableNamedElementCollection<Feature>.Builder _features
+            = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
 
         public PrintSchemaFeature(XName name)
         {
@@ -364,23 +355,18 @@ namespace Kip
         public void Add(Element element)
         {
             element.Apply(
-                onFeature: x =>
-                {
-                    _features = _features.Add(x);
-                },
-                onOption: x =>
-                {
-                    _options = _options.Add(x);
-                },
-                onProperty: x =>
-                {
-                    _properties = _properties.Add(x);
-                });
+                onFeature: x => _features.Add(x),
+                onOption: x => _options.Add(x),
+                onProperty: x => _properties.Add(x));
         }
 
         public Element GetResult()
         {
-            return new Feature(_name, _properties, _options, _features);
+            return new Feature(
+                _name,
+                _properties.ToImmutableNamedElementCollection(),
+                _options.ToImmutable(),
+                _features.ToImmutableNamedElementCollection());
         }
     }
 
@@ -388,10 +374,10 @@ namespace Kip
     {
         private XName _name;
         private XName _constrained;
-        private ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
-            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+        private ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+        private ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
 
         public PrintSchemaOption(XName name, XName constrained)
         {
@@ -402,14 +388,8 @@ namespace Kip
         public void Add(Element element)
         {
             element.Apply(
-                onProperty: x =>
-                {
-                    _properties = _properties.Add(x);
-                },
-                onScoredProperty: x =>
-                {
-                    _scoredProperties = _scoredProperties.Add(x);
-                });
+                onProperty: x => _properties.Add(x),
+                onScoredProperty: x => _scoredProperties.Add(x));
         }
 
         public Element GetResult()
@@ -417,16 +397,16 @@ namespace Kip
             return new Option(
                 _name,
                 _constrained,
-                _properties,
-                _scoredProperties);
+                _properties.ToImmutableNamedElementCollection(),
+                _scoredProperties.ToImmutableNamedElementCollection());
         }
     }
 
     internal class PrintSchemaParameterDef : PrintSchemaElement
     {
         private XName _name;
-        private ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
         public PrintSchemaParameterDef(XName name)
         {
@@ -435,15 +415,13 @@ namespace Kip
 
         public void Add(Element element)
         {
-            element.Apply(onProperty: x =>
-            {
-                _properties = _properties.Add(x);
-            });
+            element.Apply(onProperty: x => _properties.Add(x));
+
         }
 
         public Element GetResult()
         {
-            return new ParameterDef(_name, _properties);
+            return new ParameterDef(_name, _properties.ToImmutableNamedElementCollection());
         }
     }
 
@@ -492,8 +470,8 @@ namespace Kip
     {
         private XName _name;
         private Value _value;
-        private ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
         public PrintSchemaProperty(XName name)
         {
@@ -503,13 +481,13 @@ namespace Kip
         public void Add(Element element)
         {
             element.Apply(
-                onProperty: x => _properties = _properties.Add(x),
+                onProperty: x => _properties.Add(x),
                 onValue: x => _value = x);
         }
 
         public Element GetResult()
         {
-            var p = new Property(_name, _value, _properties.ToArray());
+            var p = new Property(_name, _value, _properties.ToImmutableNamedElementCollection());
             return p;
         }
     }
@@ -519,10 +497,10 @@ namespace Kip
         private XName _name;
         private Value _value;
         private ParameterRef _parameterRef;
-        private ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
-            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+        private ImmutableNamedElementCollection<Property>.Builder _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+        private ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
 
         public PrintSchemaScoredProperty(XName name)
         {
@@ -548,8 +526,12 @@ namespace Kip
 
         public Element GetResult()
         {
-            var sp = new ScoredProperty(_name, _value, _parameterRef, _scoredProperties, _properties);
-            return sp;
+            return new ScoredProperty(
+                _name,
+                _value,
+                _parameterRef,
+                _scoredProperties.ToImmutableNamedElementCollection(),
+                _properties.ToImmutableNamedElementCollection());
         }
 
         private void ThrowIfValueOrParameterRefExists()

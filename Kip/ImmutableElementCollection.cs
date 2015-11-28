@@ -64,7 +64,8 @@ namespace Kip
         internal sealed class Builder
         {
             private Func<T, XName> _nameOf;
-            private readonly ImmutableDictionary<XName, T>.Builder _elements;
+            private readonly ImmutableDictionary<XName, T>.Builder _elements
+                = ImmutableDictionary.CreateBuilder<XName, T>();
 
             internal Builder(Func<T, XName> nameOf)
             {
