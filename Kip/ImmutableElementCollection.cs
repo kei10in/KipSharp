@@ -97,9 +97,19 @@ namespace Kip
             return new ImmutableNamedElementCollection<Feature>(x => x.Name);
         }
 
+        public static ImmutableNamedElementCollection<Feature>.Builder CreateFeatureCollectionBuilder()
+        {
+            return new ImmutableNamedElementCollection<Feature>.Builder(x => x.Name);
+        }
+
         public static ImmutableNamedElementCollection<ParameterDef> CreateParameterDefCollection()
         {
             return new ImmutableNamedElementCollection<ParameterDef>(x => x.Name);
+        }
+
+        public static ImmutableNamedElementCollection<ParameterDef>.Builder CreateParameterDefCollectionBuilder()
+        {
+            return new ImmutableNamedElementCollection<ParameterDef>.Builder(x => x.Name);
         }
 
         public static ImmutableNamedElementCollection<ParameterInit> CreateParameterInitCollection()
@@ -107,14 +117,29 @@ namespace Kip
             return new ImmutableNamedElementCollection<ParameterInit>(x => x.Name);
         }
 
+        public static ImmutableNamedElementCollection<ParameterInit>.Builder CreateParameterInitCollectionBuilder()
+        {
+            return new ImmutableNamedElementCollection<ParameterInit>.Builder(x => x.Name);
+        }
+
         public static ImmutableNamedElementCollection<Property> CreatePropertyCollection()
         {
             return new ImmutableNamedElementCollection<Property>(x => x.Name);
         }
 
+        public static ImmutableNamedElementCollection<Property>.Builder CreatePropertyCollectionBuilder()
+        {
+            return new ImmutableNamedElementCollection<Property>.Builder(x => x.Name);
+        }
+
         public static ImmutableNamedElementCollection<ScoredProperty> CreateScoredPropertyCollection()
         {
             return new ImmutableNamedElementCollection<ScoredProperty>(x => x.Name);
+        }
+
+        public static ImmutableNamedElementCollection<ScoredProperty>.Builder CreateScoredPropertyCollectionBuilder()
+        {
+            return new ImmutableNamedElementCollection<ScoredProperty>.Builder(x => x.Name);
         }
     }
 }
