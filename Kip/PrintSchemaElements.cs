@@ -389,9 +389,12 @@ namespace Kip
     /// </summary>
     public sealed class Feature
     {
-        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private ImmutableList<Option> _options = ImmutableList.Create<Option>();
-        private ImmutableNamedElementCollection<Feature> _features = ImmutableNamedElementCollection.CreateFeatureCollection();
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private readonly ImmutableList<Option> _options
+            = ImmutableList.Create<Option>();
+        private readonly ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
 
         public Feature(XName name)
         {
@@ -401,22 +404,20 @@ namespace Kip
         public Feature(XName name, params FeatureChild[] elements)
         {
             Name = name;
+
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+            var options = ImmutableList.CreateBuilder<Option>();
+            var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
             foreach (var e in elements)
             {
                 e.Apply(
-                    onProperty: x =>
-                    {
-                        _properties = _properties.Add(x);
-                    },
-                    onOption: x =>
-                    {
-                        _options = _options.Add(x);
-                    },
-                    onFeature: x =>
-                    {
-                        _features = _features.Add(x);
-                    });
+                    onProperty: x => properties.Add(x),
+                    onOption: x => options.Add(x),
+                    onFeature: x => features.Add(x));
             }
+            _properties = properties.ToImmutable();
+            _options = options.ToImmutable();
+            _features = features.ToImmutable();
         }
 
         internal Feature(
@@ -515,36 +516,36 @@ namespace Kip
     /// </summary>
     public sealed class Option
     {
-        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
 
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
-        {
-        }
+        { }
 
         public Option(XName name, params OptionChild[] elements)
             : this(name, null, elements)
-        {
-        }
+        { }
 
         public Option(XName name, XName constrained, params OptionChild[] elements)
         {
             Name = name;
             Constrained = constrained;
 
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+            var scoredProperties = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
+
             foreach (var e in elements)
             {
                 e.Apply(
-                    onProperty: x =>
-                    {
-                        _properties = _properties.Add(x);
-                    },
-                    onScoredProperty: x =>
-                    {
-                        _scoredProperties = _scoredProperties.Add(x);
-                    });
+                    onProperty: x => properties.Add(x),
+                    onScoredProperty: x => scoredProperties.Add(x));
             }
+
+            _properties = properties.ToImmutable();
+            _scoredProperties = scoredProperties.ToImmutable();
         }
 
         internal Option(
@@ -637,16 +638,19 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef
     {
-        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
-        public ParameterDef(XName name, params Property[] properties)
+        public ParameterDef(XName name, params Property[] elements)
         {
             Name = name;
 
-            foreach (var p in properties)
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+            foreach (var e in elements)
             {
-                Add(p);
+                properties.Add(e);
             }
+            _properties = properties.ToImmutable();
         }
         internal ParameterDef(XName name, ImmutableNamedElementCollection<Property> properties)
         {
@@ -726,7 +730,7 @@ namespace Kip
     /// </summary>
     public sealed class Property
     {
-        private ImmutableNamedElementCollection<Property> _properties
+        private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public Property(XName name, params Property[] elements)
@@ -739,10 +743,12 @@ namespace Kip
             Name = name;
             Value = value;
 
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
             foreach (var e in elements)
             {
-                _properties = _properties.Add(e);
+                properties.Add(e);
             }
+            _properties = properties.ToImmutable();
         }
 
         internal Property(
@@ -782,30 +788,24 @@ namespace Kip
     /// </summary>
     public sealed class ScoredProperty
     {
-        private ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
-        private ImmutableNamedElementCollection<Property> _properties;
+        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
+        private readonly ImmutableNamedElementCollection<Property> _properties;
 
         public ScoredProperty(XName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
 
-            var scoredProperties = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
-            var properties = ImmutableNamedElementCollection.CreatePropertyCollection();
+            var scoredProperties = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
             foreach (var e in elements)
             {
                 e.Apply(
-                    onScoredProperty: x =>
-                    {
-                        scoredProperties = scoredProperties.Add(x);
-                    },
-                    onProperty: x =>
-                    {
-                        properties = properties.Add(x);
-                    });
+                    onScoredProperty: x => scoredProperties.Add(x),
+                    onProperty: x => properties.Add(x));
             }
 
-            _scoredProperties = scoredProperties;
-            _properties = properties;
+            _scoredProperties = scoredProperties.ToImmutable();
+            _properties = properties.ToImmutable();
         }
 
         public ScoredProperty(XName name, Value value, params ScoredPropertyChild[] elements)
@@ -903,7 +903,7 @@ namespace Kip
     {
         public static readonly Value Empty = new Value();
 
-        object _value;
+        private readonly object _value;
 
         private Value()
         {
