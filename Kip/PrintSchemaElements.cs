@@ -205,28 +205,30 @@ namespace Kip
     /// </summary>
     public sealed class Ticket
     {
-        private ImmutableNamedElementCollection<Feature> _features = ImmutableNamedElementCollection.CreateFeatureCollection();
-        private ImmutableNamedElementCollection<ParameterInit> _parameters = ImmutableNamedElementCollection.CreateParameterInitCollection();
-        private ImmutableNamedElementCollection<Property> _properties = ImmutableNamedElementCollection.CreatePropertyCollection();
+        private readonly ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
+            = ImmutableNamedElementCollection.CreateParameterInitCollection();
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public Ticket(params TicketChild[] elements)
         {
+            var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
+            var parameters = ImmutableNamedElementCollection.CreateParameterInitCollectionBuilder();
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+
             foreach (var e in elements)
             {
                 e.Apply(
-                    onFeature: x =>
-                    {
-                        _features = _features.Add(x);
-                    },
-                    onParameterInit: x =>
-                    {
-                        _parameters = _parameters.Add(x);
-                    },
-                    onProperty: x =>
-                    {
-                        _properties = _properties.Add(x);
-                    });
+                    onFeature: x => features.Add(x),
+                    onParameterInit: x => parameters.Add(x),
+                    onProperty: x => properties.Add(x));
             }
+
+            _features = features.ToImmutable();
+            _parameters = parameters.ToImmutable();
+            _properties = properties.ToImmutable();
         }
 
         internal Ticket(
