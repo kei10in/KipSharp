@@ -13,31 +13,30 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities
     {
-        private ImmutableNamedElementCollection<Feature> _features
+        private readonly ImmutableNamedElementCollection<Feature> _features
             = ImmutableNamedElementCollection.CreateFeatureCollection();
-        private ImmutableNamedElementCollection<ParameterDef> _parameters
+        private readonly ImmutableNamedElementCollection<ParameterDef> _parameters
             = ImmutableNamedElementCollection.CreateParameterDefCollection();
-        private ImmutableNamedElementCollection<Property> _properties
+        private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
 
         public Capabilities(params CapabilitiesChild[] elements)
         {
+            var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
+            var parameters = ImmutableNamedElementCollection.CreateParameterDefCollectionBuilder();
+            var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+
             foreach (var e in elements)
             {
                 e.Apply(
-                    onFeature: f =>
-                    {
-                        _features = _features.Add(f);
-                    },
-                    onParameterDef: pd =>
-                    {
-                        _parameters = _parameters.Add(pd);
-                    },
-                    onProperty: p =>
-                    {
-                        _properties = _properties.Add(p);
-                    });
+                    onFeature: x => features.Add(x),
+                    onParameterDef: x => parameters.Add(x),
+                    onProperty: x => properties.Add(x));
             }
+
+            _features = features.ToImmutable();
+            _parameters = parameters.ToImmutable();
+            _properties = properties.ToImmutable();
         }
 
         internal Capabilities(
