@@ -15,14 +15,8 @@ namespace Kip
         private readonly ImmutableDictionary<XName, T> _elements;
 
         internal ImmutableNamedElementCollection(Func<T, XName> nameOf)
-            : this(ImmutableDictionary.Create<XName, T>(), nameOf)
+            : this(nameOf, ImmutableDictionary.Create<XName, T>())
         { }
-
-        private ImmutableNamedElementCollection(IDictionary<XName, T> elements, Func<T, XName> nameOf)
-        {
-            _elements = elements.ToImmutableDictionary();
-            _nameOf = nameOf;
-        }
 
         private ImmutableNamedElementCollection(Func<T, XName> nameOf, ImmutableDictionary<XName, T> elements)
         {
@@ -48,7 +42,7 @@ namespace Kip
             }
             var newElement = _elements.Add(name, element);
 
-            return new ImmutableNamedElementCollection<T>(newElement, _nameOf);
+            return new ImmutableNamedElementCollection<T>(_nameOf, newElement);
         }
 
         public IEnumerator<T> GetEnumerator()
