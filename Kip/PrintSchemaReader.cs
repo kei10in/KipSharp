@@ -303,9 +303,9 @@ namespace Kip
         public Capabilities GetResult()
         {
             return new Capabilities(
-                _features.ToImmutableNamedElementCollection(),
-                _parameters.ToImmutableNamedElementCollection(),
-                _properties.ToImmutableNamedElementCollection());
+                _features.ToImmutable(),
+                _parameters.ToImmutable(),
+                _properties.ToImmutable());
         }
     }
 
@@ -331,9 +331,9 @@ namespace Kip
         public Ticket GetResult()
         {
             return new Ticket(
-                _features.ToImmutableNamedElementCollection(),
-                _parameters.ToImmutableNamedElementCollection(),
-                _properties.ToImmutableNamedElementCollection());
+                _features.ToImmutable(),
+                _parameters.ToImmutable(),
+                _properties.ToImmutable());
         }
     }
 
@@ -364,9 +364,9 @@ namespace Kip
         {
             return new Feature(
                 _name,
-                _properties.ToImmutableNamedElementCollection(),
+                _properties.ToImmutable(),
                 _options.ToImmutable(),
-                _features.ToImmutableNamedElementCollection());
+                _features.ToImmutable());
         }
     }
 
@@ -397,8 +397,8 @@ namespace Kip
             return new Option(
                 _name,
                 _constrained,
-                _properties.ToImmutableNamedElementCollection(),
-                _scoredProperties.ToImmutableNamedElementCollection());
+                _properties.ToImmutable(),
+                _scoredProperties.ToImmutable());
         }
     }
 
@@ -421,7 +421,7 @@ namespace Kip
 
         public Element GetResult()
         {
-            return new ParameterDef(_name, _properties.ToImmutableNamedElementCollection());
+            return new ParameterDef(_name, _properties.ToImmutable());
         }
     }
 
@@ -487,7 +487,7 @@ namespace Kip
 
         public Element GetResult()
         {
-            var p = new Property(_name, _value, _properties.ToImmutableNamedElementCollection());
+            var p = new Property(_name, _value, _properties.ToImmutable());
             return p;
         }
     }
@@ -530,8 +530,8 @@ namespace Kip
                 _name,
                 _value,
                 _parameterRef,
-                _scoredProperties.ToImmutableNamedElementCollection(),
-                _properties.ToImmutableNamedElementCollection());
+                _scoredProperties.ToImmutable(),
+                _properties.ToImmutable());
         }
 
         private void ThrowIfValueOrParameterRefExists()

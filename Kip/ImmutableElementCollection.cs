@@ -83,10 +83,10 @@ namespace Kip
                 _elements.Add(name, element);
             }
 
-            internal ImmutableNamedElementCollection<T> ToImmutableNamedElementCollection()
+            internal ImmutableNamedElementCollection<T> ToImmutable()
             {
                 return new ImmutableNamedElementCollection<T>(
-                    _nameOf, _elements.ToImmutableDictionary());
+                    _nameOf, _elements.ToImmutable());
             }
         }
     }
