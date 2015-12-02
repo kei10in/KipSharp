@@ -44,10 +44,10 @@
     <Compile Include="Capabilities.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Feature.cs" />
-    <Compile Include="ImmutableElementCollection.cs" />
+    <Compile Include="ImmutableNamedElementCollection.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="ElementCollection.cs" />
+    <Compile Include="NamedElementCollection.cs" />
     <Compile Include="Option.cs" />
     <Compile Include="ParameterDef.cs" />
     <Compile Include="ParameterInit.cs" />
