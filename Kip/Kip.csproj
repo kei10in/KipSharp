@@ -41,12 +41,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Capabilities.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="Feature.cs" />
     <Compile Include="ImmutableElementCollection.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ElementCollection.cs" />
-    <Compile Include="PrintSchemaElements.cs" />
+    <Compile Include="Option.cs" />
+    <Compile Include="ParameterDef.cs" />
+    <Compile Include="ParameterInit.cs" />
+    <Compile Include="ParameterRef.cs" />
     <Compile Include="PrintSchemaFramework.cs" />
     <Compile Include="PrintSchemaKeywords.cs">
       <AutoGen>True</AutoGen>
@@ -57,6 +62,10 @@
     <Compile Include="PrintSchemaReader.cs" />
     <Compile Include="PrintSchemaWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Property.cs" />
+    <Compile Include="ScoredProperty.cs" />
+    <Compile Include="Ticket.cs" />
+    <Compile Include="Value.cs" />
     <Compile Include="XmlSchema.cs" />
     <Compile Include="XmlSchemaInstance.cs" />
     <Compile Include="XmlUtils.cs" />
