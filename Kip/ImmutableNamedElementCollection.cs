@@ -83,6 +83,34 @@ namespace Kip
                     _nameOf, _elements.ToImmutable());
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ImmutableNamedElementCollection<T>);
+        }
+
+        public bool Equals(ImmutableNamedElementCollection<T> rhs)
+        {
+            return this == rhs;
+        }
+
+        public override int GetHashCode()
+        {
+            return _elements.GetHashCode();
+        }
+
+        public static bool operator ==(ImmutableNamedElementCollection<T> v1, ImmutableNamedElementCollection<T> v2)
+        {
+            if (ReferenceEquals(v1, v2)) return true;
+            if ((object)v1 == null || (object)v2 == null) return false;
+
+            return v1._elements == v2._elements;
+        }
+
+        public static bool operator !=(ImmutableNamedElementCollection<T> v1, ImmutableNamedElementCollection<T> v2)
+        {
+            return !(v1 == v2);
+        }
     }
 
     internal static class ImmutableNamedElementCollection

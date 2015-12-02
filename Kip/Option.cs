@@ -98,6 +98,40 @@ namespace Kip
         {
             return _scoredProperties.FirstOrDefault(x => x.Name == name);
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Option);
+        }
+
+        public bool Equals(Option rhs)
+        {
+            return this == rhs;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name?.GetHashCode() ?? 0 ^
+                Constrained?.GetHashCode() ?? 0 ^
+                _properties.GetHashCode() ^
+                _scoredProperties.GetHashCode();
+        }
+
+        public static bool operator ==(Option v1, Option v2)
+        {
+            if (ReferenceEquals(v1, v2)) return true;
+            if ((object)v1 == null || (object)v2 == null) return false;
+
+            return v1.Name == v2.Name &&
+                v1.Constrained == v2.Constrained &&
+                v1._properties == v2._properties &&
+                v1._scoredProperties == v2._scoredProperties;
+        }
+
+        public static bool operator !=(Option v1, Option v2)
+        {
+            return !(v1 == v2);
+        }
     }
 
     public sealed class OptionChild

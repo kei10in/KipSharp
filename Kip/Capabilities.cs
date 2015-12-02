@@ -110,6 +110,38 @@ namespace Kip
             return _properties;
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Capabilities);
+        }
+
+        public bool Equals(Capabilities rhs)
+        {
+            return this == rhs;
+        }
+
+        public override int GetHashCode()
+        {
+            return _features.GetHashCode() ^
+                _parameters.GetHashCode() ^
+                _properties.GetHashCode();
+        }
+
+        public static bool operator ==(Capabilities v1, Capabilities v2)
+        {
+            if (ReferenceEquals(v1, v2)) return true;
+            if ((object)v1 == null || (object)v2 == null) return false;
+
+            return v1._features == v2._features &&
+                v1._parameters == v2._parameters &&
+                v1._properties == v2._properties;
+        }
+
+        public static bool operator !=(Capabilities v1, Capabilities v2)
+        {
+            return !(v1 == v2);
+        }
+
         public void Save(System.IO.Stream stream)
         {
             using (var writer = XmlWriter.Create(stream))

@@ -60,5 +60,37 @@ namespace Kip
         {
             return _properties.FirstOrDefault(x => x.Name == name);
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Property);
+        }
+
+        public bool Equals(Property rhs)
+        {
+            return this == rhs;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode() ^
+                Value?.GetHashCode() ?? 0 ^
+                _properties.GetHashCode();
+        }
+
+        public static bool operator ==(Property v1, Property v2)
+        {
+            if (ReferenceEquals(v1, v2)) return true;
+            if ((object)v1 == null || (object)v2 == null) return false;
+
+            return v1.Name == v2.Name &&
+                v1.Value == v2.Value &&
+                v1._properties == v2._properties;
+        }
+
+        public static bool operator !=(Property v1, Property v2)
+        {
+            return !(v1 == v2);
+        }
     }
 }
