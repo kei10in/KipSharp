@@ -12,13 +12,14 @@ namespace Kip
         where T : class
     {
         private Func<T, XName> _nameOf;
-        private List<T> _elements = new List<T>();
+        private Dictionary<XName, T> _elements = new Dictionary<XName, T>();
 
         internal NamedElementCollection(Func<T, XName> nameOf)
-            : this(new List<T>(), nameOf)
-        { }
+        {
+            _nameOf = nameOf;
+        }
 
-        internal NamedElementCollection(IEnumerable<T> collection, Func<T, XName> nameOf)
+        internal NamedElementCollection(Func<T, XName> nameOf, IEnumerable<T> collection)
         {
             _nameOf = nameOf;
             foreach (var element in collection)
@@ -37,22 +38,22 @@ namespace Kip
 
         public void Add(T element)
         {
-            if (_elements.Any(x => _nameOf(x) == _nameOf(element)))
+            if (_elements.ContainsKey(_nameOf(element)))
             {
                 throw new DuplicateNameException(
                     $"{_nameOf(element)} is already exists. The attribute \"name\" must be unique.");
             }
-            _elements.Add(element);
+            _elements.Add(_nameOf(element), element);
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return _elements.GetEnumerator();
+            return _elements.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return _elements.GetEnumerator();
+            return _elements.Values.GetEnumerator();
         }
     }
 
@@ -65,7 +66,7 @@ namespace Kip
 
         public static NamedElementCollection<Feature> CreateFeatureCollection(IEnumerable<Feature> elements)
         {
-            return new NamedElementCollection<Feature>(elements, x => x.Name);
+            return new NamedElementCollection<Feature>(x => x.Name, elements);
         }
 
         public static NamedElementCollection<ParameterDef> CreateParameterDefCollection()
@@ -75,7 +76,7 @@ namespace Kip
 
         public static NamedElementCollection<ParameterDef> CreateParameterDefCollection(IEnumerable<ParameterDef> elements)
         {
-            return new NamedElementCollection<ParameterDef>(elements, x => x.Name);
+            return new NamedElementCollection<ParameterDef>(x => x.Name, elements);
         }
 
         public static NamedElementCollection<ParameterInit> CreateParameterInitCollection()
@@ -85,7 +86,7 @@ namespace Kip
 
         public static NamedElementCollection<ParameterInit> CreateParameterInitCollection(IEnumerable<ParameterInit> elements)
         {
-            return new NamedElementCollection<ParameterInit>(elements, x => x.Name);
+            return new NamedElementCollection<ParameterInit>(x => x.Name, elements);
         }
 
         public static NamedElementCollection<Property> CreatePropertyCollection()
@@ -95,7 +96,7 @@ namespace Kip
 
         public static NamedElementCollection<Property> CreatePropertyCollection(IEnumerable<Property> elements)
         {
-            return new NamedElementCollection<Property>(elements, x => x.Name);
+            return new NamedElementCollection<Property>(x => x.Name, elements);
         }
 
         public static NamedElementCollection<ScoredProperty> CreateScoredPropertyCollection()
@@ -105,7 +106,7 @@ namespace Kip
 
         public static NamedElementCollection<ScoredProperty> CreateScoredPropertyCollection(IEnumerable<ScoredProperty> elements)
         {
-            return new NamedElementCollection<ScoredProperty>(elements, x => x.Name);
+            return new NamedElementCollection<ScoredProperty>(x => x.Name, elements);
         }
     }
 }
