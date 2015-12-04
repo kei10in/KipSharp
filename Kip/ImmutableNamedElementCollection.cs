@@ -104,7 +104,7 @@ namespace Kip
             if (ReferenceEquals(v1, v2)) return true;
             if ((object)v1 == null || (object)v2 == null) return false;
 
-            return v1._elements == v2._elements;
+            return v1.SequenceEqual(v2);
         }
 
         public static bool operator !=(ImmutableNamedElementCollection<T> v1, ImmutableNamedElementCollection<T> v2)
