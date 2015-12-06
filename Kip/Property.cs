@@ -92,5 +92,16 @@ namespace Kip
         {
             return !(v1 == v2);
         }
+
+        public override string ToString()
+        {
+            var result = new List<string>() { "Property" };
+            result.Add($"name=\"{Name}\"");
+            if (Value != null) 
+                result.Add($"value={Value}");
+            if (_properties.Any())
+                result.Add($"nested properties={_properties.Count}");
+            return string.Join(" ", result);
+        }
     }
 }

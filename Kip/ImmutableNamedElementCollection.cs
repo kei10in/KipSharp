@@ -84,6 +84,11 @@ namespace Kip
             }
         }
 
+        public override string ToString()
+        {
+            return _elements.ToString();
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as ImmutableNamedElementCollection<T>);
