@@ -6,7 +6,7 @@ namespace Kip.Tests
 {
     public class PropertyTests
     {
-        private List<Tuple<Property, Property>> _equalsPropertiesPair = new List<Tuple<Property, Property>>()
+        private List<Tuple<Property, Property>> _equalsPair = new List<Tuple<Property, Property>>()
         {
             Tuple.Create<Property, Property>(null, null),
             Tuple.Create(new Property("a"), new Property("a")),
@@ -17,13 +17,13 @@ namespace Kip.Tests
         [Fact]
         public void EqualsOpeartorAndTrue()
         {
-            foreach (var pair in _equalsPropertiesPair)
+            foreach (var pair in _equalsPair)
             {
                 Assert.Equal(pair.Item1, pair.Item2);
             }
         }
 
-        private List<Tuple<Property, Property>> _notEqualsPropertiesPair = new List<Tuple<Property, Property>>()
+        private List<Tuple<Property, Property>> _notEqualsPair = new List<Tuple<Property, Property>>()
         {
             Tuple.Create<Property, Property>(null, new Property("a")),
             Tuple.Create<Property, Property>(new Property("a"), null),
@@ -37,7 +37,7 @@ namespace Kip.Tests
         [Fact]
         public void EqualsOpeartorAndFalse()
         {
-            foreach (var pair in _notEqualsPropertiesPair)
+            foreach (var pair in _notEqualsPair)
             {
                 Assert.NotEqual(pair.Item1, pair.Item2);
             }
