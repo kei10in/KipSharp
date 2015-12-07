@@ -41,6 +41,7 @@
     <Compile Include="BasicPrintCapabilitiesReadingTests.cs" />
     <Compile Include="CapabilitiesTests.cs" />
     <Compile Include="ElementTests.cs" />
+    <Compile Include="FeatureTests.cs" />
     <Compile Include="ParameterRefTests.cs" />
     <Compile Include="ParameterInitTests.cs" />
     <Compile Include="PrintSchemaCapabilitiesTests.cs" />

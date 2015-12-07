@@ -124,7 +124,7 @@ namespace Kip
             if ((object)v1 == null || (object)v2 == null) return false;
 
             return v1.Name == v2.Name &&
-                v1._options == v2._options &&
+                v1._options.SequenceEqual(v2._options) &&
                 v1._properties == v2._properties &&
                 v1._features == v2._features;
         }
