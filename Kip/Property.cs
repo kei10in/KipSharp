@@ -61,6 +61,11 @@ namespace Kip
             return _properties.FirstOrDefault(x => x.Name == name);
         }
 
+        public Property Add(Property element)
+        {
+            return new Property(Name, Value, _properties.Add(element));
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as Property);

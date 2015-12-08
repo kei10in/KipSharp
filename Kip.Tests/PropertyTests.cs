@@ -6,6 +6,17 @@ namespace Kip.Tests
 {
     public class PropertyTests
     {
+        [Fact]
+        public void AddNestedProperty()
+        {
+            var nested = new Property("b");
+            var property = new Property("a", nested);
+
+            var found = property.NestedProperty("b");
+
+            Assert.Equal(found, nested);
+        }
+
         private List<Tuple<Property, Property>> _equalsPair = new List<Tuple<Property, Property>>()
         {
             Tuple.Create<Property, Property>(null, null),
