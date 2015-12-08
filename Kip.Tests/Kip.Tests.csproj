@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BasicPrintCapabilitiesReadingTests.cs" />
+    <Compile Include="TicketTests.cs" />
     <Compile Include="CapabilitiesTests.cs" />
     <Compile Include="ElementTests.cs" />
     <Compile Include="FeatureTests.cs" />
