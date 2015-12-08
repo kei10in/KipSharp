@@ -1,6 +1,6 @@
 # KipSharp
 
-[![Build Status](https://travis-ci.org/kei10in/KipSharp.svg)](https://travis-ci.org/kei10in/KipSharp)
+[![Build status](https://ci.appveyor.com/api/projects/status/bpw4bkpty6f9ny85?svg=true)](https://ci.appveyor.com/project/kei10in/kipsharp) [![Build Status](https://travis-ci.org/kei10in/KipSharp.svg)](https://travis-ci.org/kei10in/KipSharp)
 
 Handle PrintCapabilities and PrintTicket documents on .NET Framework.
 
