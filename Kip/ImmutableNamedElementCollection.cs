@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace Kip
 {
     internal sealed class ImmutableNamedElementCollection<T>
-        : IEnumerable<T>, IReadOnlyCollection<T>
+        : IReadOnlyNamedElementCollection<T>
         where T : class
     {
         private Func<T, XName> _nameOf;
@@ -29,6 +29,22 @@ namespace Kip
             get
             {
                 return _elements.Count;
+            }
+        }
+        
+        public T this[XName name]
+        {
+            get
+            {
+                T result;
+                if (_elements.TryGetValue(name, out result))
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
