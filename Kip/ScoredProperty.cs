@@ -11,9 +11,6 @@ namespace Kip
     /// </summary>
     public sealed class ScoredProperty
     {
-        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
-        private readonly ImmutableNamedElementCollection<Property> _properties;
-
         public ScoredProperty(XName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
@@ -72,26 +69,32 @@ namespace Kip
             get;
         }
 
-        public IEnumerable<ScoredProperty> NestedScoredProperties()
+        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
+        public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
         {
-            return _scoredProperties;
+            get { return _scoredProperties; }
         }
 
-        public ScoredProperty NestedScoredProperty(XName name)
+        private readonly ImmutableNamedElementCollection<Property> _properties;
+        public IReadOnlyNamedElementCollection<Property> Properties
         {
-            return _scoredProperties.FirstOrDefault(x => x.Name == name);
+            get { return _properties; }
         }
 
-        public IEnumerable<Property> Properties()
+        public ScoredProperty Add(ScoredProperty scoredProperty)
         {
-            return _properties;
+            return new ScoredProperty(
+                Name, Value, ParameterRef,
+                _scoredProperties.Add(scoredProperty), _properties);
         }
 
-        public Property Property(XName name)
+        public ScoredProperty Add(Property property)
         {
-            return _properties.FirstOrDefault(x => x.Name == name);
+            return new ScoredProperty(
+                Name, Value, ParameterRef,
+                _scoredProperties, _properties.Add(property));
         }
-
+        
         public override bool Equals(object obj)
         {
             return Equals(obj as ScoredProperty);
