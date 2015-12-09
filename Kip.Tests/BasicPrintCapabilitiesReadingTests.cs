@@ -49,7 +49,7 @@ namespace Kip.Tests
 
             var parameter = _actual.Parameter(PrivateNamespace + "PageDevmodeSnapshot");
             Assert.NotNull(parameter);
-            Assert.Equal(6, parameter.Properties().Count());
+            Assert.Equal(6, parameter.Properties.Count);
         }
 
         [Fact]

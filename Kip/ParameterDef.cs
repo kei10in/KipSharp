@@ -10,9 +10,6 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef
     {
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-
         public ParameterDef(XName name, params Property[] elements)
         {
             Name = name;
@@ -35,19 +32,16 @@ namespace Kip
             get;
         }
 
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties
+        {
+            get { return _properties; }
+        }
+
         public ParameterDef Add(Property property)
         {
             return new ParameterDef(Name, _properties);
-        }
-
-        public IEnumerable<Property> Properties()
-        {
-            return _properties;
-        }
-
-        public Property Property(XName name)
-        {
-            return _properties.FirstOrDefault(x => x.Name == name);
         }
 
         public override bool Equals(object obj)

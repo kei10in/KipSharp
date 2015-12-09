@@ -99,7 +99,7 @@ namespace Kip
             writer.WriteStartElement(Psf.ParameterDef.LocalName, Psf.Namespace.NamespaceName);
             writer.WriteAttributeString("name", element.Name.ToQName(writer));
 
-            foreach (var p in element.Properties())
+            foreach (var p in element.Properties)
             {
                 Write(writer, p);
             }
