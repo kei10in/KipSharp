@@ -12,13 +12,6 @@ namespace Kip
     /// </summary>
     public sealed class Feature
     {
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private readonly ImmutableList<Option> _options
-            = ImmutableList.Create<Option>();
-        private readonly ImmutableNamedElementCollection<Feature> _features
-            = ImmutableNamedElementCollection.CreateFeatureCollection();
-
         public Feature(XName name)
         {
             Name = name;
@@ -60,19 +53,30 @@ namespace Kip
             get;
         }
 
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties
+        {
+            get { return _properties; }
+        }
+
+        private readonly ImmutableList<Option> _options
+            = ImmutableList.Create<Option>();
+        public IReadOnlyCollection<Option> Options()
+        {
+            return _options;
+        }
+
+        private readonly ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        public IReadOnlyNamedElementCollection<Feature> Features
+        {
+            get { return _features; }
+        }
+
         public Feature Add(Property property)
         {
             return new Feature(Name, _properties.Add(property), _options, _features);
-        }
-
-        public IEnumerable<Property> Properties()
-        {
-            return _properties;
-        }
-
-        public Property Property(XName name)
-        {
-            return _properties.FirstOrDefault(x => x.Name == name);
         }
 
         public Feature Add(Option option)
@@ -80,24 +84,9 @@ namespace Kip
             return new Feature(Name, _properties, _options.Add(option), _features);
         }
 
-        public IEnumerable<Option> Options()
-        {
-            return _options;
-        }
-
         public Feature Add(Feature feature)
         {
             return new Feature(Name, _properties, _options, _features.Add(feature));
-        }
-
-        public IEnumerable<Feature> NestedFeatures()
-        {
-            return _features;
-        }
-
-        public Feature NestedFeature(XName name)
-        {
-            return _features.FirstOrDefault(x => x.Name == name);
         }
 
         public override bool Equals(object obj)

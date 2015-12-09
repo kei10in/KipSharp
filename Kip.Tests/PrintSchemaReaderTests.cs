@@ -38,7 +38,7 @@ namespace Kip.Tests
             var f = actual.Feature(Psk.JobCollateAllDocuments);
             Assert.True(0 < f?.Options()?.Count());
 
-            var d = f.Property(Psk.DisplayName);
+            var d = f.Properties[Psk.DisplayName];
             Assert.Equal("Collate Copies", d?.Value);
 
             var o = f.Options().Select(x => x.Properties[Psk.DisplayName]?.Value);
@@ -75,7 +75,7 @@ namespace Kip.Tests
                 </psf:Feature>");
 
             var actual = Capabilities.Parse(pc);
-            var value = actual.Feature(Psk.JobCollateAllDocuments)?.Property(Psk.DisplayName)?.Value;
+            var value = actual.Feature(Psk.JobCollateAllDocuments)?.Properties[Psk.DisplayName]?.Value;
             Assert.NotNull(value);
             Assert.Equal(Xsd.String, value?.ValueType);
             Assert.Equal("Copies Collate", value?.AsString());

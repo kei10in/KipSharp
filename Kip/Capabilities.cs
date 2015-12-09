@@ -59,7 +59,7 @@ namespace Kip
             var ft = Feature(featureName);
             foreach (var nestedFeatureName in nestedFeatureNames)
             {
-                ft = ft?.NestedFeature(nestedFeatureName);
+                ft = ft?.Features[nestedFeatureName];
             }
             var options = ft?.Options();
             return options ?? Enumerable.Empty<Option>();
