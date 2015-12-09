@@ -12,13 +12,6 @@ namespace Kip
     /// </summary>
     public sealed class Ticket
     {
-        private readonly ImmutableNamedElementCollection<Feature> _features
-            = ImmutableNamedElementCollection.CreateFeatureCollection();
-        private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
-            = ImmutableNamedElementCollection.CreateParameterInitCollection();
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-
         public Ticket(params TicketChild[] elements)
         {
             var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
@@ -48,22 +41,33 @@ namespace Kip
             _properties = properties;
         }
 
+        private readonly ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        public IReadOnlyNamedElementCollection<Feature> Features()
+        {
+            return _features;
+        }
+
+        private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
+            = ImmutableNamedElementCollection.CreateParameterInitCollection();
+        public IReadOnlyNamedElementCollection<ParameterInit> Parameters()
+        {
+            return _parameters;
+        }
+
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties()
+        {
+            return _properties;
+        }
+
         public Ticket Add(Feature feature)
         {
             return new Ticket(
                 _features.Add(feature),
                 _parameters,
                 _properties);
-        }
-
-        public IEnumerable<Feature> Features()
-        {
-            return _features;
-        }
-
-        public Feature Feature(XName name)
-        {
-            return _features.FirstOrDefault(x => x.Name == name);
         }
 
         public Ticket Add(ParameterInit parameter)
@@ -74,32 +78,12 @@ namespace Kip
                 _properties);
         }
 
-        public IEnumerable<ParameterInit> Parameters()
-        {
-            return _parameters;
-        }
-
-        public ParameterInit ParameterInit(XName name)
-        {
-            return _parameters.FirstOrDefault(x => x.Name == name);
-        }
-
         public Ticket Add(Property property)
         {
             return new Ticket(
                 _features,
                 _parameters,
                 _properties.Add(property));
-        }
-
-        public Property Property(XName name)
-        {
-            return _properties.FirstOrDefault(p => p.Name == name);
-        }
-
-        public IEnumerable<Property> Properties()
-        {
-            return _properties;
         }
 
         public override bool Equals(object obj)
