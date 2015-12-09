@@ -133,7 +133,7 @@ namespace Kip
 
             Write(writer, element.Value);
 
-            foreach (var p in element.NestedProperties())
+            foreach (var p in element.Properties)
             {
                 Write(writer, p);
             }

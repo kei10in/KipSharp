@@ -10,13 +10,9 @@ namespace Kip
     /// </summary>
     public sealed class Property
     {
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-
         public Property(XName name, params Property[] elements)
             : this(name, null, elements)
-        {
-        }
+        { }
 
         public Property(XName name, Value value, params Property[] elements)
         {
@@ -51,14 +47,11 @@ namespace Kip
             get;
         }
 
-        public IReadOnlyCollection<Property> NestedProperties()
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties
         {
-            return _properties;
-        }
-
-        public Property NestedProperty(XName name)
-        {
-            return _properties.FirstOrDefault(x => x.Name == name);
+            get { return _properties; }
         }
 
         public Property Add(Property element)
@@ -102,7 +95,7 @@ namespace Kip
         {
             var result = new List<string>() { "Property" };
             result.Add($"name=\"{Name}\"");
-            if (Value != null) 
+            if (Value != null)
                 result.Add($"value={Value}");
             if (_properties.Any())
                 result.Add($"nested properties={_properties.Count}");

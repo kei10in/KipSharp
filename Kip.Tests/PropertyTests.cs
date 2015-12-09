@@ -12,7 +12,7 @@ namespace Kip.Tests
             var nested = new Property("b");
             var property = new Property("a", nested);
 
-            var found = property.NestedProperty("b");
+            var found = property.Properties["b"];
 
             Assert.Equal(found, nested);
         }
