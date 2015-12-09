@@ -81,12 +81,12 @@ namespace Kip
             if (option.Name != null)
                 writer.WriteAttributeString("name", option.Name.ToQName(writer));
 
-            foreach (var p in option.Properties())
+            foreach (var p in option.Properties)
             {
                 Write(writer, p);
             }
 
-            foreach (var sp in option.ScoredProperties())
+            foreach (var sp in option.ScoredProperties)
             {
                 Write(writer, sp);
             }

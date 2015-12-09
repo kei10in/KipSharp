@@ -41,7 +41,7 @@ namespace Kip.Tests
             var d = f.Property(Psk.DisplayName);
             Assert.Equal("Collate Copies", d?.Value);
 
-            var o = f.Options().Select(x => x.Property(Psk.DisplayName)?.Value);
+            var o = f.Options().Select(x => x.Properties[Psk.DisplayName]?.Value);
             Assert.Contains(o, x => x == "Yes");
             Assert.Contains(o, x => x == "No");
         }

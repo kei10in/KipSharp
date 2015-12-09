@@ -10,11 +10,6 @@ namespace Kip
     /// </summary>
     public sealed class Option
     {
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
-            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
-
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
         { }
@@ -64,6 +59,20 @@ namespace Kip
             get;
         }
 
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties
+        {
+            get { return _properties; }
+        }
+
+        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+        public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
+        {
+            get { return _scoredProperties; }
+        }
+
         public Option SetConstrained(XName constrained)
         {
             return new Option(Name, constrained, _properties, _scoredProperties);
@@ -74,29 +83,9 @@ namespace Kip
             return new Option(Name, Constrained, _properties.Add(property), _scoredProperties);
         }
 
-        public IEnumerable<Property> Properties()
-        {
-            return _properties;
-        }
-
-        public Property Property(XName name)
-        {
-            return _properties.FirstOrDefault(x => x.Name == name);
-        }
-
         public Option Add(ScoredProperty scoredProperty)
         {
             return new Option(Name, Constrained, _properties, _scoredProperties.Add(scoredProperty));
-        }
-
-        public IEnumerable<ScoredProperty> ScoredProperties()
-        {
-            return _scoredProperties;
-        }
-
-        public ScoredProperty ScoredProperty(XName name)
-        {
-            return _scoredProperties.FirstOrDefault(x => x.Name == name);
         }
 
         public override bool Equals(object obj)
