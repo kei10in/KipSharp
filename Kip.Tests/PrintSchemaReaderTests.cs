@@ -33,9 +33,9 @@ namespace Kip.Tests
             var actual = Capabilities.Parse(pc);
 
             Assert.NotNull(actual);
-            Assert.True(0 < actual.Features().Count());
+            Assert.True(0 < actual.Features.Count);
 
-            var f = actual.Feature(Psk.JobCollateAllDocuments);
+            var f = actual.Features[Psk.JobCollateAllDocuments];
             Assert.True(0 < f?.Options()?.Count());
 
             var d = f.Properties[Psk.DisplayName];
@@ -56,9 +56,9 @@ namespace Kip.Tests
                 </psf:Feature>");
 
             var actual = Capabilities.Parse(pc);
-            Assert.True(0 < actual.Features().Count());
+            Assert.True(0 < actual.Features.Count);
 
-            var f = actual.Feature(Psk.JobCollateAllDocuments);
+            var f = actual.Features[Psk.JobCollateAllDocuments];
             Assert.Equal(2, f?.Options()?.Count());
         }
 
@@ -75,7 +75,7 @@ namespace Kip.Tests
                 </psf:Feature>");
 
             var actual = Capabilities.Parse(pc);
-            var value = actual.Feature(Psk.JobCollateAllDocuments)?.Properties[Psk.DisplayName]?.Value;
+            var value = actual.Features[Psk.JobCollateAllDocuments]?.Properties[Psk.DisplayName]?.Value;
             Assert.NotNull(value);
             Assert.Equal(Xsd.String, value?.ValueType);
             Assert.Equal("Copies Collate", value?.AsString());
@@ -90,7 +90,7 @@ namespace Kip.Tests
                 </psf:Property>");
 
             var actual = Capabilities.Parse(pc);
-            var value = actual.Property(Exp.SomeProperty)?.Value;
+            var value = actual.Properties[Exp.SomeProperty]?.Value;
             Assert.NotNull(value);
             Assert.Equal(Value.Empty, value);
         }
@@ -104,7 +104,7 @@ namespace Kip.Tests
                 </psf:Property>");
 
             var actual = Capabilities.Parse(pc);
-            var value = actual.Property(Exp.SomeProperty)?.Value;
+            var value = actual.Properties[Exp.SomeProperty]?.Value;
             Assert.NotNull(value);
             Assert.Equal(Value.Empty, value);
         }

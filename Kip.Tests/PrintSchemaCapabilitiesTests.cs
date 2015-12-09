@@ -14,7 +14,7 @@ namespace Kip.Tests
             var pc = new Capabilities();
             pc = pc.Add(new Property(Psk.DisplayName, "value"));
 
-            var p = pc.Property(Psk.DisplayName);
+            var p = pc.Properties[Psk.DisplayName];
 
             Assert.Equal("value", p.Value);
         }
@@ -32,7 +32,7 @@ namespace Kip.Tests
                 var actual = Capabilities.Load(textReader);
 
                 Assert.NotNull(actual);
-                Assert.Empty(pc.Properties());
+                Assert.Empty(pc.Properties);
             }
         }
 

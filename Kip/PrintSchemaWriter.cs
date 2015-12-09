@@ -14,17 +14,17 @@ namespace Kip
             writer.WriteAttributeString("xmlns", "xsi", null, Xsi.Namespace.NamespaceName);
             writer.WriteAttributeString("xmlns", "xsd", null, Xsd.Namespace.NamespaceName);
 
-            foreach (var f in pc.Features())
+            foreach (var f in pc.Features)
             {
                 Write(writer, f);
             }
 
-            foreach (var p in pc.Properties())
+            foreach (var p in pc.Properties)
             {
                 Write(writer, p);
             }
 
-            foreach (var p in pc.Parameters())
+            foreach (var p in pc.Parameters)
             {
                 Write(writer, p);
             }

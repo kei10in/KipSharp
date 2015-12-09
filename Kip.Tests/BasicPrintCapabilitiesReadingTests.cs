@@ -47,7 +47,7 @@ namespace Kip.Tests
             //   </psf:Property>
             // </psf:ParameterDef>
 
-            var parameter = _actual.Parameter(PrivateNamespace + "PageDevmodeSnapshot");
+            var parameter = _actual.Parameters[PrivateNamespace + "PageDevmodeSnapshot"];
             Assert.NotNull(parameter);
             Assert.Equal(6, parameter.Properties.Count);
         }
@@ -78,7 +78,7 @@ namespace Kip.Tests
             //   </psf:Property>
             // </psf:Property>
 
-            var property = _actual.Property(Psk.PageImageableSize);
+            var property = _actual.Properties[Psk.PageImageableSize];
             Assert.NotNull(property);
             Assert.Equal(3, property.Properties.Count());
         }
@@ -86,9 +86,9 @@ namespace Kip.Tests
         [Fact]
         public void ReadAllElements()
         {
-            Assert.Equal(11, _actual.Features().Count());
-            Assert.Equal(4, _actual.Parameters().Count());
-            Assert.Equal(1, _actual.Properties().Count());
+            Assert.Equal(11, _actual.Features.Count);
+            Assert.Equal(4, _actual.Parameters.Count);
+            Assert.Equal(1, _actual.Properties.Count);
         }
 
         [Fact]

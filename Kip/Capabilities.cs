@@ -12,13 +12,6 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities
     {
-        private readonly ImmutableNamedElementCollection<Feature> _features
-            = ImmutableNamedElementCollection.CreateFeatureCollection();
-        private readonly ImmutableNamedElementCollection<ParameterDef> _parameters
-            = ImmutableNamedElementCollection.CreateParameterDefCollection();
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-
         public Capabilities(params CapabilitiesChild[] elements)
         {
             var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
@@ -48,15 +41,36 @@ namespace Kip
             _properties = properties;
         }
 
+        private readonly ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        public IReadOnlyNamedElementCollection<Feature> Features
+        {
+            get { return _features; }
+        }
+
+        private readonly ImmutableNamedElementCollection<ParameterDef> _parameters
+            = ImmutableNamedElementCollection.CreateParameterDefCollection();
+        public IReadOnlyNamedElementCollection<ParameterDef> Parameters
+        {
+            get { return _parameters; }
+        }
+
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties
+        {
+            get { return _properties; }
+        }
+
         public IEnumerable<Option> GetFeatureOptions(XName featureName)
         {
-            var options = Feature(featureName)?.Options();
+            var options = Features[featureName]?.Options();
             return options ?? Enumerable.Empty<Option>();
         }
 
         public IEnumerable<Option> GetFeatureOptions(XName featureName, params XName[] nestedFeatureNames)
         {
-            var ft = Feature(featureName);
+            var ft = Features[featureName];
             foreach (var nestedFeatureName in nestedFeatureNames)
             {
                 ft = ft?.Features[nestedFeatureName];
@@ -70,44 +84,14 @@ namespace Kip
             return new Capabilities(_features.Add(feature), _parameters, _properties);
         }
 
-        public IEnumerable<Feature> Features()
-        {
-            return _features;
-        }
-
-        public Feature Feature(XName name)
-        {
-            return _features.FirstOrDefault(x => x.Name == name);
-        }
-
         public Capabilities Add(ParameterDef parameter)
         {
             return new Capabilities(_features, _parameters.Add(parameter), _properties);
         }
 
-        public IEnumerable<ParameterDef> Parameters()
-        {
-            return _parameters;
-        }
-
-        public ParameterDef Parameter(XName name)
-        {
-            return _parameters.FirstOrDefault(x => x.Name == name);
-        }
-
         public Capabilities Add(Property property)
         {
             return new Capabilities(_features, _parameters, _properties.Add(property));
-        }
-
-        public Property Property(XName name)
-        {
-            return _properties.FirstOrDefault(p => p.Name == name);
-        }
-
-        public IEnumerable<Property> Properties()
-        {
-            return _properties;
         }
 
         public override bool Equals(object obj)
