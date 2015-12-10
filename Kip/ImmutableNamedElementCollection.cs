@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace Kip
 {
+    [DebuggerDisplay("Count = {Count}")]
+    [DebuggerTypeProxy(typeof(ImmutableNamedElementCollectionDebugView<>))]
     internal sealed class ImmutableNamedElementCollection<T>
         : IReadOnlyNamedElementCollection<T>
         where T : class

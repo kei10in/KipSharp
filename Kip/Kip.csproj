@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Capabilities.cs" />
+    <Compile Include="DebugView.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Feature.cs" />
     <Compile Include="ImmutableNamedElementCollection.cs" />
