@@ -51,6 +51,11 @@ namespace Kip
             }
         }
 
+        public bool Contains(XName name)
+        {
+            return _elements.ContainsKey(name);
+        }
+
         public ImmutableNamedElementCollection<T> Add(T element)
         {
             XName name = _nameOf(element);
@@ -62,6 +67,16 @@ namespace Kip
             var newElement = _elements.Add(name, element);
 
             return new ImmutableNamedElementCollection<T>(_nameOf, newElement);
+        }
+
+        public ImmutableNamedElementCollection<T> Clear()
+        {
+            return new ImmutableNamedElementCollection<T>(_nameOf);
+        }
+
+        public ImmutableNamedElementCollection<T> Remove(XName name)
+        {
+            return new ImmutableNamedElementCollection<T>(_nameOf, _elements.Remove(name));
         }
 
         public IEnumerator<T> GetEnumerator()
