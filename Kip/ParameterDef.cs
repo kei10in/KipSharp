@@ -10,6 +10,9 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef
     {
+        /// <summary>
+        /// Constructs with name and the <see cref="Property"/>s.
+        /// </summary>
         public ParameterDef(XName name, params Property[] elements)
         {
             Name = name;
@@ -21,6 +24,7 @@ namespace Kip
             }
             _properties = properties.ToImmutable();
         }
+
         internal ParameterDef(XName name, ImmutableNamedElementCollection<Property> properties)
         {
             Name = name;
@@ -39,6 +43,10 @@ namespace Kip
             get { return _properties; }
         }
 
+        /// <summary>
+        /// Add the specified property to the <see cref="ParameterDef"/>.
+        /// </summary>
+        /// <returns>A new ParameterDef with the property added.</returns>
         public ParameterDef Add(Property property)
         {
             return new ParameterDef(Name, _properties);

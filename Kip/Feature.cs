@@ -12,15 +12,22 @@ namespace Kip
     /// </summary>
     public sealed class Feature
     {
+        /// <summary>
+        /// Constructs with the name.
+        /// </summary>
         public Feature(XName name)
         {
             Name = name;
         }
 
+        /// <summary>
+        /// Constructs with the name and the children, <see cref="Option"/>,
+        /// <see cref="Property"/> and/or <see cref="Feature"/>.
+        /// </summary>
         public Feature(XName name, params FeatureChild[] elements)
         {
             Name = name;
-
+            var o = new Option();
             var properties = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
             var options = ImmutableList.CreateBuilder<Option>();
             var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
@@ -74,16 +81,28 @@ namespace Kip
             get { return _features; }
         }
 
-        public Feature Add(Property property)
+        /// <summary>
+        /// Add the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <returns>A new Feature with the element added.</returns>
+        public Feature Add(Property element)
         {
-            return new Feature(Name, _properties.Add(property), _options, _features);
+            return new Feature(Name, _properties.Add(element), _options, _features);
         }
 
+        /// <summary>
+        /// Add the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <returns>A new Feature with the element added.</returns>
         public Feature Add(Option option)
         {
             return new Feature(Name, _properties, _options.Add(option), _features);
         }
 
+        /// <summary>
+        /// Add the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <returns>A new Feature with the element added.</returns>
         public Feature Add(Feature feature)
         {
             return new Feature(Name, _properties, _options, _features.Add(feature));

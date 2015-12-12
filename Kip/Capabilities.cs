@@ -12,6 +12,10 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities
     {
+        /// <summary>
+        /// Constructs with children: <see cref="Feature"/>,
+        /// <see cref="ParameterDef"/> and/or <see cref="Property"/>.
+        /// </summary>
         public Capabilities(params CapabilitiesChild[] elements)
         {
             var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
@@ -79,19 +83,31 @@ namespace Kip
             return options ?? Enumerable.Empty<Option>();
         }
 
-        public Capabilities Add(Feature feature)
+        /// <summary>
+        /// Adds the specified element to the capabilities.
+        /// </summary>
+        /// <returns>A new capabilities with the element added</returns>
+        public Capabilities Add(Feature element)
         {
-            return new Capabilities(_features.Add(feature), _parameters, _properties);
+            return new Capabilities(_features.Add(element), _parameters, _properties);
         }
 
-        public Capabilities Add(ParameterDef parameter)
+        /// <summary>
+        /// Adds the specified element to the capabilities.
+        /// </summary>
+        /// <returns>A new capabilities with the element added</returns>
+        public Capabilities Add(ParameterDef element)
         {
-            return new Capabilities(_features, _parameters.Add(parameter), _properties);
+            return new Capabilities(_features, _parameters.Add(element), _properties);
         }
 
-        public Capabilities Add(Property property)
+        /// <summary>
+        /// Adds the specified element to the capabilities.
+        /// </summary>
+        /// <returns>A new capabilities with the element added</returns>
+        public Capabilities Add(Property element)
         {
-            return new Capabilities(_features, _parameters, _properties.Add(property));
+            return new Capabilities(_features, _parameters, _properties.Add(element));
         }
 
         public override bool Equals(object obj)

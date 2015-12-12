@@ -8,6 +8,11 @@ namespace Kip
     /// </summary>
     public sealed class ParameterInit
     {
+        /// <summary>
+        /// Constructs with the name and the <see cref="Value"/>.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public ParameterInit(XName name, Value value)
         {
             Name = name;
@@ -24,6 +29,10 @@ namespace Kip
             get;
         }
 
+        /// <summary>
+        /// Sets the specified <see cref="Value"/> to the ParameterInit.
+        /// </summary>
+        /// <returns>A new ParameterInit with the value set.</returns>
         public ParameterInit SetValue(Value value)
         {
             return new ParameterInit(Name, value);

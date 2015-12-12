@@ -12,6 +12,10 @@ namespace Kip
     /// </summary>
     public sealed class Ticket
     {
+        /// <summary>
+        /// Constructs with children: <see cref="Feature"/>,
+        /// <see cref="ParameterInit"/> and/or <see cref="Property"/>.
+        /// </summary>
         public Ticket(params TicketChild[] elements)
         {
             var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
@@ -62,28 +66,40 @@ namespace Kip
             return _properties;
         }
 
-        public Ticket Add(Feature feature)
+        /// <summary>
+        /// Adds the specified element to the ticket.
+        /// </summary>
+        /// <returns>A new Ticket with element added.</returns>
+        public Ticket Add(Feature element)
         {
             return new Ticket(
-                _features.Add(feature),
+                _features.Add(element),
                 _parameters,
                 _properties);
         }
 
-        public Ticket Add(ParameterInit parameter)
+        /// <summary>
+        /// Adds the specified element to the ticket.
+        /// </summary>
+        /// <returns>A new Ticket with element added.</returns>
+        public Ticket Add(ParameterInit element)
         {
             return new Ticket(
                 _features,
-                _parameters.Add(parameter),
+                _parameters.Add(element),
                 _properties);
         }
 
-        public Ticket Add(Property property)
+        /// <summary>
+        /// Adds the specified element to the ticket.
+        /// </summary>
+        /// <returns>A new Ticket with element added.</returns>
+        public Ticket Add(Property element)
         {
             return new Ticket(
                 _features,
                 _parameters,
-                _properties.Add(property));
+                _properties.Add(element));
         }
 
         public override bool Equals(object obj)

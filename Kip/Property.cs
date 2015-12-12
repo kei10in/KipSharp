@@ -10,10 +10,17 @@ namespace Kip
     /// </summary>
     public sealed class Property
     {
+        /// <summary>
+        /// Constructs with the name and the nested <see cref="Property"/>s.
+        /// </summary>
         public Property(XName name, params Property[] elements)
             : this(name, null, elements)
         { }
 
+        /// <summary>
+        /// Constructs with the name, the <see cref="Value"/>, and nested
+        /// <see cref="Property"/>s.
+        /// </summary>
         public Property(XName name, Value value, params Property[] elements)
         {
             Name = name;
@@ -54,6 +61,10 @@ namespace Kip
             get { return _properties; }
         }
 
+        /// <summary>
+        /// Adds the specified element to the <see cref="Property"/>.
+        /// </summary>
+        /// <returns>A new Property with the element added.</returns>
         public Property Add(Property element)
         {
             return new Property(Name, Value, _properties.Add(element));

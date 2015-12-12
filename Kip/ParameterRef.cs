@@ -8,6 +8,10 @@ namespace Kip
     /// </summary>
     public sealed class ParameterRef
     {
+        /// <summary>
+        /// Constructs with the name.
+        /// </summary>
+        /// <param name="name"></param>
         public ParameterRef(XName name)
         {
             Name = name;

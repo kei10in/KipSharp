@@ -10,14 +10,25 @@ namespace Kip
     /// </summary>
     public sealed class Option
     {
+        /// <summary>
+        /// Constructs with <see cref="Property"/>s and/or <see cref="ScoredProperty"/>s.
+        /// </summary>
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
         { }
 
+        /// <summary>
+        /// Constructs with the name and the children, <see cref="Property"/>s
+        /// and/or <see cref="ScoredProperty"/>s.
+        /// </summary>
         public Option(XName name, params OptionChild[] elements)
             : this(name, null, elements)
         { }
 
+        /// <summary>
+        /// Constructs with the name, the constrained value and children,
+        /// <see cref="Property"/> and/or <see cref="ScoredProperty"/>.
+        /// </summary>
         public Option(XName name, XName constrained, params OptionChild[] elements)
         {
             Name = name;
@@ -73,19 +84,31 @@ namespace Kip
             get { return _scoredProperties; }
         }
 
+        /// <summary>
+        /// Set constrained value.
+        /// </summary>
+        /// <returns>A new Option with constrained value set.</returns>
         public Option SetConstrained(XName constrained)
         {
             return new Option(Name, constrained, _properties, _scoredProperties);
         }
 
-        public Option Add(Property property)
+        /// <summary>
+        /// Add the specified element to the <see cref="Option"/>.
+        /// </summary>
+        /// <returns>A new Option with the element added.</returns>
+        public Option Add(Property element)
         {
-            return new Option(Name, Constrained, _properties.Add(property), _scoredProperties);
+            return new Option(Name, Constrained, _properties.Add(element), _scoredProperties);
         }
 
-        public Option Add(ScoredProperty scoredProperty)
+        /// <summary>
+        /// Add the specified element to the <see cref="Option"/>.
+        /// </summary>
+        /// <returns>A new Option with the element added.</returns>
+        public Option Add(ScoredProperty element)
         {
-            return new Option(Name, Constrained, _properties, _scoredProperties.Add(scoredProperty));
+            return new Option(Name, Constrained, _properties, _scoredProperties.Add(element));
         }
 
         public override bool Equals(object obj)
