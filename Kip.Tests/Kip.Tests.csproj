@@ -54,6 +54,7 @@
     <Compile Include="ScoredPropertyTests.cs" />
     <Compile Include="PropertyTests.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="WriterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

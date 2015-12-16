@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Kip
@@ -39,7 +40,19 @@ namespace Kip
 
         public static string ToQName(this XName self, XmlWriter writer)
         {
-            return writer.LookupPrefix(self.NamespaceName) + ":" + self.LocalName;
+            var prefix = writer.LookupPrefix(self.NamespaceName);
+            if (prefix == null)
+            {
+                throw new InternalException($"Namespace declaration not found: {self.Namespace}");
+            }
+            else if (prefix == string.Empty)
+            {
+                return self.LocalName;
+            }
+            else
+            {
+                return prefix + ":" + self.LocalName;
+            }
         }
 
         public static string ToQName(this XName self, XElement context)

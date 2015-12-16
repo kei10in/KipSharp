@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 namespace Kip
 {
@@ -25,5 +26,12 @@ namespace Kip
         public ReadPrintSchemaDocumentException() { }
         public ReadPrintSchemaDocumentException(string message) : base(message) { }
         public ReadPrintSchemaDocumentException(string message, Exception inner) : base(message, inner) { }
+    }
+
+    public class InternalException : Exception
+    {
+        public InternalException() { }
+        public InternalException(string message) : base(message) { }
+        public InternalException(string message, Exception inner) : base(message, inner) { }
     }
 }
