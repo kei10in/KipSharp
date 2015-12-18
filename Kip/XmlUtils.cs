@@ -8,18 +8,32 @@ namespace Kip
     {
         internal static XName ToXName(this string self, XmlReader reader)
         {
-            char[] separater = { ':' };
-            var separeted = self.Split(separater, 2);
-            if (separeted.Length != 2)
+            var i = self.IndexOf(':');
+            if (i == 0 || i == self.Length - 1)
             {
-                return self;
+                throw new XmlException($"\"{self}\" is not QName.");
             }
 
-            var prefix = separeted[0];
-            var name = separeted[1];
+            var prefix = string.Empty;
+            var localPart = string.Empty;
+
+            if (i < 0)
+            {
+                localPart = self;
+            }
+            else
+            {
+                prefix = self.Substring(0, i);
+                localPart = self.Substring(i + 1);
+            }
 
             XNamespace ns = reader.LookupNamespace(prefix);
-            return ns + name;
+            if (ns == null)
+            {
+                throw new XmlException($"The prefix \"{prefix}\" is not declared.");
+            }
+
+            return ns + localPart;
         }
 
         internal static string ToQName(this XName self, XmlWriter writer)

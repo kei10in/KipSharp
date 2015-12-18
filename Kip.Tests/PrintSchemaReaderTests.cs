@@ -128,5 +128,26 @@ namespace Kip.Tests
                 var actual = Capabilities.Parse(pc);
             });
         }
+
+        [Fact]
+        public void LoadPrintCapabilitiesContainingDefaultNamespaceDeclaration()
+        {
+            var pc = @"<?xml version='1.0' encoding='UTF-8'?>
+                <psf:PrintCapabilities
+                    version='1'
+                    xmlns:psf='http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework'
+                    xmlns:psk='http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords'
+                    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                    xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+                    xmlns='http://example.com/2015/printschemakeywords'>
+                  <psf:Property name='SomeProperty'>
+                    <psf:Value xsi:type='xsd:QName'>SomeValue</psf:Value>
+                  </psf:Property>
+                </psf:PrintCapabilities>";
+            var actual = Capabilities.Parse(pc);
+            var expected = new Capabilities(new Property(Exp.SomeProperty, Exp.SomeValue));
+
+            Assert.Equal(expected, actual);
+        }
     }
 }
