@@ -4,7 +4,7 @@ using Xunit;
 namespace Kip.Tests
 {
 
-    public class PrintSchemaValueTests
+    public class ValueTests
     {
         [Fact]
         public void ComparableWithIntValue()
