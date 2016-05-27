@@ -305,7 +305,8 @@ namespace Kip
             return new Capabilities(
                 _features.ToImmutable(),
                 _parameters.ToImmutable(),
-                _properties.ToImmutable());
+                _properties.ToImmutable(),
+                NamespaceManager.Default);
         }
     }
 
@@ -333,7 +334,8 @@ namespace Kip
             return new Ticket(
                 _features.ToImmutable(),
                 _parameters.ToImmutable(),
-                _properties.ToImmutable());
+                _properties.ToImmutable(),
+                NamespaceManager.Default);
         }
     }
 

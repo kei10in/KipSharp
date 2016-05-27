@@ -33,16 +33,19 @@ namespace Kip
             _features = features.ToImmutable();
             _parameters = parameters.ToImmutable();
             _properties = properties.ToImmutable();
+            _declaredNamespaces = NamespaceManager.Default;
         }
 
         internal Capabilities(
             ImmutableNamedElementCollection<Feature> features,
             ImmutableNamedElementCollection<ParameterDef> parameters,
-            ImmutableNamedElementCollection<Property> properties)
+            ImmutableNamedElementCollection<Property> properties,
+            NamespaceManager namespaceDeclarations)
         {
             _features = features;
             _parameters = parameters;
             _properties = properties;
+            _declaredNamespaces = namespaceDeclarations;
         }
 
         private readonly ImmutableNamedElementCollection<Feature> _features
@@ -64,6 +67,12 @@ namespace Kip
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
+        }
+
+        private readonly NamespaceManager _declaredNamespaces;
+        public IReadOnlyNamespaceManager DeclaredNamespaces
+        {
+            get { return _declaredNamespaces; }
         }
 
         public IEnumerable<Option> GetFeatureOptions(XName featureName)
@@ -89,7 +98,7 @@ namespace Kip
         /// <returns>A new capabilities with the element added</returns>
         public Capabilities Add(Feature element)
         {
-            return new Capabilities(_features.Add(element), _parameters, _properties);
+            return new Capabilities(_features.Add(element), _parameters, _properties, _declaredNamespaces);
         }
 
         /// <summary>
@@ -98,7 +107,7 @@ namespace Kip
         /// <returns>A new capabilities with the element added</returns>
         public Capabilities Add(ParameterDef element)
         {
-            return new Capabilities(_features, _parameters.Add(element), _properties);
+            return new Capabilities(_features, _parameters.Add(element), _properties, _declaredNamespaces);
         }
 
         /// <summary>
@@ -107,7 +116,17 @@ namespace Kip
         /// <returns>A new capabilities with the element added</returns>
         public Capabilities Add(Property element)
         {
-            return new Capabilities(_features, _parameters, _properties.Add(element));
+            return new Capabilities(_features, _parameters, _properties.Add(element), _declaredNamespaces);
+        }
+
+        /// <summary>
+        /// Adds the namespace declaration to the capabilities.
+        /// </summary>
+        /// <param name="declaration"></param>
+        /// <returns>A new capabilities with the declared namespace</returns>
+        public Capabilities Add(NamespaceDeclaration declaration)
+        {
+            return new Capabilities(_features, _parameters, _properties, _declaredNamespaces.Add(declaration));
         }
 
         public override bool Equals(object obj)
@@ -124,7 +143,8 @@ namespace Kip
         {
             return _features.GetHashCode() ^
                 _parameters.GetHashCode() ^
-                _properties.GetHashCode();
+                _properties.GetHashCode() ^
+                _declaredNamespaces.GetHashCode();
         }
 
         public static bool operator ==(Capabilities v1, Capabilities v2)
@@ -134,7 +154,8 @@ namespace Kip
 
             return v1._features == v2._features &&
                 v1._parameters == v2._parameters &&
-                v1._properties == v2._properties;
+                v1._properties == v2._properties &&
+                v1._declaredNamespaces == v2._declaredNamespaces;
         }
 
         public static bool operator !=(Capabilities v1, Capabilities v2)

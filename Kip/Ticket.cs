@@ -33,16 +33,19 @@ namespace Kip
             _features = features.ToImmutable();
             _parameters = parameters.ToImmutable();
             _properties = properties.ToImmutable();
+            _declaredNamespaces = NamespaceManager.Default;
         }
 
         internal Ticket(
             ImmutableNamedElementCollection<Feature> features,
             ImmutableNamedElementCollection<ParameterInit> parameters,
-            ImmutableNamedElementCollection<Property> properties)
+            ImmutableNamedElementCollection<Property> properties,
+            NamespaceManager namespaceDeclarations)
         {
             _features = features;
             _parameters = parameters;
             _properties = properties;
+            _declaredNamespaces = namespaceDeclarations;
         }
 
         private readonly ImmutableNamedElementCollection<Feature> _features
@@ -66,6 +69,12 @@ namespace Kip
             return _properties;
         }
 
+        private readonly NamespaceManager _declaredNamespaces;
+        public IReadOnlyNamespaceManager DeclaredNamespaces
+        {
+            get { return _declaredNamespaces; }
+        }
+    
         /// <summary>
         /// Adds the specified element to the ticket.
         /// </summary>
@@ -75,7 +84,8 @@ namespace Kip
             return new Ticket(
                 _features.Add(element),
                 _parameters,
-                _properties);
+                _properties,
+                _declaredNamespaces);
         }
 
         /// <summary>
@@ -87,7 +97,8 @@ namespace Kip
             return new Ticket(
                 _features,
                 _parameters.Add(element),
-                _properties);
+                _properties,
+                _declaredNamespaces);
         }
 
         /// <summary>
@@ -99,7 +110,17 @@ namespace Kip
             return new Ticket(
                 _features,
                 _parameters,
-                _properties.Add(element));
+                _properties.Add(element),
+                _declaredNamespaces);
+        }
+
+        public Ticket Add(NamespaceDeclaration declaration)
+        {
+            return new Ticket(
+                _features,
+                _parameters,
+                _properties,
+                _declaredNamespaces.Add(declaration));
         }
 
         public override bool Equals(object obj)
@@ -116,7 +137,8 @@ namespace Kip
         {
             return _features.GetHashCode() ^
                 _parameters.GetHashCode() ^
-                _properties.GetHashCode();
+                _properties.GetHashCode() ^
+                _declaredNamespaces.GetHashCode();
         }
 
         public static bool operator ==(Ticket v1, Ticket v2)
@@ -126,7 +148,8 @@ namespace Kip
 
             return v1._features == v2._features &&
                 v1._parameters == v2._parameters &&
-                v1._properties == v2._properties;
+                v1._properties == v2._properties &&
+                v1._declaredNamespaces == v2._declaredNamespaces;
         }
 
         public static bool operator !=(Ticket v1, Ticket v2)
