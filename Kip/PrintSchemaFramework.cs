@@ -5,6 +5,8 @@ namespace Kip
     public static class Psf
     {
         public static readonly XNamespace Namespace = "http://schemas.microsoft.com/windows/2003/08/printing/printschemaframework";
+        public static readonly string Prefix = "psf";
+        public static readonly NamespaceDeclaration Declaration = new NamespaceDeclaration(Prefix, Namespace);
 
         public static readonly XName PrintCapabilities = Namespace + "PrintCapabilities";
         public static readonly XName PrintTicket = Namespace + "PrintTicket";

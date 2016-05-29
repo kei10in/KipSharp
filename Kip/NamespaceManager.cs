@@ -26,11 +26,11 @@ namespace Kip
         static NamespaceManager()
         {
             var map = ImmutableDictionary.CreateBuilder<string, XNamespace>();
-            map.Add("psf", Psf.Namespace);
-            map.Add("xsi", Xsi.Namespace);
-            map.Add("xsd", Xsd.Namespace);
-            map.Add("psk", Psk.Namespace);
-            map.Add("pskv11", Pskv11.Namespace);
+            map.Add(Psf.Prefix, Psf.Namespace);
+            map.Add(Xsi.Prefix, Xsi.Namespace);
+            map.Add(Xsd.Prefix, Xsd.Namespace);
+            map.Add(Psk.Prefix, Psk.Namespace);
+            map.Add(Pskv11.Prefix, Pskv11.Namespace);
 
             Default = new NamespaceManager(map.ToImmutableDictionary());
         }
@@ -40,6 +40,16 @@ namespace Kip
         private NamespaceManager(ImmutableDictionary<string, XNamespace> map)
         {
             _map = map;
+        }
+
+        internal NamespaceManager(IEnumerable<NamespaceDeclaration> declarations)
+        {
+            var builder = ImmutableDictionary.CreateBuilder<string, XNamespace>();
+            foreach (var decl in declarations)
+            {
+                builder.Add(decl.Prefix, decl.Uri);
+            }
+            _map = builder.ToImmutableDictionary();
         }
 
         public int Count

@@ -5,6 +5,8 @@ namespace Kip
     public static class Psk
     {
         public static readonly XNamespace Namespace = "http://schemas.microsoft.com/windows/2003/08/printing/printschemakeywords";
+        public static readonly string Prefix = "psk";
+        public static readonly NamespaceDeclaration Declaration = new NamespaceDeclaration(Prefix, Namespace);
 
         public static readonly XName None = Namespace + "None";
         public static readonly XName Standard = Namespace + "Standard";

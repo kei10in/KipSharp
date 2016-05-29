@@ -5,6 +5,8 @@ namespace Kip
     public static class Pskv11
     {
         public static readonly XNamespace Namespace = "http://schemas.microsoft.com/windows/2013/05/printing/printschemakeywordsv11";
+        public static readonly string Prefix = "pskv11";
+        public static readonly NamespaceDeclaration Declaration = new NamespaceDeclaration(Prefix, Namespace);
 
         public static readonly XName JobPasscode = Namespace + "JobPasscode";
         public static readonly XName JobPasscodeString = Namespace + "JobPasscodeString";

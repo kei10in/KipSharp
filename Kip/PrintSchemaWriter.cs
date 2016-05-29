@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -11,46 +13,36 @@ namespace Kip
             private Dictionary<XNamespace, string> cache = new Dictionary<XNamespace, string>();
             private int n = 0;
 
-            internal NamespaceResolver()
+            internal NamespaceResolver(IReadOnlyNamespaceManager namespaces)
             {
-                cache.Add(Psf.Namespace, "psf");
-                cache.Add(Psk.Namespace, "psk");
-                cache.Add(Pskv11.Namespace, "pskv11");
-                cache.Add(Xsi.Namespace, "xsi");
-                cache.Add(Xsd.Namespace, "xsd");
+                NamespaceDeclarations = new NamespaceManager(namespaces);
             }
 
-            internal string LookupPrefix(XNamespace ns)
+            internal NamespaceManager NamespaceDeclarations { get; }
+
+            internal void Add(XNamespace uri)
             {
-                if (cache.ContainsKey(ns))
-                {
-                    return cache[ns];
-                }
-                else
-                {
-                    var prefix = string.Format("ns{0:0000}", n);
-                    n += 1;
-                    cache[ns] = prefix;
-                    return prefix;
-                }
+                if (uri == null) throw new ArgumentNullException(nameof(uri));
+                if (cache.ContainsKey(uri)) return;
+
+                var prefix = string.Format("ns{0:0000}", n);
+                n += 1;
+                cache[uri] = prefix;
             }
         }
 
         public static void Write(XmlWriter writer, Capabilities pc)
         {
+            var declarations = NamespaceDeclarations(pc);
+
             writer.WriteStartDocument();
-            writer.WriteStartElement("psf", Psf.PrintCapabilities.LocalName, Psf.Namespace.NamespaceName);
+            var prefix = declarations.LookupPrefix(Psf.PrintCapabilities.NamespaceName);
+            writer.WriteStartElement(prefix, Psf.PrintCapabilities.LocalName, Psf.PrintCapabilities.NamespaceName);
             writer.WriteAttributeString("version", "1");
 
-            var nsSet = NamespaceCollector.Collect(pc);
-            nsSet.Add(Psf.Namespace);
-            nsSet.Add(Xsi.Namespace);
-            nsSet.Add(Xsd.Namespace);
-
-            var resolver = new NamespaceResolver();
-            foreach (var ns in nsSet)
+            foreach (var decl in declarations)
             {
-                writer.WriteAttributeString("xmlns", resolver.LookupPrefix(ns), null, ns.NamespaceName);
+                writer.WriteAttributeString("xmlns", decl.Prefix, null, decl.Uri.NamespaceName);
             }
 
             foreach (var f in pc.Features)
@@ -72,40 +64,71 @@ namespace Kip
             writer.Flush();
         }
 
-        public static void Write(XmlWriter writer, Ticket pc)
+        public static void Write(XmlWriter writer, Ticket pt)
         {
+            var declarations = NamespaceDeclarations(pt);
+
             writer.WriteStartDocument();
-            writer.WriteStartElement("psf", Psf.PrintTicket.LocalName, Psf.Namespace.NamespaceName);
+            var prefix = declarations.LookupPrefix(Psf.PrintTicket.NamespaceName);
+            writer.WriteStartElement(prefix, Psf.PrintTicket.LocalName, Psf.PrintTicket.NamespaceName);
             writer.WriteAttributeString("version", "1");
 
-            var nsSet = NamespaceCollector.Collect(pc);
-            nsSet.Add(Psf.Namespace);
-            nsSet.Add(Xsi.Namespace);
-            nsSet.Add(Xsd.Namespace);
-
-            var resolver = new NamespaceResolver();
-            foreach (var ns in nsSet)
+            foreach (var decl in declarations)
             {
-                writer.WriteAttributeString("xmlns", resolver.LookupPrefix(ns), null, ns.NamespaceName);
+                writer.WriteAttributeString("xmlns", decl.Prefix, null, decl.Uri.NamespaceName);
             }
 
-            foreach (var f in pc.Features())
+            foreach (var f in pt.Features())
             {
                 Write(writer, f);
             }
 
-            foreach (var p in pc.Properties())
+            foreach (var p in pt.Properties())
             {
                 Write(writer, p);
             }
 
-            foreach (var p in pc.Parameters())
+            foreach (var p in pt.Parameters())
             {
                 Write(writer, p);
             }
 
             writer.WriteEndElement();
             writer.Flush();
+        }
+
+        private static NamespaceManager NamespaceDeclarations(Capabilities pc)
+        {
+            return NamespaceDeclarations(NamespaceCollector.Collect(pc), pc.DeclaredNamespaces);
+        }
+
+        private static NamespaceManager NamespaceDeclarations(Ticket pt)
+        {
+            return NamespaceDeclarations(NamespaceCollector.Collect(pt), pt.DeclaredNamespaces);
+        }
+
+        private static NamespaceManager NamespaceDeclarations(
+            IEnumerable<XNamespace> appeared, IReadOnlyNamespaceManager declared)
+        {
+            int n = 0;
+            var result = new List<NamespaceDeclaration>();
+
+            appeared = Enumerable.Concat(
+                new List<XNamespace> { Psf.Namespace, Psk.Namespace, Xsd.Namespace, Xsi.Namespace },
+                appeared);
+
+            foreach (var uri in appeared)
+            {
+                var prefix = declared.LookupPrefix(uri);
+                if (prefix == null)
+                {
+                    prefix = string.Format("ns{0:0000}", n);
+                    n += 1;
+                }
+                result.Add(new NamespaceDeclaration(prefix, uri));
+            }
+
+            return new NamespaceManager(result);
         }
 
         private static void Write(XmlWriter writer, Feature feature)
@@ -355,7 +378,7 @@ namespace Kip
         private static void Collect(HashSet<XNamespace> result, ScoredProperty element)
         {
             result.AddXNamespaceOfXName(element.Name);
-            
+
             Collect(result, element.Value);
             Collect(result, element.ParameterRef);
 
