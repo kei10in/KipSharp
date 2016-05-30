@@ -72,18 +72,25 @@ namespace Kip
 
             do
             {
-                var name = reader.XName();
-                if (XNamespace.Xmlns == name.Namespace)
+                var decl = ReadNamespaceDeclaration(reader);
+                if (decl != null)
                 {
-                    // if name.LocalName is "xmlns", this is declaring default namespace.
-                    var prefix = (name.LocalName == "xmlns") ? string.Empty : name.LocalName;
-                    var uri = reader.Value;
-                    var decl = new NamespaceDeclaration(prefix, uri);
                     result.Add(decl);
                 }
             } while (reader.MoveToNextAttribute());
 
             return result;
+        }
+
+        private static NamespaceDeclaration ReadNamespaceDeclaration(XmlReader reader)
+        {
+            if (reader.NamespaceURI != XNamespace.Xmlns.NamespaceName)
+            {
+                return null;
+            }
+            var prefix = (reader.LocalName == "xmlns") ? string.Empty : reader.LocalName;
+            var uri = reader.Value;
+            return new NamespaceDeclaration(prefix, uri);
         }
 
         public static IEnumerable<Element> ReadChildren(XmlReader reader)
