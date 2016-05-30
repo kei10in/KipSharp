@@ -33,14 +33,14 @@ namespace Kip
             _features = features.ToImmutable();
             _parameters = parameters.ToImmutable();
             _properties = properties.ToImmutable();
-            _declaredNamespaces = NamespaceManager.Default;
+            _declaredNamespaces = NamespaceDeclarationCollection.Default;
         }
 
         internal Capabilities(
             ImmutableNamedElementCollection<Feature> features,
             ImmutableNamedElementCollection<ParameterDef> parameters,
             ImmutableNamedElementCollection<Property> properties,
-            NamespaceManager namespaceDeclarations)
+            NamespaceDeclarationCollection namespaceDeclarations)
         {
             _features = features;
             _parameters = parameters;
@@ -69,8 +69,8 @@ namespace Kip
             get { return _properties; }
         }
 
-        private readonly NamespaceManager _declaredNamespaces;
-        public IReadOnlyNamespaceManager DeclaredNamespaces
+        private readonly NamespaceDeclarationCollection _declaredNamespaces;
+        public IReadOnlyNamespaceDeclarationCollection DeclaredNamespaces
         {
             get { return _declaredNamespaces; }
         }

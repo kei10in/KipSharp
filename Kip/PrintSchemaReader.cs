@@ -338,8 +338,8 @@ namespace Kip
         public Capabilities GetResult()
         {
             var nm = _namespaceDeclarations == null
-                ? NamespaceManager.Default
-                : new NamespaceManager(_namespaceDeclarations);
+                ? NamespaceDeclarationCollection.Default
+                : new NamespaceDeclarationCollection(_namespaceDeclarations);
             return new Capabilities(
                 _features.ToImmutable(),
                 _parameters.ToImmutable(),
@@ -376,8 +376,8 @@ namespace Kip
         public Ticket GetResult()
         {
             var nm = _namespaceDeclarations == null
-                ? NamespaceManager.Default
-                : new NamespaceManager(_namespaceDeclarations);
+                ? NamespaceDeclarationCollection.Default
+                : new NamespaceDeclarationCollection(_namespaceDeclarations);
             return new Ticket(
                 _features.ToImmutable(),
                 _parameters.ToImmutable(),

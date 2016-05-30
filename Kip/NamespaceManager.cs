@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace Kip
 {
-    public interface IReadOnlyNamespaceManager : IReadOnlyCollection<NamespaceDeclaration>
+    public interface IReadOnlyNamespaceDeclarationCollection : IReadOnlyCollection<NamespaceDeclaration>
     {
         XNamespace LookupNamespace(string prefix);
         string LookupPrefix(XNamespace uri);
@@ -15,15 +15,15 @@ namespace Kip
         bool ContainsNamespace(XNamespace uri);
     }
 
-    public sealed class NamespaceManager : IReadOnlyNamespaceManager
+    public sealed class NamespaceDeclarationCollection : IReadOnlyNamespaceDeclarationCollection
     {
         private ImmutableDictionary<string, XNamespace> _map
             = ImmutableDictionary.Create<string, XNamespace>();
 
-        public static NamespaceManager Empty = new NamespaceManager();
-        public static NamespaceManager Default;
+        public static NamespaceDeclarationCollection Empty = new NamespaceDeclarationCollection();
+        public static NamespaceDeclarationCollection Default;
 
-        static NamespaceManager()
+        static NamespaceDeclarationCollection()
         {
             var map = ImmutableDictionary.CreateBuilder<string, XNamespace>();
             map.Add(Psf.Prefix, Psf.Namespace);
@@ -32,17 +32,17 @@ namespace Kip
             map.Add(Psk.Prefix, Psk.Namespace);
             map.Add(Pskv11.Prefix, Pskv11.Namespace);
 
-            Default = new NamespaceManager(map.ToImmutableDictionary());
+            Default = new NamespaceDeclarationCollection(map.ToImmutableDictionary());
         }
 
-        private NamespaceManager() { }
+        private NamespaceDeclarationCollection() { }
 
-        private NamespaceManager(ImmutableDictionary<string, XNamespace> map)
+        private NamespaceDeclarationCollection(ImmutableDictionary<string, XNamespace> map)
         {
             _map = map;
         }
 
-        internal NamespaceManager(IEnumerable<NamespaceDeclaration> declarations)
+        internal NamespaceDeclarationCollection(IEnumerable<NamespaceDeclaration> declarations)
         {
             var builder = ImmutableDictionary.CreateBuilder<string, XNamespace>();
             foreach (var decl in declarations)
@@ -84,7 +84,7 @@ namespace Kip
             return _map.ContainsValue(uri);
         }
 
-        public NamespaceManager Add(NamespaceDeclaration declaration)
+        public NamespaceDeclarationCollection Add(NamespaceDeclaration declaration)
         {
             if (ContainsPrefix(declaration.Prefix))
             {
@@ -94,7 +94,7 @@ namespace Kip
             return Add(declaration.Prefix, declaration.Uri);
         }
 
-        public NamespaceManager Add(string prefix, XNamespace uri)
+        public NamespaceDeclarationCollection Add(string prefix, XNamespace uri)
         {
             if (prefix == null) throw new ArgumentNullException(nameof(prefix));
             if (uri == null) throw new ArgumentNullException(nameof(uri));
@@ -104,14 +104,14 @@ namespace Kip
                 throw new ArgumentException($"\"{prefix}\" is already declared.", nameof(prefix));
             }
 
-            return new NamespaceManager(_map.Add(prefix, uri));
+            return new NamespaceDeclarationCollection(_map.Add(prefix, uri));
         }
 
-        public NamespaceManager Remove(string prefix)
+        public NamespaceDeclarationCollection Remove(string prefix)
         {
             if (prefix == null) throw new ArgumentNullException(nameof(prefix));
 
-            return new NamespaceManager(_map.Remove(prefix));
+            return new NamespaceDeclarationCollection(_map.Remove(prefix));
         }
 
         public IEnumerator<NamespaceDeclaration> GetEnumerator()

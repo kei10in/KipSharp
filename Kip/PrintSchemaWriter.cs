@@ -13,12 +13,12 @@ namespace Kip
             private Dictionary<XNamespace, string> cache = new Dictionary<XNamespace, string>();
             private int n = 0;
 
-            internal NamespaceResolver(IReadOnlyNamespaceManager namespaces)
+            internal NamespaceResolver(IReadOnlyNamespaceDeclarationCollection namespaces)
             {
-                NamespaceDeclarations = new NamespaceManager(namespaces);
+                NamespaceDeclarations = new NamespaceDeclarationCollection(namespaces);
             }
 
-            internal NamespaceManager NamespaceDeclarations { get; }
+            internal NamespaceDeclarationCollection NamespaceDeclarations { get; }
 
             internal void Add(XNamespace uri)
             {
@@ -97,18 +97,18 @@ namespace Kip
             writer.Flush();
         }
 
-        private static NamespaceManager NamespaceDeclarations(Capabilities pc)
+        private static NamespaceDeclarationCollection NamespaceDeclarations(Capabilities pc)
         {
             return NamespaceDeclarations(NamespaceCollector.Collect(pc), pc.DeclaredNamespaces);
         }
 
-        private static NamespaceManager NamespaceDeclarations(Ticket pt)
+        private static NamespaceDeclarationCollection NamespaceDeclarations(Ticket pt)
         {
             return NamespaceDeclarations(NamespaceCollector.Collect(pt), pt.DeclaredNamespaces);
         }
 
-        private static NamespaceManager NamespaceDeclarations(
-            IEnumerable<XNamespace> appeared, IReadOnlyNamespaceManager declared)
+        private static NamespaceDeclarationCollection NamespaceDeclarations(
+            IEnumerable<XNamespace> appeared, IReadOnlyNamespaceDeclarationCollection declared)
         {
             int n = 0;
             var result = new List<NamespaceDeclaration>();
@@ -128,7 +128,7 @@ namespace Kip
                 result.Add(new NamespaceDeclaration(prefix, uri));
             }
 
-            return new NamespaceManager(result);
+            return new NamespaceDeclarationCollection(result);
         }
 
         private static void Write(XmlWriter writer, Feature feature)
