@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Xunit;
 
 namespace Kip.Tests
@@ -19,10 +20,15 @@ namespace Kip.Tests
             var writer = new StringWriter();
             pc.Save(writer);
 
-            var reader = new StringReader(writer.ToString());
-            var actual = Capabilities.Load(reader);
+            var doc = XDocument.Parse(writer.ToString());
+            var element = doc.Root;
+            var decls = element.Attributes().Where(x => x.IsNamespaceDeclaration).ToList();
 
-            Assert.Equal(pc, actual);
+            Assert.Contains(decls, CompareWith(Psf.Declaration));
+            Assert.Contains(decls, CompareWith(Psk.Declaration));
+            Assert.Contains(decls, CompareWith(Xsd.Declaration));
+            Assert.Contains(decls, CompareWith(Xsi.Declaration));
+            Assert.Contains(decls, x => x.Value == Exp.Namespace.NamespaceName);
         }
 
         [Fact]
@@ -34,10 +40,25 @@ namespace Kip.Tests
             var writer = new StringWriter();
             pt.Save(writer);
 
-            var reader = new StringReader(writer.ToString());
-            var actual = Ticket.Load(reader);
+            var doc = XDocument.Parse(writer.ToString());
+            var element = doc.Root;
+            var decls = element.Attributes().Where(x => x.IsNamespaceDeclaration).ToList();
 
-            Assert.Equal(pt, actual);
+            Assert.Contains(decls, CompareWith(Psf.Declaration));
+            Assert.Contains(decls, CompareWith(Psk.Declaration));
+            Assert.Contains(decls, CompareWith(Xsd.Declaration));
+            Assert.Contains(decls, CompareWith(Xsi.Declaration));
+            Assert.Contains(decls, x => x.Value == Exp.Namespace.NamespaceName);
+        }
+
+        private Predicate<XAttribute> CompareWith(NamespaceDeclaration decl)
+        {
+            return (XAttribute x) =>
+            {
+                return x.IsNamespaceDeclaration
+                    && x.Name.LocalName == decl.Prefix
+                    && x.Value == decl.Uri.NamespaceName;
+            };
         }
     }
 }

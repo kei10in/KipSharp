@@ -25,6 +25,8 @@ namespace Kip
 
             var pc = new PrintSchemaCapabilities();
 
+            pc.Add(ReadNamespaceDeclarations(reader));
+
             foreach (var child in ReadChildren(reader))
             {
                 pc.Add(child);
@@ -49,12 +51,39 @@ namespace Kip
 
             var pt = new PrintSchemaTicket();
 
+            pt.Add(ReadNamespaceDeclarations(reader));
+
             foreach (var child in ReadChildren(reader))
             {
                 pt.Add(child);
             }
 
             return pt.GetResult();
+        }
+
+        public static IEnumerable<NamespaceDeclaration> ReadNamespaceDeclarations(XmlReader reader)
+        {
+            if (!reader.MoveToFirstAttribute())
+            {
+                return Enumerable.Empty<NamespaceDeclaration>();
+            }
+
+            var result = new List<NamespaceDeclaration>();
+
+            do
+            {
+                var name = reader.XName();
+                if (XNamespace.Xmlns == name.Namespace)
+                {
+                    // if name.LocalName is "xmlns", this is declaring default namespace.
+                    var prefix = (name.LocalName == "xmlns") ? "" : name.LocalName;
+                    var uri = reader.Value;
+                    var decl = new NamespaceDeclaration(prefix, uri);
+                    result.Add(decl);
+                }
+            } while (reader.MoveToNextAttribute());
+
+            return result;
         }
 
         public static IEnumerable<Element> ReadChildren(XmlReader reader)
@@ -289,6 +318,7 @@ namespace Kip
             = ImmutableNamedElementCollection.CreateParameterDefCollectionBuilder();
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+        private List<NamespaceDeclaration> _namespaceDeclarations;
 
         public PrintSchemaCapabilities() { }
 
@@ -300,13 +330,21 @@ namespace Kip
                 onProperty: x => _properties.Add(x));
         }
 
+        public void Add(IEnumerable<NamespaceDeclaration> declarations)
+        {
+            _namespaceDeclarations = declarations.ToList();
+        }
+
         public Capabilities GetResult()
         {
+            var nm = _namespaceDeclarations == null
+                ? NamespaceManager.Default
+                : new NamespaceManager(_namespaceDeclarations);
             return new Capabilities(
                 _features.ToImmutable(),
                 _parameters.ToImmutable(),
                 _properties.ToImmutable(),
-                NamespaceManager.Default);
+                nm);
         }
     }
 
@@ -318,6 +356,7 @@ namespace Kip
             = ImmutableNamedElementCollection.CreateParameterInitCollectionBuilder();
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+        private List<NamespaceDeclaration> _namespaceDeclarations;
 
         public PrintSchemaTicket() { }
 
@@ -329,13 +368,21 @@ namespace Kip
                 onProperty: x => _properties.Add(x));
         }
 
+        public void Add(IEnumerable<NamespaceDeclaration> declarations)
+        {
+            _namespaceDeclarations = declarations.ToList();
+        }
+
         public Ticket GetResult()
         {
+            var nm = _namespaceDeclarations == null
+                ? NamespaceManager.Default
+                : new NamespaceManager(_namespaceDeclarations);
             return new Ticket(
                 _features.ToImmutable(),
                 _parameters.ToImmutable(),
                 _properties.ToImmutable(),
-                NamespaceManager.Default);
+                nm);
         }
     }
 
