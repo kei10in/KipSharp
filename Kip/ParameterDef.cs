@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -8,7 +9,7 @@ namespace Kip
     /// Represents a ParameterDef element defined in the Print Schema
     /// Specificaiton.
     /// </summary>
-    public sealed class ParameterDef
+    public sealed class ParameterDef : IEquatable<ParameterDef>
     {
         /// <summary>
         /// Constructs with name and the <see cref="Property"/>s.

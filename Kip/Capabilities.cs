@@ -10,7 +10,7 @@ namespace Kip
     /// Represents a PrintCapabilities document defined in the Print Schema
     /// Specification.
     /// </summary>
-    public sealed class Capabilities
+    public sealed class Capabilities : IEquatable<Capabilities>
     {
         /// <summary>
         /// Constructs with children: <see cref="Feature"/>,

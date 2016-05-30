@@ -1,8 +1,9 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Kip
 {
-    public class NamespaceDeclaration
+    public class NamespaceDeclaration : IEquatable<NamespaceDeclaration>
     {
         public string Prefix { get; }
         public XNamespace Uri { get; }

@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Kip
 {
@@ -6,7 +7,7 @@ namespace Kip
     /// Represents a ParameterRef element defined in the Print Schema
     /// Specificaiton.
     /// </summary>
-    public sealed class ParameterRef
+    public sealed class ParameterRef : IEquatable<ParameterRef>
     {
         /// <summary>
         /// Constructs with the name.

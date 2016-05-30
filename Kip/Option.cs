@@ -8,7 +8,7 @@ namespace Kip
     /// <summary>
     /// Represents an Option element defined in the Print Schema Specificaiton.
     /// </summary>
-    public sealed class Option
+    public sealed class Option : IEquatable<Option>
     {
         /// <summary>
         /// Constructs with <see cref="Property"/>s and/or <see cref="ScoredProperty"/>s.

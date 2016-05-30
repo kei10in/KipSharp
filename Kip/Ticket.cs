@@ -10,7 +10,7 @@ namespace Kip
     /// Represents a PrintTicket document defined in the Print Schema
     /// Specification.
     /// </summary>
-    public sealed class Ticket
+    public sealed class Ticket : IEquatable<Ticket>
     {
         /// <summary>
         /// Constructs with children: <see cref="Feature"/>,

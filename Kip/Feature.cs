@@ -10,7 +10,7 @@ namespace Kip
     /// Represents an Feature element defined in the Print Schema
     /// Specification.
     /// </summary>
-    public sealed class Feature
+    public sealed class Feature : IEquatable<Feature>
     {
         /// <summary>
         /// Constructs with the name.

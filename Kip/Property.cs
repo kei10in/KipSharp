@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -8,7 +9,7 @@ namespace Kip
     /// Represents a Property element defined in the Print Schema
     /// Specificaiton.
     /// </summary>
-    public sealed class Property
+    public sealed class Property : IEquatable<Property>
     {
         /// <summary>
         /// Constructs with the name and the nested <see cref="Property"/>s.

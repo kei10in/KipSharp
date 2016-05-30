@@ -1,11 +1,12 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Kip
 {
     /// <summary>
     /// Represents a Value element defined in the Print Schema Specificaiton.
     /// </summary>
-    public sealed class Value
+    public sealed class Value : IEquatable<Value>
     {
         public static readonly Value Empty = new Value();
 

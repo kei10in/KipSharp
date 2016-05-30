@@ -12,6 +12,7 @@ namespace Kip
     [DebuggerTypeProxy(typeof(ImmutableNamedElementCollectionDebugView<>))]
     internal sealed class ImmutableNamedElementCollection<T>
         : IReadOnlyNamedElementCollection<T>
+        , IEquatable<ImmutableNamedElementCollection<T>>
         where T : class
     {
         private Func<T, XName> _nameOf;

@@ -9,7 +9,7 @@ namespace Kip
     /// Represents a ScoredProeprty element defined in the Print Schema
     /// Specificaiton.
     /// </summary>
-    public sealed class ScoredProperty
+    public sealed class ScoredProperty : IEquatable<ScoredProperty>
     {
         /// <summary>
         /// Constructs with the name and the children:
