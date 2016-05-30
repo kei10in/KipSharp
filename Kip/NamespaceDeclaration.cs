@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace Kip
 {
-    public class NamespaceDeclaration : IEquatable<NamespaceDeclaration>
+    public sealed class NamespaceDeclaration : IEquatable<NamespaceDeclaration>
     {
         public string Prefix { get; }
         public XNamespace Uri { get; }
