@@ -150,7 +150,7 @@ namespace Kip.Tests
             Assert.Equal(Psk.Namespace, actual.DeclaredNamespaces.LookupNamespace(Psk.Prefix));
             Assert.Equal(Xsd.Namespace, actual.DeclaredNamespaces.LookupNamespace(Xsd.Prefix));
             Assert.Equal(Xsi.Namespace, actual.DeclaredNamespaces.LookupNamespace(Xsi.Prefix));
-            Assert.Equal(Exp.Namespace, actual.DeclaredNamespaces.LookupNamespace(""));
+            Assert.Equal(Exp.Namespace, actual.DeclaredNamespaces.LookupNamespace(string.Empty));
         }
     }
 }

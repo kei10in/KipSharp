@@ -76,7 +76,7 @@ namespace Kip
                 if (XNamespace.Xmlns == name.Namespace)
                 {
                     // if name.LocalName is "xmlns", this is declaring default namespace.
-                    var prefix = (name.LocalName == "xmlns") ? "" : name.LocalName;
+                    var prefix = (name.LocalName == "xmlns") ? string.Empty : name.LocalName;
                     var uri = reader.Value;
                     var decl = new NamespaceDeclaration(prefix, uri);
                     result.Add(decl);
