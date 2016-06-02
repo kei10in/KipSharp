@@ -8,10 +8,10 @@ namespace Kip
         public static readonly string Prefix = "pskv11";
         public static readonly NamespaceDeclaration Declaration = new NamespaceDeclaration(Prefix, Namespace);
 
-        public static readonly XName JobPasscode = Namespace + "JobPasscode";
-        public static readonly XName JobPasscodeString = Namespace + "JobPasscodeString";
-        public static readonly XName JobImageFormat = Namespace + "JobImageFormat";
-        public static readonly XName Jpeg = Namespace + "Jpeg";
-        public static readonly XName PNG = Namespace + "PNG";
+        public static readonly FeatureName JobPasscode = new FeatureName(Namespace + "JobPasscode");
+        public static readonly ParameterName JobPasscodeString = new ParameterName(Namespace + "JobPasscodeString");
+        public static readonly FeatureName JobImageFormat = new FeatureName(Namespace + "JobImageFormat");
+        public static readonly PrintSchemaName Jpeg = new PrintSchemaName(Namespace + "Jpeg");
+        public static readonly PrintSchemaName PNG = new PrintSchemaName(Namespace + "PNG");
     }
 }

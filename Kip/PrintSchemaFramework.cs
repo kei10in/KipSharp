@@ -8,28 +8,32 @@ namespace Kip
         public static readonly string Prefix = "psf";
         public static readonly NamespaceDeclaration Declaration = new NamespaceDeclaration(Prefix, Namespace);
 
-        public static readonly XName PrintCapabilities = Namespace + "PrintCapabilities";
-        public static readonly XName PrintTicket = Namespace + "PrintTicket";
-        public static readonly XName Feature = Namespace + "Feature";
-        public static readonly XName Option = Namespace + "Option";
-        public static readonly XName ParameterDef = Namespace + "ParameterDef";
-        public static readonly XName ParameterInit = Namespace + "ParameterInit";
-        public static readonly XName ParameterRef = Namespace + "ParameterRef";
-        public static readonly XName Property = Namespace + "Property";
-        public static readonly XName ScoredProperty = Namespace + "ScoredProperty";
-        public static readonly XName Value = Namespace + "Value";
+        // Tag names
+        public static readonly PrintSchemaName PrintCapabilities = new PrintSchemaName(Namespace + "PrintCapabilities");
+        public static readonly PrintSchemaName PrintTicket = new PrintSchemaName(Namespace + "PrintTicket");
+        public static readonly PrintSchemaName Feature = new PrintSchemaName(Namespace + "Feature");
+        public static readonly PrintSchemaName Option = new PrintSchemaName(Namespace + "Option");
+        public static readonly PrintSchemaName ParameterDef = new PrintSchemaName(Namespace + "ParameterDef");
+        public static readonly PrintSchemaName ParameterInit = new PrintSchemaName(Namespace + "ParameterInit");
+        public static readonly PrintSchemaName ParameterRef = new PrintSchemaName(Namespace + "ParameterRef");
+        public static readonly PrintSchemaName Property = new PrintSchemaName(Namespace + "Property");
+        public static readonly PrintSchemaName ScoredProperty = new PrintSchemaName(Namespace + "ScoredProperty");
+        public static readonly PrintSchemaName Value = new PrintSchemaName(Namespace + "Value");
 
-        public static readonly XName SelectionType = Namespace + "SelectionType";
-        public static readonly XName IdentityOption = Namespace + "IdentityOpiton";
+        // Property for Feature
+        public static readonly PropertyName SelectionType = new PropertyName(Namespace + "SelectionType");
+        // Property for Option
+        public static readonly PropertyName IdentityOption = new PropertyName(Namespace + "IdentityOpiton");
 
-        public static readonly XName DataType = Namespace + "DataType";
-        public static readonly XName DefaultValue = Namespace + "DefaultValue";
-        public static readonly XName MaxLength = Namespace + "MaxLength";
-        public static readonly XName MinLength = Namespace + "MinLength";
-        public static readonly XName MaxValue = Namespace + "MaxValue";
-        public static readonly XName MinValue = Namespace + "MinValue";
-        public static readonly XName Mandatory = Namespace + "Mandatory";
-        public static readonly XName UnitType = Namespace + "UnitType";
+        // Property for Parameter
+        public static readonly PropertyName DataType = new PropertyName(Namespace + "DataType");
+        public static readonly PropertyName DefaultValue = new PropertyName(Namespace + "DefaultValue");
+        public static readonly PropertyName MaxLength = new PropertyName(Namespace + "MaxLength");
+        public static readonly PropertyName MinLength = new PropertyName(Namespace + "MinLength");
+        public static readonly PropertyName MaxValue = new PropertyName(Namespace + "MaxValue");
+        public static readonly PropertyName MinValue = new PropertyName(Namespace + "MinValue");
+        public static readonly PropertyName Mandatory = new PropertyName(Namespace + "Mandatory");
+        public static readonly PropertyName UnitType = new PropertyName(Namespace + "UnitType");
 
     }
 }
