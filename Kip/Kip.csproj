@@ -62,6 +62,7 @@
       <DependentUpon>PrintSchemaKeywords.tt</DependentUpon>
     </Compile>
     <Compile Include="PrintSchemaKeywordsV11.cs" />
+    <Compile Include="PrintSchemaName.cs" />
     <Compile Include="PrintSchemaReader.cs" />
     <Compile Include="PrintSchemaWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

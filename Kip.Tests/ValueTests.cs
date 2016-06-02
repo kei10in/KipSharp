@@ -23,8 +23,8 @@ namespace Kip.Tests
         [Fact]
         public void ComparableWithXNameValue()
         {
-            var v = new Value(Psf.Feature);
-            Assert.Equal(Psf.Feature, v);
+            var v = new Value(Exp.SomeValue);
+            Assert.Equal(Exp.SomeValue, v);
         }
 
         [Fact]
