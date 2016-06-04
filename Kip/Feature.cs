@@ -69,7 +69,7 @@ namespace Kip
 
         private readonly ImmutableList<Option> _options
             = ImmutableList.Create<Option>();
-        public IReadOnlyCollection<Option> Options()
+        public IReadOnlyList<Option> Options()
         {
             return _options;
         }
@@ -97,6 +97,17 @@ namespace Kip
         public Feature Add(Option option)
         {
             return new Feature(Name, _properties, _options.Add(option), _features);
+        }
+
+        /// <summary>
+        /// Set the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <param name="option">The option to set to <see cref="Feature"/>.</param>       
+        /// <returns>A new Feature with the element set.</returns>
+        public Feature Set(Option option)
+        {
+            var options = new []{ option };
+            return new Feature(Name, _properties, options.ToImmutableList(), _features);
         }
 
         /// <summary>

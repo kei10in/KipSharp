@@ -80,6 +80,12 @@ namespace Kip
             return new ImmutableNamedElementCollection<T>(_nameOf, _elements.Remove(name));
         }
 
+        public ImmutableNamedElementCollection<T> SetItem(T element)
+        {
+            var name = _nameOf(element);
+            return new ImmutableNamedElementCollection<T>(_nameOf, _elements.SetItem(name, element));
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return _elements.Values.GetEnumerator();

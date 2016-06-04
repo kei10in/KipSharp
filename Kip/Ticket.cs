@@ -55,6 +55,33 @@ namespace Kip
             return _features;
         }
 
+        public IReadOnlyList<Option> this[FeatureName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _features[name].Options();
+            }
+        }
+
+        /// <summary>
+        /// Set an option to the Feature specified by name.
+        /// </summary>
+        /// <param name="name">The name of Feature to set.</param>
+        /// <param name="selection">An option to set to the Feature.</param>
+        /// <returns>A new Ticket with the option set.</returns>
+        public Ticket Set(FeatureName name, Option selection)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (selection == null) throw new ArgumentNullException(nameof(selection));
+
+            var ft = _features.Contains(name)
+                ? _features[name].Set(selection)
+                : new Feature(name, selection);
+
+            return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
+        }
+
         private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
             = ImmutableNamedElementCollection.CreateParameterInitCollection();
         public IReadOnlyNamedElementCollection<ParameterInit> Parameters()
@@ -74,7 +101,7 @@ namespace Kip
         {
             get { return _declaredNamespaces; }
         }
-    
+
         /// <summary>
         /// Adds the specified element to the ticket.
         /// </summary>

@@ -44,5 +44,31 @@ namespace Kip.Tests
                 Assert.NotEqual(pair.Item1, pair.Item2);
             }
         }
+
+        readonly Ticket EmptyTicket = new Ticket();
+        readonly Option ISOA4 = new Option(Psk.ISOA4);
+        readonly Option NorthAmericaLetter = new Option(Psk.NorthAmericaLetter);
+
+        [Fact]
+        public void SetOption()
+        {
+            var pt = EmptyTicket.Set(Psk.PageMediaSize, ISOA4);
+            var op = pt[Psk.PageMediaSize];
+            Assert.NotNull(op);
+            Assert.Equal(1, op.Count);
+            Assert.Equal(Psk.ISOA4, op[0].Name);
+        }
+
+        [Fact]
+        public void OverwriteOptionOfFeatureAlreadyExisted()
+        {
+            var pt = EmptyTicket.Set(Psk.PageMediaSize, ISOA4);
+
+            var overwitten = pt.Set(Psk.PageMediaSize, NorthAmericaLetter);
+            var op = overwitten[Psk.PageMediaSize];
+            Assert.NotNull(op);
+            Assert.Equal(1, op.Count);
+            Assert.Equal(Psk.NorthAmericaLetter, op[0].Name);
+        }
     }
 }
