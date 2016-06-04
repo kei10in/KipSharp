@@ -89,6 +89,31 @@ namespace Kip
             return _parameters;
         }
 
+        public Value this[ParameterName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _parameters[name].Value;
+            }
+        }
+
+        /// <summary>
+        /// Set a value to the ParameterInit specified by name.
+        /// </summary>
+        /// <param name="name">The name of the ParameterInit to set.</param>
+        /// <param name="value">A value to set to the ParameterInit.</param>
+        /// <returns>A new Ticket with the value set.</returns>
+        public Ticket Set(ParameterName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var pi = new ParameterInit(name, value);
+
+            return new Ticket(_features, _parameters.SetItem(pi), _properties, _declaredNamespaces);
+        }
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties()

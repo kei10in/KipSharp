@@ -70,5 +70,25 @@ namespace Kip.Tests
             Assert.Equal(1, op.Count);
             Assert.Equal(Psk.NorthAmericaLetter, op[0].Name);
         }
+
+        [Fact]
+        public void SetValueToParameter()
+        {
+            var pt = EmptyTicket.Set(Psk.JobCopiesAllDocuments, 2);
+            var copies = pt[Psk.JobCopiesAllDocuments];
+            Assert.NotNull(copies);
+            Assert.Equal(copies, 2);
+        }
+
+        [Fact]
+        public void OverwriteParameterAlreadyExisted()
+        {
+            var pt = EmptyTicket.Set(Psk.JobCopiesAllDocuments, 2);
+
+            var overwitten = pt.Set(Psk.JobCopiesAllDocuments, 3);
+            var copies = overwitten[Psk.JobCopiesAllDocuments];
+            Assert.NotNull(copies);
+            Assert.Equal(copies, 3);
+        }
     }
 }
