@@ -40,16 +40,20 @@ namespace Kip
         {
             get
             {
-                T result;
-                if (_elements.TryGetValue(name, out result))
+                try
                 {
-                    return result;
+                    return _elements[name];
                 }
-                else
+                catch (KeyNotFoundException exp)
                 {
-                    return null;
+                    throw new KeyNotFoundException($"{name} not found.", exp);
                 }
             }
+        }
+
+        public T Get(XName name)
+        {
+            return _elements.GetValueOrDefault(name, null);
         }
 
         public bool Contains(XName name)

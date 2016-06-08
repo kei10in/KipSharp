@@ -64,6 +64,12 @@ namespace Kip
             }
         }
 
+        public IReadOnlyList<Option> Get(FeatureName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _features.Get(name)?.Options();
+        }
+
         /// <summary>
         /// Set an option to the Feature specified by name.
         /// </summary>
@@ -98,6 +104,12 @@ namespace Kip
             }
         }
 
+        public Value Get(ParameterName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _parameters.Get(name)?.Value;
+        }
+
         /// <summary>
         /// Set a value to the ParameterInit specified by name.
         /// </summary>
@@ -128,6 +140,12 @@ namespace Kip
                 if (name == null) throw new ArgumentNullException(nameof(name));
                 return _properties[name].Value;
             }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
         }
 
         /// <summary>

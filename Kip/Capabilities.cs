@@ -77,16 +77,16 @@ namespace Kip
 
         public IEnumerable<Option> GetFeatureOptions(XName featureName)
         {
-            var options = Features[featureName]?.Options();
+            var options = Features.Get(featureName)?.Options();
             return options ?? Enumerable.Empty<Option>();
         }
 
         public IEnumerable<Option> GetFeatureOptions(XName featureName, params XName[] nestedFeatureNames)
         {
-            var ft = Features[featureName];
+            var ft = Features.Get(featureName);
             foreach (var nestedFeatureName in nestedFeatureNames)
             {
-                ft = ft?.Features[nestedFeatureName];
+                ft = ft?.Features.Get(nestedFeatureName);
             }
             var options = ft?.Options();
             return options ?? Enumerable.Empty<Option>();
