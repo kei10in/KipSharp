@@ -90,5 +90,25 @@ namespace Kip.Tests
             Assert.NotNull(copies);
             Assert.Equal(copies, 3);
         }
+
+        [Fact]
+        public void SetValueToProperty()
+        {
+            var pt = EmptyTicket.Set(Psk.JobID, "Some job name");
+            var prop = pt[Psk.JobID];
+            Assert.NotNull(prop);
+            Assert.Equal(prop, "Some job name");
+        }
+
+        [Fact]
+        public void OverwritePropertyAlreadyExisted()
+        {
+            var pt = EmptyTicket.Set(Psk.JobID, "Some job name");
+
+            var overwitten = pt.Set(Psk.JobCopiesAllDocuments, "New job name");
+            var prop = overwitten[Psk.JobCopiesAllDocuments];
+            Assert.NotNull(prop);
+            Assert.Equal(prop, "New job name");
+        }
     }
 }

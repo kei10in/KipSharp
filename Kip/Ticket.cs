@@ -121,6 +121,31 @@ namespace Kip
             return _properties;
         }
 
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        /// <summary>
+        /// Set a value to the Property specified by name.
+        /// </summary>
+        /// <param name="name">The name of the Property to set.</param>
+        /// <param name="value">A value to set to the Property.</param>
+        /// <returns>A new Ticket with the value set.</returns>
+        public Ticket Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var p = new Property(name, value);
+
+            return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
+        }
+
         private readonly NamespaceDeclarationCollection _declaredNamespaces;
         public IReadOnlyNamespaceDeclarationCollection DeclaredNamespaces
         {
