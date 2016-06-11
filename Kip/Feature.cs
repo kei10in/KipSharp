@@ -81,6 +81,16 @@ namespace Kip
             get { return _features; }
         }
 
+        public Feature this[FeatureName name]
+        {
+            get { return _features[name]; }
+        }
+
+        public Feature Get(FeatureName name)
+        {
+            return _features.Get(name);
+        }
+
         /// <summary>
         /// Add the specified element to the <see cref="Feature"/>.
         /// </summary>
@@ -106,7 +116,7 @@ namespace Kip
         /// <returns>A new Feature with the element set.</returns>
         public Feature Set(Option option)
         {
-            var options = new []{ option };
+            var options = new[] { option };
             return new Feature(Name, _properties, options.ToImmutableList(), _features);
         }
 
@@ -118,6 +128,19 @@ namespace Kip
         {
             return new Feature(Name, _properties, _options, _features.Add(feature));
         }
+
+        public Feature Set(FeatureName name, Option selection)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (selection == null) throw new ArgumentNullException(nameof(selection));
+
+            var ft = _features.Contains(name)
+                ? _features[name].Set(selection)
+                : new Feature(name, selection);
+
+            return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
+
 
         public override bool Equals(object obj)
         {

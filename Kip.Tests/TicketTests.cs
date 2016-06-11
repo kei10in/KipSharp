@@ -72,6 +72,17 @@ namespace Kip.Tests
         }
 
         [Fact]
+        public void SetOptionToNestedFeature()
+        {
+            var pd = new Option(Psk.LeftBottom);
+            var pt = EmptyTicket.Set(Psk.JobNUpAllDocumentsContiguously, Psk.PresentationDirection, pd);
+            var op = pt[Psk.JobNUpAllDocumentsContiguously, Psk.PresentationDirection];
+            Assert.NotNull(op);
+            Assert.Equal(1, op.Count);
+            Assert.Equal(Psk.LeftBottom, op[0].Name);
+        }
+
+        [Fact]
         public void SetValueToParameter()
         {
             var pt = EmptyTicket.Set(Psk.JobCopiesAllDocuments, 2);

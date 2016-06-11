@@ -63,11 +63,27 @@ namespace Kip
                 return _features[name].Options();
             }
         }
+        public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _features[name1][name2].Options();
+            }
+        }
 
         public IReadOnlyList<Option> Get(FeatureName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _features.Get(name)?.Options();
+        }
+
+        public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _features.Get(name1)?.Get(name2)?.Options();
         }
 
         /// <summary>
@@ -84,6 +100,26 @@ namespace Kip
             var ft = _features.Contains(name)
                 ? _features[name].Set(selection)
                 : new Feature(name, selection);
+
+            return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
+        }
+
+        /// <summary>
+        /// Set an option to the Feature specified by name.
+        /// </summary>
+        /// <param name="name1">The name of Feature containing the nested Feature.</param>
+        /// <param name="name2">The name of the nested Feature to set.</param>
+        /// <param name="selection">An option to set to the Feature.</param>
+        /// <returns>A new Ticket with the option set.</returns>
+        public Ticket Set(FeatureName name1, FeatureName name2, Option selection)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            if (selection == null) throw new ArgumentNullException(nameof(selection));
+
+            var ft = _features.Contains(name1)
+                ? _features[name1].Set(selection)
+                : new Feature(name1, new Feature(name2, selection));
 
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
