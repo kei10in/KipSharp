@@ -67,6 +67,56 @@ namespace Kip
             get { return _properties; }
         }
 
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        /// <summary>
+        /// Set a value to the Property specified by the name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Feature Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
+            var p = _properties.Get(name)?.Set(value)
+                ?? new Property(name, value);
+
+            return new Feature(Name, _properties.SetItem(p), _options, _features);
+        }
+
+        /// <summary>
+        /// Set a value to the nested Property specified by the name1 and
+        /// name2.
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Feature Set(PropertyName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            var p = _properties.Get(name1)?.Set(name2, value)
+                ?? new Property(name1, new Property(name2, value));
+
+            return new Feature(Name, _properties.SetItem(p), _options, _features);
+        }
+
         private readonly ImmutableList<Option> _options
             = ImmutableList.Create<Option>();
         public IReadOnlyList<Option> Options()
@@ -141,6 +191,48 @@ namespace Kip
             return new Feature(Name, _properties, _options, _features.SetItem(ft));
         }
 
+        public Value this[FeatureName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+                return _features[name1][name2];
+            }
+        }
+
+        /// <summary>
+        /// Get a value of the Property of the nested Feature.
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <returns></returns>
+        public Value Get(FeatureName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            return _features.Get(name1)?.Get(name2);
+        }
+
+        /// <summary>
+        /// Set a value to the Property of the nested Feature.
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Feature Set(FeatureName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            var ft = _features.Get(name1)?.Set(name2, value)
+                ?? new Feature(name1, new Property(name2, value));
+
+            return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
 
         public override bool Equals(object obj)
         {

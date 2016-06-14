@@ -55,11 +55,38 @@ namespace Kip
             get;
         }
 
+        public Property Set(Value value)
+        {
+            return new Property(Name, value, _properties);
+        }
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
+        }
+
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        public Property Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            var p = _properties.Get(name) ?? new Property(name);
+            return new Property(Name, value, _properties.SetItem(p));
         }
 
         /// <summary>

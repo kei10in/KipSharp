@@ -45,5 +45,23 @@ namespace Kip.Tests
                 Assert.NotEqual(pair.Item1, pair.Item2);
             }
         }
+
+        [Fact]
+        public void SetPropertyValue()
+        {
+            var ft = new Feature(Exp.SomeFeature);
+            ft = ft.Set(Exp.SomeProperty, 10);
+
+            Assert.Equal(10, ft.Get(Exp.SomeProperty));
+        }
+
+        [Fact]
+        public void SetPropertyValueToTheNestedFeature()
+        {
+            var ft = new Feature(Exp.SomeFeature);
+            ft = ft.Set(Exp.NestedFeature, Exp.SomeProperty, 10);
+
+            Assert.Equal(10, ft.Get(Exp.NestedFeature, Exp.SomeProperty));
+        }
     }
 }

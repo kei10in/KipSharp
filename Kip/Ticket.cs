@@ -97,9 +97,10 @@ namespace Kip
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (selection == null) throw new ArgumentNullException(nameof(selection));
 
+            var sel = ToPrintTicketOption(selection);
             var ft = _features.Contains(name)
-                ? _features[name].Set(selection)
-                : new Feature(name, selection);
+                ? _features[name].Set(sel)
+                : new Feature(name, sel);
 
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
@@ -117,11 +118,20 @@ namespace Kip
             if (name2 == null) throw new ArgumentNullException(nameof(name2));
             if (selection == null) throw new ArgumentNullException(nameof(selection));
 
+            var sel = ToPrintTicketOption(selection);
             var ft = _features.Contains(name1)
-                ? _features[name1].Set(selection)
-                : new Feature(name1, new Feature(name2, selection));
+                ? _features[name1].Set(sel)
+                : new Feature(name1, new Feature(name2, sel));
 
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
+        }
+
+        private Option ToPrintTicketOption(Option option)
+        {
+            return option.Remove(Psk.DisplayName)
+                .Remove(Psk.DisplayUI)
+                .Remove(Psf.IdentityOption)
+                .SetConstrained(null);
         }
 
         private readonly ImmutableNamedElementCollection<ParameterInit> _parameters

@@ -82,10 +82,35 @@ namespace Kip
             get;
         }
 
+        public ValueOrParameterRef ValueOrParameterRef
+        {
+            get
+            {
+                if (Value != null) return new ValueOrParameterRef(Value);
+                if (ParameterRef != null) return new ValueOrParameterRef(ParameterRef);
+                else return null;
+            }
+        }
+
         private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
         public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
         {
             get { return _scoredProperties; }
+        }
+
+        public ValueOrParameterRef this[ScoredPropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _scoredProperties[name].ValueOrParameterRef;
+            }
+        }
+
+        public ValueOrParameterRef Get(ScoredPropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _scoredProperties.Get(name)?.ValueOrParameterRef;
         }
 
         private readonly ImmutableNamedElementCollection<Property> _properties;
@@ -176,6 +201,51 @@ namespace Kip
         public static implicit operator ScoredPropertyChild(ScoredProperty element)
         {
             return new ScoredPropertyChild(element);
+        }
+    }
+
+    public class ValueOrParameterRef
+    {
+        private object _content;
+
+        public ValueOrParameterRef(Value value)
+        {
+            _content = value;
+        }
+
+        public ValueOrParameterRef(ParameterRef paramterRef)
+        {
+            _content = paramterRef;
+        }
+
+        public XName Type
+        {
+            get
+            {
+                var type = _content.GetType();
+                if (type == typeof(Value))
+                {
+                    return Psf.Feature;
+                }
+                else if (type == typeof(ParameterRef))
+                {
+                    return Psf.ParameterRef;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unexpected type.");
+                }
+            }
+        }
+
+        public Value AsValue()
+        {
+            return _content as Value;
+        }
+
+        public ParameterRef AsParamterRef()
+        {
+            return _content as ParameterRef; ;
         }
     }
 }

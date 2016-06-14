@@ -34,11 +34,11 @@ namespace Kip.Tests
     {
         internal static readonly XNamespace Namespace = "http://example.com/2015/printschemakeywords";
 
-        internal static readonly XName SomeFeature = Namespace + "SomeFeature";
-        internal static readonly XName SomeFeature1 = Namespace + "SomeFeature1";
-        internal static readonly XName SomeFeature2 = Namespace + "SomeFeature2";
-        internal static readonly XName NestedFeature = Namespace + "NestedFeature";
-        internal static readonly XName OtherFeature = Namespace + "OtherFeature";
+        internal static readonly FeatureName SomeFeature = new FeatureName(Namespace + "SomeFeature");
+        internal static readonly FeatureName SomeFeature1 = new FeatureName(Namespace + "SomeFeature1");
+        internal static readonly FeatureName SomeFeature2 = new FeatureName(Namespace + "SomeFeature2");
+        internal static readonly FeatureName NestedFeature = new FeatureName(Namespace + "NestedFeature");
+        internal static readonly FeatureName OtherFeature = new FeatureName(Namespace + "OtherFeature");
 
         internal static readonly XName SomeOption = Namespace + "SomeOption";
         internal static readonly XName SomeOption1 = Namespace + "SomeOption1";
@@ -46,7 +46,8 @@ namespace Kip.Tests
 
         internal static readonly XName SomeParameter = Namespace + "SomeParameter";
 
-        internal static readonly XName SomeProperty = Namespace + "SomeProperty";
+        internal static readonly PropertyName SomeProperty = new PropertyName(Namespace + "SomeProperty");
+        internal static readonly PropertyName NestedProperty = new PropertyName(Namespace + "NestedProperty");
 
         internal static readonly XName SomeScoredProperty = Namespace + "SomeScoredProperty";
 
