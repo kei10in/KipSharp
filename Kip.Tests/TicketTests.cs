@@ -121,5 +121,22 @@ namespace Kip.Tests
             Assert.NotNull(prop);
             Assert.Equal(prop, "New job name");
         }
+
+        [Fact]
+        public void RemoveInvalidPropertyFromOption()
+        {
+            var op = new Option(Psk.ISOA4, Psk.PrintTicketSettings,
+                new Property(Psk.DisplayName, "A4"),
+                new Property(Psk.DisplayUI, "Show"),
+                new Property(Psf.IdentityOption, "True"));
+            var pt = EmptyTicket.Set(Psk.PageMediaSize, op);
+            var actual = pt.Get(Psk.PageMediaSize)[0];
+
+            Assert.NotNull(actual);
+            Assert.Null(actual.Constrained);
+            Assert.Null(actual.Get(Psk.DisplayName));
+            Assert.Null(actual.Get(Psk.DisplayUI));
+            Assert.Null(actual.Get(Psf.IdentityOption));
+        }
     }
 }
