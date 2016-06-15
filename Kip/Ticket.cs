@@ -284,47 +284,6 @@ namespace Kip
             get { return _declaredNamespaces; }
         }
 
-        #endregion
-
-        /// <summary>
-        /// Adds the specified element to the ticket.
-        /// </summary>
-        /// <returns>A new Ticket with element added.</returns>
-        public Ticket Add(Feature element)
-        {
-            return new Ticket(
-                _features.Add(element),
-                _parameters,
-                _properties,
-                _declaredNamespaces);
-        }
-
-        /// <summary>
-        /// Adds the specified element to the ticket.
-        /// </summary>
-        /// <returns>A new Ticket with element added.</returns>
-        public Ticket Add(ParameterInit element)
-        {
-            return new Ticket(
-                _features,
-                _parameters.Add(element),
-                _properties,
-                _declaredNamespaces);
-        }
-
-        /// <summary>
-        /// Adds the specified element to the ticket.
-        /// </summary>
-        /// <returns>A new Ticket with element added.</returns>
-        public Ticket Add(Property element)
-        {
-            return new Ticket(
-                _features,
-                _parameters,
-                _properties.Add(element),
-                _declaredNamespaces);
-        }
-
         public Ticket Add(NamespaceDeclaration declaration)
         {
             return new Ticket(
@@ -333,6 +292,8 @@ namespace Kip
                 _properties,
                 _declaredNamespaces.Add(declaration));
         }
+
+        #endregion
 
         public override bool Equals(object obj)
         {
