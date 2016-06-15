@@ -233,6 +233,47 @@ namespace Kip
             return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
         }
 
+        #region Nested properties
+
+        public Value this[PropertyName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+                return _properties[name1][name2];
+            }
+        }
+
+        public Value Get(PropertyName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _properties.Get(name1)?.Get(name2);
+        }
+
+        /// <summary>
+        /// Set a value to the Property specified by name.
+        /// </summary>
+        /// <param name="name1">The name of the Property containing the nested
+        /// Property.</param>
+        /// <param name="name2">The name of the nested Property to set.</param>
+        /// <param name="value">A value to set to the Property.</param>
+        /// <returns>A new Ticket with the value set.</returns>
+        public Ticket Set(PropertyName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var p = _properties.Get(name1)?.Set(name2, value)
+                ?? new Property(name1, new Property(name2, value));
+
+            return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
+        }
+
+        #endregion
+
         #endregion
 
         #region Namespace declarations
