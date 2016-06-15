@@ -12,6 +12,9 @@ namespace Kip
     /// </summary>
     public sealed class Ticket : IEquatable<Ticket>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with children: <see cref="Feature"/>,
         /// <see cref="ParameterInit"/> and/or <see cref="Property"/>.
@@ -48,6 +51,12 @@ namespace Kip
             _declaredNamespaces = namespaceDeclarations;
         }
 
+        #endregion
+
+        #region Features
+
+        #region Top level features
+
         private readonly ImmutableNamedElementCollection<Feature> _features
             = ImmutableNamedElementCollection.CreateFeatureCollection();
         public IReadOnlyNamedElementCollection<Feature> Features()
@@ -69,7 +78,7 @@ namespace Kip
             {
                 if (name1 == null) throw new ArgumentNullException(nameof(name1));
                 if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _features[name1][name2].Options();
+                return _features[name1][name2];
             }
         }
 
@@ -77,13 +86,6 @@ namespace Kip
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _features.Get(name)?.Options();
-        }
-
-        public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
-        {
-            if (name1 == null) throw new ArgumentNullException(nameof(name1));
-            if (name2 == null) throw new ArgumentNullException(nameof(name2));
-            return _features.Get(name1)?.Get(name2)?.Options();
         }
 
         /// <summary>
@@ -103,6 +105,17 @@ namespace Kip
                 : new Feature(name, sel);
 
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
+        }
+
+        #endregion
+
+        #region Nested Features
+
+        public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _features.Get(name1)?.Get(name2);
         }
 
         /// <summary>
@@ -126,6 +139,8 @@ namespace Kip
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
 
+        #endregion
+
         private Option ToPrintTicketOption(Option option)
         {
             return option.Remove(Psk.DisplayName)
@@ -133,6 +148,10 @@ namespace Kip
                 .Remove(Psf.IdentityOption)
                 .SetConstrained(null);
         }
+
+        #endregion
+
+        #region Parameters
 
         private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
             = ImmutableNamedElementCollection.CreateParameterInitCollection();
@@ -172,6 +191,10 @@ namespace Kip
             return new Ticket(_features, _parameters.SetItem(pi), _properties, _declaredNamespaces);
         }
 
+        #endregion
+
+        #region Properties
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties()
@@ -210,11 +233,17 @@ namespace Kip
             return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
         }
 
+        #endregion
+
+        #region Namespace declarations
+
         private readonly NamespaceDeclarationCollection _declaredNamespaces;
         public IReadOnlyNamespaceDeclarationCollection DeclaredNamespaces
         {
             get { return _declaredNamespaces; }
         }
+
+        #endregion
 
         /// <summary>
         /// Adds the specified element to the ticket.

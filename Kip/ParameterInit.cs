@@ -34,7 +34,7 @@ namespace Kip
         /// Sets the specified <see cref="Value"/> to the ParameterInit.
         /// </summary>
         /// <returns>A new ParameterInit with the value set.</returns>
-        public ParameterInit SetValue(Value value)
+        public ParameterInit Set(Value value)
         {
             return new ParameterInit(Name, value);
         }

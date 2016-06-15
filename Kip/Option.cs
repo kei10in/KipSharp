@@ -10,6 +10,8 @@ namespace Kip
     /// </summary>
     public sealed class Option : IEquatable<Option>
     {
+        #region Constructors
+
         /// <summary>
         /// Constructs with <see cref="Property"/>s and/or <see cref="ScoredProperty"/>s.
         /// </summary>
@@ -60,15 +62,31 @@ namespace Kip
             _scoredProperties = scoredPropertis;
         }
 
+        #endregion
+
         public XName Name
         {
             get;
         }
 
+        #region The constrained value
         public XName Constrained
         {
             get;
         }
+
+        /// <summary>
+        /// Set constrained value.
+        /// </summary>
+        /// <returns>A new Option with constrained value set.</returns>
+        public Option SetConstrained(XName constrained)
+        {
+            return new Option(Name, constrained, _properties, _scoredProperties);
+        }
+
+        #endregion
+
+        #region Properties
 
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
@@ -105,6 +123,10 @@ namespace Kip
             return new Option(Name, Constrained, _properties.Remove(name), _scoredProperties);
         }
 
+        #endregion
+
+        #region Nested properties
+
         public Value this[PropertyName name1, PropertyName name2]
         {
             get
@@ -131,6 +153,10 @@ namespace Kip
             return new Option(Name, Constrained, _properties.SetItem(p), _scoredProperties);
         }
 
+        #endregion
+
+        #region Scored properties
+
         private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
             = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
         public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
@@ -153,7 +179,11 @@ namespace Kip
             return _scoredProperties.Get(name)?.ValueOrParameterRef;
         }
 
-        public ValueOrParameterRef this[ScoredPropertyName name1, ScoredPropertyName name2 ]
+        #endregion
+
+        #region Nested scored properties
+
+        public ValueOrParameterRef this[ScoredPropertyName name1, ScoredPropertyName name2]
         {
             get
             {
@@ -170,14 +200,7 @@ namespace Kip
             return _scoredProperties.Get(name1)?.Get(name2);
         }
 
-        /// <summary>
-        /// Set constrained value.
-        /// </summary>
-        /// <returns>A new Option with constrained value set.</returns>
-        public Option SetConstrained(XName constrained)
-        {
-            return new Option(Name, constrained, _properties, _scoredProperties);
-        }
+        #endregion
 
         /// <summary>
         /// Add the specified element to the <see cref="Option"/>.

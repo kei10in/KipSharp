@@ -11,6 +11,9 @@ namespace Kip
     /// </summary>
     public sealed class ParameterDef : IEquatable<ParameterDef>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with name and the <see cref="Property"/>s.
         /// </summary>
@@ -32,10 +35,14 @@ namespace Kip
             _properties = properties;
         }
 
+        #endregion
+
         public XName Name
         {
             get;
         }
+
+        #region Properties
 
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
@@ -43,6 +50,22 @@ namespace Kip
         {
             get { return _properties; }
         }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        public ParameterDef Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            var p = _properties.Get(name)?.Set(value)
+                ?? new Property(name, value);
+            return new ParameterDef(Name, _properties.SetItem(p));
+        }
+
+        #endregion
 
         /// <summary>
         /// Add the specified property to the <see cref="ParameterDef"/>.

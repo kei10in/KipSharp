@@ -11,6 +11,9 @@ namespace Kip
     /// </summary>
     public sealed class Property : IEquatable<Property>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with the name and the nested <see cref="Property"/>s.
         /// </summary>
@@ -45,6 +48,8 @@ namespace Kip
             _properties = properties;
         }
 
+        #endregion
+
         public XName Name
         {
             get;
@@ -59,6 +64,8 @@ namespace Kip
         {
             return new Property(Name, value, _properties);
         }
+
+        #region Nested properties
 
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
@@ -88,6 +95,8 @@ namespace Kip
             var p = _properties.Get(name) ?? new Property(name);
             return new Property(Name, value, _properties.SetItem(p));
         }
+
+        #endregion
 
         /// <summary>
         /// Adds the specified element to the <see cref="Property"/>.

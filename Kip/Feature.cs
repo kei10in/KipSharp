@@ -60,6 +60,9 @@ namespace Kip
             get;
         }
 
+
+        #region Properties
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties
@@ -98,6 +101,25 @@ namespace Kip
             return new Feature(Name, _properties.SetItem(p), _options, _features);
         }
 
+        #region Nested properties
+
+        public Value this[PropertyName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _properties[name1][name2];
+            }
+        }
+
+        public Value Get(PropertyName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _properties.Get(name1)?.Get(name2);
+        }
+
         /// <summary>
         /// Set a value to the nested Property specified by the name1 and
         /// name2.
@@ -117,46 +139,17 @@ namespace Kip
             return new Feature(Name, _properties.SetItem(p), _options, _features);
         }
 
+        #endregion
+
+        #endregion
+
+        #region The options
+
         private readonly ImmutableList<Option> _options
             = ImmutableList.Create<Option>();
         public IReadOnlyList<Option> Options()
         {
             return _options;
-        }
-
-        private readonly ImmutableNamedElementCollection<Feature> _features
-            = ImmutableNamedElementCollection.CreateFeatureCollection();
-        public IReadOnlyNamedElementCollection<Feature> Features
-        {
-            get { return _features; }
-        }
-
-        public Feature this[FeatureName name]
-        {
-            get { return _features[name]; }
-        }
-
-        public Feature Get(FeatureName name)
-        {
-            return _features.Get(name);
-        }
-
-        /// <summary>
-        /// Add the specified element to the <see cref="Feature"/>.
-        /// </summary>
-        /// <returns>A new Feature with the element added.</returns>
-        public Feature Add(Property element)
-        {
-            return new Feature(Name, _properties.Add(element), _options, _features);
-        }
-
-        /// <summary>
-        /// Add the specified element to the <see cref="Feature"/>.
-        /// </summary>
-        /// <returns>A new Feature with the element added.</returns>
-        public Feature Add(Option option)
-        {
-            return new Feature(Name, _properties, _options.Add(option), _features);
         }
 
         /// <summary>
@@ -170,13 +163,27 @@ namespace Kip
             return new Feature(Name, _properties, options.ToImmutableList(), _features);
         }
 
-        /// <summary>
-        /// Add the specified element to the <see cref="Feature"/>.
-        /// </summary>
-        /// <returns>A new Feature with the element added.</returns>
-        public Feature Add(Feature feature)
+        #endregion
+
+        #region Nested feature
+
+        #region Options of the nested feature
+
+        private readonly ImmutableNamedElementCollection<Feature> _features
+            = ImmutableNamedElementCollection.CreateFeatureCollection();
+        public IReadOnlyNamedElementCollection<Feature> Features
         {
-            return new Feature(Name, _properties, _options, _features.Add(feature));
+            get { return _features; }
+        }
+
+        public IReadOnlyList<Option> this[FeatureName name]
+        {
+            get { return _features[name].Options(); }
+        }
+
+        public IReadOnlyList<Option> Get(FeatureName name)
+        {
+            return _features.Get(name)?.Options();
         }
 
         public Feature Set(FeatureName name, Option selection)
@@ -190,6 +197,10 @@ namespace Kip
 
             return new Feature(Name, _properties, _options, _features.SetItem(ft));
         }
+
+        #endregion
+
+        #region Properties of the nested feature
 
         public Value this[FeatureName name1, PropertyName name2]
         {
@@ -232,6 +243,36 @@ namespace Kip
                 ?? new Feature(name1, new Property(name2, value));
 
             return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
+
+        #endregion
+        #endregion
+
+        /// <summary>
+        /// Add the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <returns>A new Feature with the element added.</returns>
+        public Feature Add(Property element)
+        {
+            return new Feature(Name, _properties.Add(element), _options, _features);
+        }
+
+        /// <summary>
+        /// Add the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <returns>A new Feature with the element added.</returns>
+        public Feature Add(Option option)
+        {
+            return new Feature(Name, _properties, _options.Add(option), _features);
+        }
+
+        /// <summary>
+        /// Add the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <returns>A new Feature with the element added.</returns>
+        public Feature Add(Feature feature)
+        {
+            return new Feature(Name, _properties, _options, _features.Add(feature));
         }
 
         public override bool Equals(object obj)
