@@ -15,7 +15,7 @@ namespace Kip.Tests
                 new Feature(Exp.SomeFeature,
                     new Option(Exp.SomeOption1),
                     new Option(Exp.SomeOption2)));
-            var options = pc.GetFeatureOptions(Exp.SomeFeature);
+            var options = pc.Get(Exp.SomeFeature);
 
             var expected = new List<XName>() { Exp.SomeOption1, Exp.SomeOption2 };
             Assert.Equal(expected, options.Select(x => x.Name));
@@ -28,9 +28,9 @@ namespace Kip.Tests
                 new Feature(Exp.SomeFeature,
                     new Option(Exp.SomeOption1),
                     new Option(Exp.SomeOption2)));
-            var options = pc.GetFeatureOptions(Exp.OtherFeature);
+            var options = pc.Get(Exp.OtherFeature);
 
-            Assert.Empty(options);
+            Assert.Null(options);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Kip.Tests
                     new Feature(Exp.NestedFeature,
                         new Option(Exp.SomeOption1),
                         new Option(Exp.SomeOption2))));
-            var options = pc.GetFeatureOptions(Exp.SomeFeature, Exp.NestedFeature);
+            var options = pc.Get(Exp.SomeFeature, Exp.NestedFeature);
 
             var expected = new List<XName>() { Exp.SomeOption1, Exp.SomeOption2 };
             Assert.Equal(expected, options.Select(x => x.Name));
@@ -55,9 +55,9 @@ namespace Kip.Tests
                     new Feature(Exp.NestedFeature,
                         new Option(Exp.SomeOption1),
                         new Option(Exp.SomeOption2))));
-            var options = pc.GetFeatureOptions(Exp.SomeFeature, Exp.OtherFeature);
+            var options = pc.Get(Exp.SomeFeature, Exp.OtherFeature);
 
-            Assert.Empty(options);
+            Assert.Null(options);
         }
 
         private List<Tuple<Capabilities, Capabilities>> _equalsPair = new List<Tuple<Capabilities, Capabilities>>()
