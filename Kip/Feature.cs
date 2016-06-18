@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Kip
 {
@@ -15,7 +14,7 @@ namespace Kip
         /// <summary>
         /// Constructs with the name.
         /// </summary>
-        public Feature(XName name)
+        public Feature(FeatureName name)
         {
             Name = name;
         }
@@ -24,7 +23,7 @@ namespace Kip
         /// Constructs with the name and the children, <see cref="Option"/>,
         /// <see cref="Property"/> and/or <see cref="Feature"/>.
         /// </summary>
-        public Feature(XName name, params FeatureChild[] elements)
+        public Feature(FeatureName name, params FeatureChild[] elements)
         {
             Name = name;
             var o = new Option();
@@ -44,7 +43,7 @@ namespace Kip
         }
 
         internal Feature(
-            XName name,
+            FeatureName name,
             ImmutableNamedElementCollection<Property> properties,
             ImmutableList<Option> options,
             ImmutableNamedElementCollection<Feature> nestedFeature)
@@ -55,7 +54,7 @@ namespace Kip
             _features = nestedFeature;
         }
 
-        public XName Name
+        public FeatureName Name
         {
             get;
         }

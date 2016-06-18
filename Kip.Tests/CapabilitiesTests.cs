@@ -64,7 +64,7 @@ namespace Kip.Tests
         {
             Tuple.Create<Capabilities, Capabilities>(null, null),
             Tuple.Create(new Capabilities(), new Capabilities()),
-            Tuple.Create(new Capabilities(new Feature("a")), new Capabilities(new Feature("a"))),
+            Tuple.Create(new Capabilities(new Feature(Exp.SomeFeature)), new Capabilities(new Feature(Exp.SomeFeature))),
             Tuple.Create(new Capabilities(new Property("a")), new Capabilities(new Property("a"))),
             Tuple.Create(new Capabilities(new ParameterDef("a")), new Capabilities(new ParameterDef("a"))),
         };
@@ -82,8 +82,8 @@ namespace Kip.Tests
         {
             Tuple.Create<Capabilities, Capabilities>(null, new Capabilities()),
             Tuple.Create<Capabilities, Capabilities>(new Capabilities(), null),
-            Tuple.Create(new Capabilities(), new Capabilities(new Feature("a"))),
-            Tuple.Create(new Capabilities(new Feature("a")), new Capabilities(new Feature("b"))),
+            Tuple.Create(new Capabilities(), new Capabilities(new Feature(Exp.SomeFeature))),
+            Tuple.Create(new Capabilities(new Feature(Exp.SomeFeature)), new Capabilities(new Feature(Exp.OtherFeature))),
             Tuple.Create(new Capabilities(), new Capabilities(new Property("a"))),
             Tuple.Create(new Capabilities(new Property("a")), new Capabilities(new Property("b"))),
             Tuple.Create(new Capabilities(), new Capabilities(new ParameterDef("a"))),

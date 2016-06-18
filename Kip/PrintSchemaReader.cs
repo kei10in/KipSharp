@@ -142,7 +142,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("Feature element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaFeature(name);
+            var element = new PrintSchemaFeature(new FeatureName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -395,7 +395,7 @@ namespace Kip
 
     internal class PrintSchemaFeature : PrintSchemaElement
     {
-        private XName _name;
+        private FeatureName _name;
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
         private readonly ImmutableList<Option>.Builder _options
@@ -403,7 +403,7 @@ namespace Kip
         private readonly ImmutableNamedElementCollection<Feature>.Builder _features
             = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
 
-        public PrintSchemaFeature(XName name)
+        public PrintSchemaFeature(FeatureName name)
         {
             _name = name;
         }
