@@ -178,7 +178,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ParameterDef element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaParameterDef(name);
+            var element = new PrintSchemaParameterDef(new ParameterName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -460,11 +460,11 @@ namespace Kip
 
     internal class PrintSchemaParameterDef : PrintSchemaElement
     {
-        private XName _name;
+        private ParameterName _name;
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
-        public PrintSchemaParameterDef(XName name)
+        public PrintSchemaParameterDef(ParameterName name)
         {
             _name = name;
         }

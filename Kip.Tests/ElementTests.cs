@@ -21,11 +21,11 @@ namespace Kip.Tests
         public void ThrowsExceptionWhenAddParameterWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc = pc.Add(new ParameterDef(Exp.SomeFeature));
+            pc = pc.Add(new ParameterDef(Exp.SomeParameter));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc = pc.Add(new ParameterDef(Exp.SomeFeature));
+                pc = pc.Add(new ParameterDef(Exp.SomeParameter));
             });
         }
 

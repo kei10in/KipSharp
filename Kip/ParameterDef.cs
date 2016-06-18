@@ -17,7 +17,7 @@ namespace Kip
         /// <summary>
         /// Constructs with name and the <see cref="Property"/>s.
         /// </summary>
-        public ParameterDef(XName name, params Property[] elements)
+        public ParameterDef(ParameterName name, params Property[] elements)
         {
             Name = name;
 
@@ -29,7 +29,7 @@ namespace Kip
             _properties = properties.ToImmutable();
         }
 
-        internal ParameterDef(XName name, ImmutableNamedElementCollection<Property> properties)
+        internal ParameterDef(ParameterName name, ImmutableNamedElementCollection<Property> properties)
         {
             Name = name;
             _properties = properties;
@@ -37,7 +37,7 @@ namespace Kip
 
         #endregion
 
-        public XName Name
+        public ParameterName Name
         {
             get;
         }
