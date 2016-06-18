@@ -9,7 +9,7 @@ namespace Kip.Tests
         private List<Tuple<ParameterInit, ParameterInit>> _equalsPair = new List<Tuple<ParameterInit, ParameterInit>>()
         {
             Tuple.Create<ParameterInit, ParameterInit>(null, null),
-            Tuple.Create(new ParameterInit("a", 1), new ParameterInit("a", 1)),
+            Tuple.Create(new ParameterInit(Exp.SomeParameter, 1), new ParameterInit(Exp.SomeParameter, 1)),
         };
 
         [Fact]
@@ -23,10 +23,10 @@ namespace Kip.Tests
 
         private List<Tuple<ParameterInit, ParameterInit>> _notEqualsPair = new List<Tuple<ParameterInit, ParameterInit>>()
         {
-            Tuple.Create<ParameterInit, ParameterInit>(null, new ParameterInit("a", 1)),
-            Tuple.Create<ParameterInit, ParameterInit>(new ParameterInit("a", 1), null),
-            Tuple.Create(new ParameterInit("a", 1), new ParameterInit("b", 1)),
-            Tuple.Create(new ParameterInit("a", 1), new ParameterInit("a", 2)),
+            Tuple.Create<ParameterInit, ParameterInit>(null, new ParameterInit(Exp.SomeParameter, 1)),
+            Tuple.Create<ParameterInit, ParameterInit>(new ParameterInit(Exp.SomeParameter, 1), null),
+            Tuple.Create(new ParameterInit(Exp.SomeParameter, 1), new ParameterInit(Exp.OtherParameter, 1)),
+            Tuple.Create(new ParameterInit(Exp.SomeParameter, 1), new ParameterInit(Exp.SomeParameter, 2)),
         };
 
         [Fact]

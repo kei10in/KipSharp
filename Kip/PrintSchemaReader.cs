@@ -194,7 +194,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ParameterInit element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaParameterInit(name);
+            var element = new PrintSchemaParameterInit(new ParameterName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -483,10 +483,10 @@ namespace Kip
 
     internal class PrintSchemaParameterInit : PrintSchemaElement
     {
-        private XName _name;
+        private ParameterName _name;
         private Value _value;
 
-        public PrintSchemaParameterInit(XName name)
+        public PrintSchemaParameterInit(ParameterName name)
         {
             _name = name;
         }

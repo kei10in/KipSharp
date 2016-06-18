@@ -12,7 +12,7 @@ namespace Kip.Tests
             Tuple.Create(new Ticket(), new Ticket()),
             Tuple.Create(new Ticket(new Feature(Exp.SomeFeature)), new Ticket(new Feature(Exp.SomeFeature))),
             Tuple.Create(new Ticket(new Property(Exp.SomeProperty)), new Ticket(new Property(Exp.SomeProperty))),
-            Tuple.Create(new Ticket(new ParameterInit("a", 1)), new Ticket(new ParameterInit("a", 1))),
+            Tuple.Create(new Ticket(new ParameterInit(Exp.SomeParameter, 1)), new Ticket(new ParameterInit(Exp.SomeParameter, 1))),
         };
 
         [Fact]
@@ -32,8 +32,8 @@ namespace Kip.Tests
             Tuple.Create(new Ticket(new Feature(Exp.SomeFeature)), new Ticket(new Feature(Exp.OtherFeature))),
             Tuple.Create(new Ticket(), new Ticket(new Property(Exp.SomeProperty))),
             Tuple.Create(new Ticket(new Property(Exp.SomeProperty)), new Ticket(new Property(Exp.OtherProperty))),
-            Tuple.Create(new Ticket(), new Ticket(new ParameterInit("a", 1))),
-            Tuple.Create(new Ticket(new ParameterInit("a", 1)), new Ticket(new ParameterInit("b", 2))),
+            Tuple.Create(new Ticket(), new Ticket(new ParameterInit(Exp.SomeParameter, 1))),
+            Tuple.Create(new Ticket(new ParameterInit(Exp.SomeParameter, 1)), new Ticket(new ParameterInit(Exp.OtherParameter, 2))),
         };
 
         [Fact]
