@@ -9,11 +9,11 @@ namespace Kip.Tests
         private List<Tuple<ScoredProperty, ScoredProperty>> _equalsPair = new List<Tuple<ScoredProperty, ScoredProperty>>()
         {
             Tuple.Create<ScoredProperty, ScoredProperty>(null, null),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a")),
-            Tuple.Create(new ScoredProperty("a", 1), new ScoredProperty("a", 1)),
-            Tuple.Create(new ScoredProperty("a", new ParameterRef("b")), new ScoredProperty("a", new ParameterRef("b"))),
-            Tuple.Create(new ScoredProperty("a", new ScoredProperty("b")), new ScoredProperty("a", new ScoredProperty("b"))),
-            Tuple.Create(new ScoredProperty("a", new Property(Exp.SomeProperty)), new ScoredProperty("a", new Property(Exp.SomeProperty))),
+            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty), new ScoredProperty(Exp.SomeScoredProperty)),
+            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, 1), new ScoredProperty(Exp.SomeScoredProperty, 1)),
+            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b")), new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b"))),
+            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.OtherScoredProperty)), new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.OtherScoredProperty))),
+            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.SomeProperty)), new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.SomeProperty))),
         };
 
         [Fact]
@@ -27,18 +27,61 @@ namespace Kip.Tests
 
         private List<Tuple<ScoredProperty, ScoredProperty>> _notEqualsPair = new List<Tuple<ScoredProperty, ScoredProperty>>()
         {
-            Tuple.Create<ScoredProperty, ScoredProperty>(null, new ScoredProperty("a")),
-            Tuple.Create<ScoredProperty, ScoredProperty>(new ScoredProperty("a"), null),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("b")),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", 1)),
-            Tuple.Create(new ScoredProperty("a", 1), new ScoredProperty("a", 2)),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", new ParameterRef("b"))),
-            Tuple.Create(new ScoredProperty("a", new ParameterRef("b")), new ScoredProperty("a", new ParameterRef("c"))),
-            Tuple.Create(new ScoredProperty("a", 1), new ScoredProperty("a", new ParameterRef("b"))),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", new ScoredProperty("b"))),
-            Tuple.Create(new ScoredProperty("a", new ScoredProperty("b")), new ScoredProperty("a", new ScoredProperty("c"))),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", new Property(Exp.SomeProperty))),
-            Tuple.Create(new ScoredProperty("a", new Property(Exp.SomeProperty)), new ScoredProperty("a", new Property(Exp.OtherProperty))),
+            Tuple.Create<ScoredProperty, ScoredProperty>(
+                null, new ScoredProperty(Exp.SomeScoredProperty)),
+
+            Tuple.Create<ScoredProperty, ScoredProperty>(
+                new ScoredProperty(Exp.SomeScoredProperty), null),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty),
+                new ScoredProperty(Exp.OtherScoredProperty)
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty),
+                new ScoredProperty(Exp.SomeScoredProperty, 1)
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty, 1),
+                new ScoredProperty(Exp.SomeScoredProperty, 2)
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty),
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b"))
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b")),
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("c"))
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty, 1),
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b"))
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty),
+                new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.OtherScoredProperty))
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.SomeScoredProperty1)),
+                new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.SomeScoredProperty2))
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty),
+                new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.SomeProperty))
+                ),
+
+            Tuple.Create(
+                new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.SomeProperty)),
+                new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.OtherProperty))
+                ),
         };
 
         [Fact]

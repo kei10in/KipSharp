@@ -242,7 +242,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ScoredProperty element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaScoredProperty(name);
+            var element = new PrintSchemaScoredProperty(new ScoredPropertyName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -550,7 +550,7 @@ namespace Kip
 
     internal class PrintSchemaScoredProperty : PrintSchemaElement
     {
-        private XName _name;
+        private ScoredPropertyName _name;
         private Value _value;
         private ParameterRef _parameterRef;
         private ImmutableNamedElementCollection<Property>.Builder _properties
@@ -558,7 +558,7 @@ namespace Kip
         private ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
             = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
 
-        public PrintSchemaScoredProperty(XName name)
+        public PrintSchemaScoredProperty(ScoredPropertyName name)
         {
             _name = name;
         }

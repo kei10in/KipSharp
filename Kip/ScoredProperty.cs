@@ -18,7 +18,7 @@ namespace Kip
         /// Constructs with the name and the children:
         /// <see cref="ScoredProperty"/>s and/or <see cref="Property"/>s.
         /// </summary>
-        public ScoredProperty(XName name, params ScoredPropertyChild[] elements)
+        public ScoredProperty(ScoredPropertyName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
 
@@ -39,7 +39,7 @@ namespace Kip
         /// Constructs with the name, the <see cref="Value"/> and the children:
         /// <see cref="ScoredProperty"/>s and/or <see cref="Property"/>s.
         /// </summary>
-        public ScoredProperty(XName name, Value value, params ScoredPropertyChild[] elements)
+        public ScoredProperty(ScoredPropertyName name, Value value, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
             Value = value;
@@ -50,14 +50,14 @@ namespace Kip
         /// children: <see cref="ScoredProperty"/>s and/or <see cref="Property"/>.
         /// <see cref="Property"/>s.
         /// </summary>
-        public ScoredProperty(XName name, ParameterRef parameter, params ScoredPropertyChild[] elements)
+        public ScoredProperty(ScoredPropertyName name, ParameterRef parameter, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
             ParameterRef = parameter;
         }
 
         internal ScoredProperty(
-            XName name,
+            ScoredPropertyName name,
             Value value,
             ParameterRef parameter,
             ImmutableNamedElementCollection<ScoredProperty> scoredProperties,
@@ -72,7 +72,7 @@ namespace Kip
 
         #endregion
 
-        public XName Name
+        public ScoredPropertyName Name
         {
             get;
         }
