@@ -10,7 +10,7 @@ namespace Kip.Tests
         {
             Tuple.Create<ParameterDef, ParameterDef>(null, null),
             Tuple.Create(new ParameterDef("a"), new ParameterDef("a")),
-            Tuple.Create(new ParameterDef("a", new Property("b")), new ParameterDef("a", new Property("b"))),
+            Tuple.Create(new ParameterDef("a", new Property(Exp.SomeProperty)), new ParameterDef("a", new Property(Exp.SomeProperty))),
         };
 
         [Fact]
@@ -27,8 +27,8 @@ namespace Kip.Tests
             Tuple.Create<ParameterDef, ParameterDef>(null, new ParameterDef("a")),
             Tuple.Create<ParameterDef, ParameterDef>(new ParameterDef("a"), null),
             Tuple.Create(new ParameterDef("a"), new ParameterDef("b")),
-            Tuple.Create(new ParameterDef("a"), new ParameterDef("a", new Property("b"))),
-            Tuple.Create(new ParameterDef("a", new Property("b")), new ParameterDef("a", new Property("c"))),
+            Tuple.Create(new ParameterDef("a"), new ParameterDef("a", new Property(Exp.SomeProperty))),
+            Tuple.Create(new ParameterDef("a", new Property(Exp.SomeProperty)), new ParameterDef("a", new Property(Exp.OtherProperty))),
         };
 
         [Fact]

@@ -9,10 +9,10 @@ namespace Kip.Tests
         [Fact]
         public void AddNestedProperty()
         {
-            var nested = new Property("b");
-            var property = new Property("a", nested);
+            var nested = new Property(Exp.NestedProperty);
+            var property = new Property(Exp.SomeProperty, nested);
 
-            var found = property.Properties["b"];
+            var found = property.Properties[Exp.NestedProperty];
 
             Assert.Equal(found, nested);
         }
@@ -20,9 +20,20 @@ namespace Kip.Tests
         private List<Tuple<Property, Property>> _equalsPair = new List<Tuple<Property, Property>>()
         {
             Tuple.Create<Property, Property>(null, null),
-            Tuple.Create(new Property("a"), new Property("a")),
-            Tuple.Create(new Property("a", 1), new Property("a", 1)),
-            Tuple.Create(new Property("a", new Property("b")), new Property("a", new Property("b"))),
+            Tuple.Create(
+                new Property(Exp.SomeProperty),
+                new Property(Exp.SomeProperty)
+                ),
+
+            Tuple.Create(
+                new Property(Exp.SomeProperty, 1),
+                new Property(Exp.SomeProperty, 1)
+                ),
+
+            Tuple.Create(
+                new Property(Exp.SomeProperty, new Property(Exp.NestedProperty)),
+                new Property(Exp.SomeProperty, new Property(Exp.NestedProperty))
+                ),
         };
 
         [Fact]
@@ -36,13 +47,13 @@ namespace Kip.Tests
 
         private List<Tuple<Property, Property>> _notEqualsPair = new List<Tuple<Property, Property>>()
         {
-            Tuple.Create<Property, Property>(null, new Property("a")),
-            Tuple.Create<Property, Property>(new Property("a"), null),
-            Tuple.Create(new Property("a"), new Property("b")),
-            Tuple.Create(new Property("a"), new Property("a", 1)),
-            Tuple.Create(new Property("a", 1), new Property("a", 2)),
-            Tuple.Create(new Property("a"), new Property("a", new Property("b"))),
-            Tuple.Create(new Property("a", new Property("b")), new Property("a", new Property("c"))),
+            Tuple.Create<Property, Property>(null, new Property(Exp.SomeProperty)),
+            Tuple.Create<Property, Property>(new Property(Exp.SomeProperty), null),
+            Tuple.Create(new Property(Exp.SomeProperty), new Property(Exp.OtherProperty)),
+            Tuple.Create(new Property(Exp.SomeProperty), new Property(Exp.SomeProperty, 1)),
+            Tuple.Create(new Property(Exp.SomeProperty, 1), new Property(Exp.SomeProperty, 2)),
+            Tuple.Create(new Property(Exp.SomeProperty), new Property(Exp.SomeProperty, new Property(Exp.OtherProperty))),
+            Tuple.Create(new Property(Exp.SomeProperty, new Property(Exp.SomeProperty1)), new Property(Exp.SomeProperty, new Property(Exp.SomeProperty2))),
         };
 
         [Fact]

@@ -11,7 +11,7 @@ namespace Kip.Tests
             Tuple.Create<Feature, Feature>(null, null),
             Tuple.Create(new Feature(Exp.SomeFeature), new Feature(Exp.SomeFeature)),
             Tuple.Create(new Feature(Exp.SomeFeature, new Option("b")), new Feature(Exp.SomeFeature, new Option("b"))),
-            Tuple.Create(new Feature(Exp.SomeFeature, new Property("b")), new Feature(Exp.SomeFeature, new Property("b"))),
+            Tuple.Create(new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty)), new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty))),
             Tuple.Create(new Feature(Exp.SomeFeature, new Feature(Exp.OtherFeature)), new Feature(Exp.SomeFeature, new Feature(Exp.OtherFeature))),
         };
 
@@ -46,12 +46,12 @@ namespace Kip.Tests
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature),
-                new Feature(Exp.SomeFeature, new Property("b"))
+                new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty))
                 ),
 
             Tuple.Create(
-                new Feature(Exp.SomeFeature, new Property("b")),
-                new Feature(Exp.SomeFeature, new Property("c"))
+                new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty)),
+                new Feature(Exp.SomeFeature, new Property(Exp.OtherProperty))
                 ),
 
             Tuple.Create(

@@ -12,7 +12,7 @@ namespace Kip.Tests
             Tuple.Create(new Option(), new Option()),
             Tuple.Create(new Option("a"), new Option("a")),
             Tuple.Create(new Option("a", new ScoredProperty("b")), new Option("a", new ScoredProperty("b"))),
-            Tuple.Create(new Option("a", new Property("b")), new Option("a", new Property("b"))),
+            Tuple.Create(new Option("a", new Property(Exp.SomeProperty)), new Option("a", new Property(Exp.SomeProperty))),
         };
 
         [Fact]
@@ -31,8 +31,8 @@ namespace Kip.Tests
             Tuple.Create(new Option("a"), new Option("b")),
             Tuple.Create(new Option("a"), new Option("a", new ScoredProperty("b"))),
             Tuple.Create(new Option("a", new ScoredProperty("b")), new Option("a", new ScoredProperty("c"))),
-            Tuple.Create(new Option("a"), new Option("a", new Property("b"))),
-            Tuple.Create(new Option("a", new Property("b")), new Option("a", new Property("c"))),
+            Tuple.Create(new Option("a"), new Option("a", new Property(Exp.SomeProperty))),
+            Tuple.Create(new Option("a", new Property(Exp.SomeProperty)), new Option("a", new Property(Exp.OtherProperty))),
         };
 
         [Fact]

@@ -47,7 +47,10 @@ namespace Kip.Tests
         internal static readonly XName SomeParameter = Namespace + "SomeParameter";
 
         internal static readonly PropertyName SomeProperty = new PropertyName(Namespace + "SomeProperty");
+        internal static readonly PropertyName SomeProperty1 = new PropertyName(Namespace + "SomeProperty1");
+        internal static readonly PropertyName SomeProperty2 = new PropertyName(Namespace + "SomeProperty2");
         internal static readonly PropertyName NestedProperty = new PropertyName(Namespace + "NestedProperty");
+        internal static readonly PropertyName OtherProperty = new PropertyName(Namespace + "OtherProperty");
 
         internal static readonly XName SomeScoredProperty = Namespace + "SomeScoredProperty";
 

@@ -13,7 +13,7 @@ namespace Kip.Tests
             Tuple.Create(new ScoredProperty("a", 1), new ScoredProperty("a", 1)),
             Tuple.Create(new ScoredProperty("a", new ParameterRef("b")), new ScoredProperty("a", new ParameterRef("b"))),
             Tuple.Create(new ScoredProperty("a", new ScoredProperty("b")), new ScoredProperty("a", new ScoredProperty("b"))),
-            Tuple.Create(new ScoredProperty("a", new Property("b")), new ScoredProperty("a", new Property("b"))),
+            Tuple.Create(new ScoredProperty("a", new Property(Exp.SomeProperty)), new ScoredProperty("a", new Property(Exp.SomeProperty))),
         };
 
         [Fact]
@@ -37,8 +37,8 @@ namespace Kip.Tests
             Tuple.Create(new ScoredProperty("a", 1), new ScoredProperty("a", new ParameterRef("b"))),
             Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", new ScoredProperty("b"))),
             Tuple.Create(new ScoredProperty("a", new ScoredProperty("b")), new ScoredProperty("a", new ScoredProperty("c"))),
-            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", new Property("b"))),
-            Tuple.Create(new ScoredProperty("a", new Property("b")), new ScoredProperty("a", new Property("c"))),
+            Tuple.Create(new ScoredProperty("a"), new ScoredProperty("a", new Property(Exp.SomeProperty))),
+            Tuple.Create(new ScoredProperty("a", new Property(Exp.SomeProperty)), new ScoredProperty("a", new Property(Exp.OtherProperty))),
         };
 
         [Fact]

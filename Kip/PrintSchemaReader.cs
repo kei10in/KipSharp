@@ -226,7 +226,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("Property element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaProperty(name);
+            var element = new PrintSchemaProperty(new PropertyName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -524,12 +524,12 @@ namespace Kip
 
     internal class PrintSchemaProperty : PrintSchemaElement
     {
-        private XName _name;
+        private PropertyName _name;
         private Value _value;
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
-        public PrintSchemaProperty(XName name)
+        public PrintSchemaProperty(PropertyName name)
         {
             _name = name;
         }

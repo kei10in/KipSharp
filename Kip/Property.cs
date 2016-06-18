@@ -17,7 +17,7 @@ namespace Kip
         /// <summary>
         /// Constructs with the name and the nested <see cref="Property"/>s.
         /// </summary>
-        public Property(XName name, params Property[] elements)
+        public Property(PropertyName name, params Property[] elements)
             : this(name, null, elements)
         { }
 
@@ -25,7 +25,7 @@ namespace Kip
         /// Constructs with the name, the <see cref="Value"/>, and nested
         /// <see cref="Property"/>s.
         /// </summary>
-        public Property(XName name, Value value, params Property[] elements)
+        public Property(PropertyName name, Value value, params Property[] elements)
         {
             Name = name;
             Value = value;
@@ -39,7 +39,7 @@ namespace Kip
         }
 
         internal Property(
-            XName name,
+            PropertyName name,
             Value value,
             ImmutableNamedElementCollection<Property> properties)
         {
@@ -50,7 +50,7 @@ namespace Kip
 
         #endregion
 
-        public XName Name
+        public PropertyName Name
         {
             get;
         }
