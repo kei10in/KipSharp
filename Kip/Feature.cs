@@ -143,7 +143,7 @@ namespace Kip
 
         #endregion
 
-        #region The options
+        #region Options
 
         private readonly ImmutableList<Option> _options
             = ImmutableList.Create<Option>();
@@ -161,6 +161,12 @@ namespace Kip
         {
             var options = new[] { option };
             return new Feature(Name, _properties, options.ToImmutableList(), _features);
+        }
+
+        public Feature Update(Func<Option, Option> func)
+        {
+            var updated = _options.Select(func);
+            return new Feature(Name, _properties, updated.ToImmutableList(), _features);
         }
 
         #endregion
@@ -194,6 +200,14 @@ namespace Kip
             var ft = _features.Contains(name)
                 ? _features[name].Set(selection)
                 : new Feature(name, selection);
+
+            return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
+
+        public Feature Update(FeatureName name, Func<Option, Option> func)
+        {
+            var ft = _features.Get(name)?.Update(func);
+            if (ft == null) return this;
 
             return new Feature(Name, _properties, _options, _features.SetItem(ft));
         }
@@ -246,6 +260,7 @@ namespace Kip
         }
 
         #endregion
+
         #endregion
 
         /// <summary>

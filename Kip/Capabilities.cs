@@ -76,6 +76,14 @@ namespace Kip
             return _features.Get(name)?.Options();
         }
 
+        public Capabilities Update(FeatureName name, Func<Option, Option> func)
+        {
+            var ft = _features.Get(name);
+             if (ft == null) return this;
+
+            return new Capabilities(_features.SetItem(ft.Update(func)), _parameters, _properties, _declaredNamespaces);
+        }
+
         public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
         {
             get
