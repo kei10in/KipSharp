@@ -9,7 +9,7 @@ namespace Kip.Tests
         private List<Tuple<ParameterRef, ParameterRef>> _equalsPair = new List<Tuple<ParameterRef, ParameterRef>>()
         {
             Tuple.Create<ParameterRef, ParameterRef>(null, null),
-            Tuple.Create(new ParameterRef("a"), new ParameterRef("a")),
+            Tuple.Create(new ParameterRef(Exp.SomeParameter), new ParameterRef(Exp.SomeParameter)),
         };
 
         [Fact]
@@ -23,9 +23,9 @@ namespace Kip.Tests
 
         private List<Tuple<ParameterRef, ParameterRef>> _notEqualsPair = new List<Tuple<ParameterRef, ParameterRef>>()
         {
-            Tuple.Create<ParameterRef, ParameterRef>(null, new ParameterRef("a")),
-            Tuple.Create<ParameterRef, ParameterRef>(new ParameterRef("a"), null),
-            Tuple.Create(new ParameterRef("a"), new ParameterRef("b")),
+            Tuple.Create<ParameterRef, ParameterRef>(null, new ParameterRef(Exp.SomeParameter)),
+            Tuple.Create<ParameterRef, ParameterRef>(new ParameterRef(Exp.SomeParameter), null),
+            Tuple.Create(new ParameterRef(Exp.SomeParameter), new ParameterRef(Exp.OtherParameter)),
        };
 
         [Fact]

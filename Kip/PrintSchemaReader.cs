@@ -210,7 +210,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ParameterRef element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaParameterRef(name);
+            var element = new PrintSchemaParameterRef(new ParameterName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -506,7 +506,7 @@ namespace Kip
     {
         private ParameterRef _parameterRef;
 
-        public PrintSchemaParameterRef(XName name)
+        public PrintSchemaParameterRef(ParameterName name)
         {
             _parameterRef = new ParameterRef(name);
         }

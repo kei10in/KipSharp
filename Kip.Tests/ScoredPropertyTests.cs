@@ -11,7 +11,7 @@ namespace Kip.Tests
             Tuple.Create<ScoredProperty, ScoredProperty>(null, null),
             Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty), new ScoredProperty(Exp.SomeScoredProperty)),
             Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, 1), new ScoredProperty(Exp.SomeScoredProperty, 1)),
-            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b")), new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b"))),
+            Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef(Exp.SomeParameter)), new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef(Exp.SomeParameter))),
             Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.OtherScoredProperty)), new ScoredProperty(Exp.SomeScoredProperty, new ScoredProperty(Exp.OtherScoredProperty))),
             Tuple.Create(new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.SomeProperty)), new ScoredProperty(Exp.SomeScoredProperty, new Property(Exp.SomeProperty))),
         };
@@ -50,17 +50,17 @@ namespace Kip.Tests
 
             Tuple.Create(
                 new ScoredProperty(Exp.SomeScoredProperty),
-                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b"))
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef(Exp.SomeParameter))
                 ),
 
             Tuple.Create(
-                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b")),
-                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("c"))
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef(Exp.SomeParameter)),
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef(Exp.OtherParameter))
                 ),
 
             Tuple.Create(
                 new ScoredProperty(Exp.SomeScoredProperty, 1),
-                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef("b"))
+                new ScoredProperty(Exp.SomeScoredProperty, new ParameterRef(Exp.SomeParameter))
                 ),
 
             Tuple.Create(
