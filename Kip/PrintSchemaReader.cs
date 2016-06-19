@@ -142,7 +142,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("Feature element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaFeature(name);
+            var element = new PrintSchemaFeature(new FeatureName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -178,7 +178,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ParameterDef element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaParameterDef(name);
+            var element = new PrintSchemaParameterDef(new ParameterName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -194,7 +194,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ParameterInit element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaParameterInit(name);
+            var element = new PrintSchemaParameterInit(new ParameterName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -210,7 +210,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ParameterRef element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaParameterRef(name);
+            var element = new PrintSchemaParameterRef(new ParameterName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -226,7 +226,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("Property element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaProperty(name);
+            var element = new PrintSchemaProperty(new PropertyName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -242,7 +242,7 @@ namespace Kip
                 throw new ReadPrintSchemaDocumentException("ScoredProperty element must contains name attribute");
 
             var name = reader.ValueAsXName();
-            var element = new PrintSchemaScoredProperty(name);
+            var element = new PrintSchemaScoredProperty(new ScoredPropertyName(name));
 
             foreach (var child in ReadChildren(reader))
             {
@@ -395,7 +395,7 @@ namespace Kip
 
     internal class PrintSchemaFeature : PrintSchemaElement
     {
-        private XName _name;
+        private FeatureName _name;
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
         private readonly ImmutableList<Option>.Builder _options
@@ -403,7 +403,7 @@ namespace Kip
         private readonly ImmutableNamedElementCollection<Feature>.Builder _features
             = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
 
-        public PrintSchemaFeature(XName name)
+        public PrintSchemaFeature(FeatureName name)
         {
             _name = name;
         }
@@ -460,11 +460,11 @@ namespace Kip
 
     internal class PrintSchemaParameterDef : PrintSchemaElement
     {
-        private XName _name;
+        private ParameterName _name;
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
-        public PrintSchemaParameterDef(XName name)
+        public PrintSchemaParameterDef(ParameterName name)
         {
             _name = name;
         }
@@ -483,10 +483,10 @@ namespace Kip
 
     internal class PrintSchemaParameterInit : PrintSchemaElement
     {
-        private XName _name;
+        private ParameterName _name;
         private Value _value;
 
-        public PrintSchemaParameterInit(XName name)
+        public PrintSchemaParameterInit(ParameterName name)
         {
             _name = name;
         }
@@ -506,7 +506,7 @@ namespace Kip
     {
         private ParameterRef _parameterRef;
 
-        public PrintSchemaParameterRef(XName name)
+        public PrintSchemaParameterRef(ParameterName name)
         {
             _parameterRef = new ParameterRef(name);
         }
@@ -524,12 +524,12 @@ namespace Kip
 
     internal class PrintSchemaProperty : PrintSchemaElement
     {
-        private XName _name;
+        private PropertyName _name;
         private Value _value;
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
-        public PrintSchemaProperty(XName name)
+        public PrintSchemaProperty(PropertyName name)
         {
             _name = name;
         }
@@ -550,7 +550,7 @@ namespace Kip
 
     internal class PrintSchemaScoredProperty : PrintSchemaElement
     {
-        private XName _name;
+        private ScoredPropertyName _name;
         private Value _value;
         private ParameterRef _parameterRef;
         private ImmutableNamedElementCollection<Property>.Builder _properties
@@ -558,7 +558,7 @@ namespace Kip
         private ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
             = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
 
-        public PrintSchemaScoredProperty(XName name)
+        public PrintSchemaScoredProperty(ScoredPropertyName name)
         {
             _name = name;
         }

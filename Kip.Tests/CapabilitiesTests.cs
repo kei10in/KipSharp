@@ -15,7 +15,7 @@ namespace Kip.Tests
                 new Feature(Exp.SomeFeature,
                     new Option(Exp.SomeOption1),
                     new Option(Exp.SomeOption2)));
-            var options = pc.GetFeatureOptions(Exp.SomeFeature);
+            var options = pc.Get(Exp.SomeFeature);
 
             var expected = new List<XName>() { Exp.SomeOption1, Exp.SomeOption2 };
             Assert.Equal(expected, options.Select(x => x.Name));
@@ -28,9 +28,9 @@ namespace Kip.Tests
                 new Feature(Exp.SomeFeature,
                     new Option(Exp.SomeOption1),
                     new Option(Exp.SomeOption2)));
-            var options = pc.GetFeatureOptions(Exp.OtherFeature);
+            var options = pc.Get(Exp.OtherFeature);
 
-            Assert.Empty(options);
+            Assert.Null(options);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Kip.Tests
                     new Feature(Exp.NestedFeature,
                         new Option(Exp.SomeOption1),
                         new Option(Exp.SomeOption2))));
-            var options = pc.GetFeatureOptions(Exp.SomeFeature, Exp.NestedFeature);
+            var options = pc.Get(Exp.SomeFeature, Exp.NestedFeature);
 
             var expected = new List<XName>() { Exp.SomeOption1, Exp.SomeOption2 };
             Assert.Equal(expected, options.Select(x => x.Name));
@@ -55,18 +55,18 @@ namespace Kip.Tests
                     new Feature(Exp.NestedFeature,
                         new Option(Exp.SomeOption1),
                         new Option(Exp.SomeOption2))));
-            var options = pc.GetFeatureOptions(Exp.SomeFeature, Exp.OtherFeature);
+            var options = pc.Get(Exp.SomeFeature, Exp.OtherFeature);
 
-            Assert.Empty(options);
+            Assert.Null(options);
         }
 
         private List<Tuple<Capabilities, Capabilities>> _equalsPair = new List<Tuple<Capabilities, Capabilities>>()
         {
             Tuple.Create<Capabilities, Capabilities>(null, null),
             Tuple.Create(new Capabilities(), new Capabilities()),
-            Tuple.Create(new Capabilities(new Feature("a")), new Capabilities(new Feature("a"))),
-            Tuple.Create(new Capabilities(new Property("a")), new Capabilities(new Property("a"))),
-            Tuple.Create(new Capabilities(new ParameterDef("a")), new Capabilities(new ParameterDef("a"))),
+            Tuple.Create(new Capabilities(new Feature(Exp.SomeFeature)), new Capabilities(new Feature(Exp.SomeFeature))),
+            Tuple.Create(new Capabilities(new Property(Exp.SomeProperty)), new Capabilities(new Property(Exp.SomeProperty))),
+            Tuple.Create(new Capabilities(new ParameterDef(Exp.SomeParameter)), new Capabilities(new ParameterDef(Exp.SomeParameter))),
         };
 
         [Fact]
@@ -82,12 +82,12 @@ namespace Kip.Tests
         {
             Tuple.Create<Capabilities, Capabilities>(null, new Capabilities()),
             Tuple.Create<Capabilities, Capabilities>(new Capabilities(), null),
-            Tuple.Create(new Capabilities(), new Capabilities(new Feature("a"))),
-            Tuple.Create(new Capabilities(new Feature("a")), new Capabilities(new Feature("b"))),
-            Tuple.Create(new Capabilities(), new Capabilities(new Property("a"))),
-            Tuple.Create(new Capabilities(new Property("a")), new Capabilities(new Property("b"))),
-            Tuple.Create(new Capabilities(), new Capabilities(new ParameterDef("a"))),
-            Tuple.Create(new Capabilities(new ParameterDef("a")), new Capabilities(new ParameterDef("b"))),
+            Tuple.Create(new Capabilities(), new Capabilities(new Feature(Exp.SomeFeature))),
+            Tuple.Create(new Capabilities(new Feature(Exp.SomeFeature)), new Capabilities(new Feature(Exp.OtherFeature))),
+            Tuple.Create(new Capabilities(), new Capabilities(new Property(Exp.SomeProperty))),
+            Tuple.Create(new Capabilities(new Property(Exp.SomeProperty)), new Capabilities(new Property(Exp.OtherProperty))),
+            Tuple.Create(new Capabilities(), new Capabilities(new ParameterDef(Exp.SomeParameter))),
+            Tuple.Create(new Capabilities(new ParameterDef(Exp.SomeParameter)), new Capabilities(new ParameterDef(Exp.OtherParameter))),
         };
 
         [Fact]

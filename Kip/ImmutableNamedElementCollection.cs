@@ -40,16 +40,20 @@ namespace Kip
         {
             get
             {
-                T result;
-                if (_elements.TryGetValue(name, out result))
+                try
                 {
-                    return result;
+                    return _elements[name];
                 }
-                else
+                catch (KeyNotFoundException exp)
                 {
-                    return null;
+                    throw new KeyNotFoundException($"{name} not found.", exp);
                 }
             }
+        }
+
+        public T Get(XName name)
+        {
+            return _elements.GetValueOrDefault(name, null);
         }
 
         public bool Contains(XName name)
@@ -78,6 +82,12 @@ namespace Kip
         public ImmutableNamedElementCollection<T> Remove(XName name)
         {
             return new ImmutableNamedElementCollection<T>(_nameOf, _elements.Remove(name));
+        }
+
+        public ImmutableNamedElementCollection<T> SetItem(T element)
+        {
+            var name = _nameOf(element);
+            return new ImmutableNamedElementCollection<T>(_nameOf, _elements.SetItem(name, element));
         }
 
         public IEnumerator<T> GetEnumerator()

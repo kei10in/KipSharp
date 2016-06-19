@@ -10,6 +10,8 @@ namespace Kip
     /// </summary>
     public sealed class Option : IEquatable<Option>
     {
+        #region Constructors
+
         /// <summary>
         /// Constructs with <see cref="Property"/>s and/or <see cref="ScoredProperty"/>s.
         /// </summary>
@@ -60,28 +62,17 @@ namespace Kip
             _scoredProperties = scoredPropertis;
         }
 
+        #endregion
+
         public XName Name
         {
             get;
         }
 
+        #region The constrained value
         public XName Constrained
         {
             get;
-        }
-
-        private readonly ImmutableNamedElementCollection<Property> _properties
-            = ImmutableNamedElementCollection.CreatePropertyCollection();
-        public IReadOnlyNamedElementCollection<Property> Properties
-        {
-            get { return _properties; }
-        }
-
-        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
-            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
-        public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
-        {
-            get { return _scoredProperties; }
         }
 
         /// <summary>
@@ -92,6 +83,124 @@ namespace Kip
         {
             return new Option(Name, constrained, _properties, _scoredProperties);
         }
+
+        #endregion
+
+        #region Properties
+
+        private readonly ImmutableNamedElementCollection<Property> _properties
+            = ImmutableNamedElementCollection.CreatePropertyCollection();
+        public IReadOnlyNamedElementCollection<Property> Properties
+        {
+            get { return _properties; }
+        }
+
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        public Option Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            var p = _properties.Get(name)?.Set(value) ?? new Property(name, value);
+            return new Option(Name, Constrained, _properties.SetItem(p), _scoredProperties);
+        }
+
+        public Option Remove(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return new Option(Name, Constrained, _properties.Remove(name), _scoredProperties);
+        }
+
+        #endregion
+
+        #region Nested properties
+
+        public Value this[PropertyName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _properties[name1][name2];
+            }
+        }
+
+        public Value Get(PropertyName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _properties.Get(name1)?.Get(name2);
+        }
+
+        public Option Set(PropertyName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            var p = _properties.Get(name1)?.Set(name2, value)
+                ?? new Property(name1, new Property(name2, value));
+            return new Option(Name, Constrained, _properties.SetItem(p), _scoredProperties);
+        }
+
+        #endregion
+
+        #region Scored properties
+
+        private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
+            = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+        public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
+        {
+            get { return _scoredProperties; }
+        }
+
+        public ValueOrParameterRef this[ScoredPropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _scoredProperties[name].ValueOrParameterRef;
+            }
+        }
+
+        public ValueOrParameterRef Get(ScoredPropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _scoredProperties.Get(name)?.ValueOrParameterRef;
+        }
+
+        #endregion
+
+        #region Nested scored properties
+
+        public ValueOrParameterRef this[ScoredPropertyName name1, ScoredPropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _scoredProperties[name1][name2];
+            }
+        }
+
+        public ValueOrParameterRef Get(ScoredPropertyName name1, ScoredPropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _scoredProperties.Get(name1)?.Get(name2);
+        }
+
+        #endregion
 
         /// <summary>
         /// Add the specified element to the <see cref="Option"/>.

@@ -13,12 +13,12 @@ namespace Kip
         /// Constructs with the name.
         /// </summary>
         /// <param name="name"></param>
-        public ParameterRef(XName name)
+        public ParameterRef(ParameterName name)
         {
             Name = name;
         }
 
-        public XName Name
+        public ParameterName Name
         {
             get;
         }

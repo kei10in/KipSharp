@@ -12,6 +12,9 @@ namespace Kip
     /// </summary>
     public sealed class Ticket : IEquatable<Ticket>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with children: <see cref="Feature"/>,
         /// <see cref="ParameterInit"/> and/or <see cref="Property"/>.
@@ -48,12 +51,107 @@ namespace Kip
             _declaredNamespaces = namespaceDeclarations;
         }
 
+        #endregion
+
+        #region Features
+
+        #region Top level features
+
         private readonly ImmutableNamedElementCollection<Feature> _features
             = ImmutableNamedElementCollection.CreateFeatureCollection();
         public IReadOnlyNamedElementCollection<Feature> Features()
         {
             return _features;
         }
+
+        public IReadOnlyList<Option> this[FeatureName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _features[name].Options();
+            }
+        }
+        public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _features[name1][name2];
+            }
+        }
+
+        public IReadOnlyList<Option> Get(FeatureName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _features.Get(name)?.Options();
+        }
+
+        /// <summary>
+        /// Set an option to the Feature specified by name.
+        /// </summary>
+        /// <param name="name">The name of Feature to set.</param>
+        /// <param name="selection">An option to set to the Feature.</param>
+        /// <returns>A new Ticket with the option set.</returns>
+        public Ticket Set(FeatureName name, Option selection)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (selection == null) throw new ArgumentNullException(nameof(selection));
+
+            var sel = ToPrintTicketOption(selection);
+            var ft = _features.Contains(name)
+                ? _features[name].Set(sel)
+                : new Feature(name, sel);
+
+            return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
+        }
+
+        #endregion
+
+        #region Nested Features
+
+        public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _features.Get(name1)?.Get(name2);
+        }
+
+        /// <summary>
+        /// Set an option to the Feature specified by name.
+        /// </summary>
+        /// <param name="name1">The name of Feature containing the nested Feature.</param>
+        /// <param name="name2">The name of the nested Feature to set.</param>
+        /// <param name="selection">An option to set to the Feature.</param>
+        /// <returns>A new Ticket with the option set.</returns>
+        public Ticket Set(FeatureName name1, FeatureName name2, Option selection)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            if (selection == null) throw new ArgumentNullException(nameof(selection));
+
+            var sel = ToPrintTicketOption(selection);
+            var ft = _features.Contains(name1)
+                ? _features[name1].Set(sel)
+                : new Feature(name1, new Feature(name2, sel));
+
+            return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
+        }
+
+        #endregion
+
+        private Option ToPrintTicketOption(Option option)
+        {
+            return option.Remove(Psk.DisplayName)
+                .Remove(Psk.DisplayUI)
+                .Remove(Psf.IdentityOption)
+                .SetConstrained(null);
+        }
+
+        #endregion
+
+        #region Parameters
 
         private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
             = ImmutableNamedElementCollection.CreateParameterInitCollection();
@@ -62,6 +160,41 @@ namespace Kip
             return _parameters;
         }
 
+        public Value this[ParameterName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _parameters[name].Value;
+            }
+        }
+
+        public Value Get(ParameterName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _parameters.Get(name)?.Value;
+        }
+
+        /// <summary>
+        /// Set a value to the ParameterInit specified by name.
+        /// </summary>
+        /// <param name="name">The name of the ParameterInit to set.</param>
+        /// <param name="value">A value to set to the ParameterInit.</param>
+        /// <returns>A new Ticket with the value set.</returns>
+        public Ticket Set(ParameterName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var pi = new ParameterInit(name, value);
+
+            return new Ticket(_features, _parameters.SetItem(pi), _properties, _declaredNamespaces);
+        }
+
+        #endregion
+
+        #region Properties
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties()
@@ -69,49 +202,86 @@ namespace Kip
             return _properties;
         }
 
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        /// <summary>
+        /// Set a value to the Property specified by name.
+        /// </summary>
+        /// <param name="name">The name of the Property to set.</param>
+        /// <param name="value">A value to set to the Property.</param>
+        /// <returns>A new Ticket with the value set.</returns>
+        public Ticket Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var p = new Property(name, value);
+
+            return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
+        }
+
+        #region Nested properties
+
+        public Value this[PropertyName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+                return _properties[name1][name2];
+            }
+        }
+
+        public Value Get(PropertyName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _properties.Get(name1)?.Get(name2);
+        }
+
+        /// <summary>
+        /// Set a value to the Property specified by name.
+        /// </summary>
+        /// <param name="name1">The name of the Property containing the nested
+        /// Property.</param>
+        /// <param name="name2">The name of the nested Property to set.</param>
+        /// <param name="value">A value to set to the Property.</param>
+        /// <returns>A new Ticket with the value set.</returns>
+        public Ticket Set(PropertyName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            var p = _properties.Get(name1)?.Set(name2, value)
+                ?? new Property(name1, new Property(name2, value));
+
+            return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Namespace declarations
+
         private readonly NamespaceDeclarationCollection _declaredNamespaces;
         public IReadOnlyNamespaceDeclarationCollection DeclaredNamespaces
         {
             get { return _declaredNamespaces; }
-        }
-    
-        /// <summary>
-        /// Adds the specified element to the ticket.
-        /// </summary>
-        /// <returns>A new Ticket with element added.</returns>
-        public Ticket Add(Feature element)
-        {
-            return new Ticket(
-                _features.Add(element),
-                _parameters,
-                _properties,
-                _declaredNamespaces);
-        }
-
-        /// <summary>
-        /// Adds the specified element to the ticket.
-        /// </summary>
-        /// <returns>A new Ticket with element added.</returns>
-        public Ticket Add(ParameterInit element)
-        {
-            return new Ticket(
-                _features,
-                _parameters.Add(element),
-                _properties,
-                _declaredNamespaces);
-        }
-
-        /// <summary>
-        /// Adds the specified element to the ticket.
-        /// </summary>
-        /// <returns>A new Ticket with element added.</returns>
-        public Ticket Add(Property element)
-        {
-            return new Ticket(
-                _features,
-                _parameters,
-                _properties.Add(element),
-                _declaredNamespaces);
         }
 
         public Ticket Add(NamespaceDeclaration declaration)
@@ -122,6 +292,8 @@ namespace Kip
                 _properties,
                 _declaredNamespaces.Add(declaration));
         }
+
+        #endregion
 
         public override bool Equals(object obj)
         {

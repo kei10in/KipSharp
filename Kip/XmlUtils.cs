@@ -52,6 +52,22 @@ namespace Kip
                 return prefix + ":" + self.LocalName;
             }
         }
+        internal static string ToQName(this PrintSchemaName self, XmlWriter writer)
+        {
+            var prefix = writer.LookupPrefix(self.NamespaceName);
+            if (prefix == null)
+            {
+                throw new InternalException($"Namespace declaration not found: {self.Namespace}");
+            }
+            else if (prefix == string.Empty)
+            {
+                return self.LocalName;
+            }
+            else
+            {
+                return prefix + ":" + self.LocalName;
+            }
+        }
 
         internal static XName XName(this XmlReader self)
         {

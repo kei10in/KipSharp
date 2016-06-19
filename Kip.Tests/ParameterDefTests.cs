@@ -9,8 +9,8 @@ namespace Kip.Tests
         private List<Tuple<ParameterDef, ParameterDef>> _equalsPair = new List<Tuple<ParameterDef, ParameterDef>>()
         {
             Tuple.Create<ParameterDef, ParameterDef>(null, null),
-            Tuple.Create(new ParameterDef("a"), new ParameterDef("a")),
-            Tuple.Create(new ParameterDef("a", new Property("b")), new ParameterDef("a", new Property("b"))),
+            Tuple.Create(new ParameterDef(Exp.SomeParameter), new ParameterDef(Exp.SomeParameter)),
+            Tuple.Create(new ParameterDef(Exp.SomeParameter, new Property(Exp.SomeProperty)), new ParameterDef(Exp.SomeParameter, new Property(Exp.SomeProperty))),
         };
 
         [Fact]
@@ -24,11 +24,11 @@ namespace Kip.Tests
 
         private List<Tuple<ParameterDef, ParameterDef>> _notEqualsPair = new List<Tuple<ParameterDef, ParameterDef>>()
         {
-            Tuple.Create<ParameterDef, ParameterDef>(null, new ParameterDef("a")),
-            Tuple.Create<ParameterDef, ParameterDef>(new ParameterDef("a"), null),
-            Tuple.Create(new ParameterDef("a"), new ParameterDef("b")),
-            Tuple.Create(new ParameterDef("a"), new ParameterDef("a", new Property("b"))),
-            Tuple.Create(new ParameterDef("a", new Property("b")), new ParameterDef("a", new Property("c"))),
+            Tuple.Create<ParameterDef, ParameterDef>(null, new ParameterDef(Exp.SomeParameter)),
+            Tuple.Create<ParameterDef, ParameterDef>(new ParameterDef(Exp.SomeParameter), null),
+            Tuple.Create(new ParameterDef(Exp.SomeParameter), new ParameterDef(Exp.OtherParameter)),
+            Tuple.Create(new ParameterDef(Exp.SomeParameter), new ParameterDef(Exp.SomeParameter, new Property(Exp.SomeProperty))),
+            Tuple.Create(new ParameterDef(Exp.SomeParameter, new Property(Exp.SomeProperty)), new ParameterDef(Exp.SomeParameter, new Property(Exp.OtherProperty))),
         };
 
         [Fact]

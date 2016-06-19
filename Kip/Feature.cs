@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Kip
 {
@@ -15,7 +14,7 @@ namespace Kip
         /// <summary>
         /// Constructs with the name.
         /// </summary>
-        public Feature(XName name)
+        public Feature(FeatureName name)
         {
             Name = name;
         }
@@ -24,7 +23,7 @@ namespace Kip
         /// Constructs with the name and the children, <see cref="Option"/>,
         /// <see cref="Property"/> and/or <see cref="Feature"/>.
         /// </summary>
-        public Feature(XName name, params FeatureChild[] elements)
+        public Feature(FeatureName name, params FeatureChild[] elements)
         {
             Name = name;
             var o = new Option();
@@ -44,7 +43,7 @@ namespace Kip
         }
 
         internal Feature(
-            XName name,
+            FeatureName name,
             ImmutableNamedElementCollection<Property> properties,
             ImmutableList<Option> options,
             ImmutableNamedElementCollection<Feature> nestedFeature)
@@ -55,10 +54,13 @@ namespace Kip
             _features = nestedFeature;
         }
 
-        public XName Name
+        public FeatureName Name
         {
             get;
         }
+
+
+        #region Properties
 
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
@@ -67,12 +69,110 @@ namespace Kip
             get { return _properties; }
         }
 
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        /// <summary>
+        /// Set a value to the Property specified by the name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Feature Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
+            var p = _properties.Get(name)?.Set(value)
+                ?? new Property(name, value);
+
+            return new Feature(Name, _properties.SetItem(p), _options, _features);
+        }
+
+        #region Nested properties
+
+        public Value this[PropertyName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _properties[name1][name2];
+            }
+        }
+
+        public Value Get(PropertyName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _properties.Get(name1)?.Get(name2);
+        }
+
+        /// <summary>
+        /// Set a value to the nested Property specified by the name1 and
+        /// name2.
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Feature Set(PropertyName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            var p = _properties.Get(name1)?.Set(name2, value)
+                ?? new Property(name1, new Property(name2, value));
+
+            return new Feature(Name, _properties.SetItem(p), _options, _features);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Options
+
         private readonly ImmutableList<Option> _options
             = ImmutableList.Create<Option>();
-        public IReadOnlyCollection<Option> Options()
+        public IReadOnlyList<Option> Options()
         {
             return _options;
         }
+
+        /// <summary>
+        /// Set the specified element to the <see cref="Feature"/>.
+        /// </summary>
+        /// <param name="option">The option to set to <see cref="Feature"/>.</param>       
+        /// <returns>A new Feature with the element set.</returns>
+        public Feature Set(Option option)
+        {
+            var options = new[] { option };
+            return new Feature(Name, _properties, options.ToImmutableList(), _features);
+        }
+
+        public Feature Update(Func<Option, Option> func)
+        {
+            var updated = _options.Select(func);
+            return new Feature(Name, _properties, updated.ToImmutableList(), _features);
+        }
+
+        #endregion
+
+        #region Nested feature
+
+        #region Options of the nested feature
 
         private readonly ImmutableNamedElementCollection<Feature> _features
             = ImmutableNamedElementCollection.CreateFeatureCollection();
@@ -80,6 +180,87 @@ namespace Kip
         {
             get { return _features; }
         }
+
+        public IReadOnlyList<Option> this[FeatureName name]
+        {
+            get { return _features[name].Options(); }
+        }
+
+        public IReadOnlyList<Option> Get(FeatureName name)
+        {
+            return _features.Get(name)?.Options();
+        }
+
+        public Feature Set(FeatureName name, Option selection)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (selection == null) throw new ArgumentNullException(nameof(selection));
+
+            var ft = _features.Contains(name)
+                ? _features[name].Set(selection)
+                : new Feature(name, selection);
+
+            return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
+
+        public Feature Update(FeatureName name, Func<Option, Option> func)
+        {
+            var ft = _features.Get(name)?.Update(func);
+            if (ft == null) return this;
+
+            return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
+
+        #endregion
+
+        #region Properties of the nested feature
+
+        public Value this[FeatureName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+                return _features[name1][name2];
+            }
+        }
+
+        /// <summary>
+        /// Get a value of the Property of the nested Feature.
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <returns></returns>
+        public Value Get(FeatureName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            return _features.Get(name1)?.Get(name2);
+        }
+
+        /// <summary>
+        /// Set a value to the Property of the nested Feature.
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Feature Set(FeatureName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            var ft = _features.Get(name1)?.Set(name2, value)
+                ?? new Feature(name1, new Property(name2, value));
+
+            return new Feature(Name, _properties, _options, _features.SetItem(ft));
+        }
+
+        #endregion
+
+        #endregion
 
         /// <summary>
         /// Add the specified element to the <see cref="Feature"/>.

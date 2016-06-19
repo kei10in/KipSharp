@@ -14,13 +14,13 @@ namespace Kip
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public ParameterInit(XName name, Value value)
+        public ParameterInit(ParameterName name, Value value)
         {
             Name = name;
             Value = value;
         }
 
-        public XName Name
+        public ParameterName Name
         {
             get;
         }
@@ -34,7 +34,7 @@ namespace Kip
         /// Sets the specified <see cref="Value"/> to the ParameterInit.
         /// </summary>
         /// <returns>A new ParameterInit with the value set.</returns>
-        public ParameterInit SetValue(Value value)
+        public ParameterInit Set(Value value)
         {
             return new ParameterInit(Name, value);
         }

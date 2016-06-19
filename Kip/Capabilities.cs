@@ -12,6 +12,9 @@ namespace Kip
     /// </summary>
     public sealed class Capabilities : IEquatable<Capabilities>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with children: <see cref="Feature"/>,
         /// <see cref="ParameterDef"/> and/or <see cref="Property"/>.
@@ -48,12 +51,57 @@ namespace Kip
             _declaredNamespaces = namespaceDeclarations;
         }
 
+        #endregion
+
+        #region Features
+
         private readonly ImmutableNamedElementCollection<Feature> _features
             = ImmutableNamedElementCollection.CreateFeatureCollection();
         public IReadOnlyNamedElementCollection<Feature> Features
         {
             get { return _features; }
         }
+
+        public IReadOnlyList<Option> this[FeatureName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _features[name].Options();
+            }
+        }
+
+        public IReadOnlyList<Option> Get(FeatureName name)
+        {
+            return _features.Get(name)?.Options();
+        }
+
+        public Capabilities Update(FeatureName name, Func<Option, Option> func)
+        {
+            var ft = _features.Get(name);
+             if (ft == null) return this;
+
+            return new Capabilities(_features.SetItem(ft.Update(func)), _parameters, _properties, _declaredNamespaces);
+        }
+
+        public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _features[name1][name2];
+            }
+        }
+
+        public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
+        {
+            return _features.Get(name1)?.Get(name2);
+        }
+
+        #endregion
+
+        #region Parameters
 
         private readonly ImmutableNamedElementCollection<ParameterDef> _parameters
             = ImmutableNamedElementCollection.CreateParameterDefCollection();
@@ -62,6 +110,25 @@ namespace Kip
             get { return _parameters; }
         }
 
+        public ParameterDef this[ParameterName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _parameters[name];
+            }
+        }
+
+        public ParameterDef Get(ParameterName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _parameters.Get(name);
+        }
+
+        #endregion
+
+        #region Properties
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties
@@ -69,28 +136,51 @@ namespace Kip
             get { return _properties; }
         }
 
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        public Value this[PropertyName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+                return _properties[name1][name2];
+            }
+        }
+
+        public Value Get(PropertyName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            return _properties.Get(name1)?.Get(name1);
+        }
+
+        #endregion
+
+        #region Namespace declarations
+
         private readonly NamespaceDeclarationCollection _declaredNamespaces;
         public IReadOnlyNamespaceDeclarationCollection DeclaredNamespaces
         {
             get { return _declaredNamespaces; }
         }
 
-        public IEnumerable<Option> GetFeatureOptions(XName featureName)
-        {
-            var options = Features[featureName]?.Options();
-            return options ?? Enumerable.Empty<Option>();
-        }
-
-        public IEnumerable<Option> GetFeatureOptions(XName featureName, params XName[] nestedFeatureNames)
-        {
-            var ft = Features[featureName];
-            foreach (var nestedFeatureName in nestedFeatureNames)
-            {
-                ft = ft?.Features[nestedFeatureName];
-            }
-            var options = ft?.Options();
-            return options ?? Enumerable.Empty<Option>();
-        }
+        #endregion
 
         /// <summary>
         /// Adds the specified element to the capabilities.

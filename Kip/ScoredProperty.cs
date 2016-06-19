@@ -11,11 +11,14 @@ namespace Kip
     /// </summary>
     public sealed class ScoredProperty : IEquatable<ScoredProperty>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with the name and the children:
         /// <see cref="ScoredProperty"/>s and/or <see cref="Property"/>s.
         /// </summary>
-        public ScoredProperty(XName name, params ScoredPropertyChild[] elements)
+        public ScoredProperty(ScoredPropertyName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
 
@@ -36,7 +39,7 @@ namespace Kip
         /// Constructs with the name, the <see cref="Value"/> and the children:
         /// <see cref="ScoredProperty"/>s and/or <see cref="Property"/>s.
         /// </summary>
-        public ScoredProperty(XName name, Value value, params ScoredPropertyChild[] elements)
+        public ScoredProperty(ScoredPropertyName name, Value value, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
             Value = value;
@@ -47,14 +50,14 @@ namespace Kip
         /// children: <see cref="ScoredProperty"/>s and/or <see cref="Property"/>.
         /// <see cref="Property"/>s.
         /// </summary>
-        public ScoredProperty(XName name, ParameterRef parameter, params ScoredPropertyChild[] elements)
+        public ScoredProperty(ScoredPropertyName name, ParameterRef parameter, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
             ParameterRef = parameter;
         }
 
         internal ScoredProperty(
-            XName name,
+            ScoredPropertyName name,
             Value value,
             ParameterRef parameter,
             ImmutableNamedElementCollection<ScoredProperty> scoredProperties,
@@ -67,10 +70,14 @@ namespace Kip
             _properties = properties;
         }
 
-        public XName Name
+        #endregion
+
+        public ScoredPropertyName Name
         {
             get;
         }
+
+        #region Value or parameter refernce
 
         public Value Value
         {
@@ -82,11 +89,42 @@ namespace Kip
             get;
         }
 
+        public ValueOrParameterRef ValueOrParameterRef
+        {
+            get
+            {
+                if (Value != null) return new ValueOrParameterRef(Value);
+                if (ParameterRef != null) return new ValueOrParameterRef(ParameterRef);
+                else return null;
+            }
+        }
+
+        #endregion
+
+        #region Nested scored properties
+
         private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
         public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
         {
             get { return _scoredProperties; }
         }
+
+        public ValueOrParameterRef this[ScoredPropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _scoredProperties[name].ValueOrParameterRef;
+            }
+        }
+
+        public ValueOrParameterRef Get(ScoredPropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _scoredProperties.Get(name)?.ValueOrParameterRef;
+        }
+
+        #endregion
 
         private readonly ImmutableNamedElementCollection<Property> _properties;
         public IReadOnlyNamedElementCollection<Property> Properties
@@ -176,6 +214,51 @@ namespace Kip
         public static implicit operator ScoredPropertyChild(ScoredProperty element)
         {
             return new ScoredPropertyChild(element);
+        }
+    }
+
+    public class ValueOrParameterRef
+    {
+        private object _content;
+
+        public ValueOrParameterRef(Value value)
+        {
+            _content = value;
+        }
+
+        public ValueOrParameterRef(ParameterRef paramterRef)
+        {
+            _content = paramterRef;
+        }
+
+        public XName Type
+        {
+            get
+            {
+                var type = _content.GetType();
+                if (type == typeof(Value))
+                {
+                    return Psf.Feature;
+                }
+                else if (type == typeof(ParameterRef))
+                {
+                    return Psf.ParameterRef;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unexpected type.");
+                }
+            }
+        }
+
+        public Value AsValue()
+        {
+            return _content as Value;
+        }
+
+        public ParameterRef AsParamterRef()
+        {
+            return _content as ParameterRef; ;
         }
     }
 }

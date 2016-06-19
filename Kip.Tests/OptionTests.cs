@@ -11,8 +11,8 @@ namespace Kip.Tests
             Tuple.Create<Option, Option>(null, null),
             Tuple.Create(new Option(), new Option()),
             Tuple.Create(new Option("a"), new Option("a")),
-            Tuple.Create(new Option("a", new ScoredProperty("b")), new Option("a", new ScoredProperty("b"))),
-            Tuple.Create(new Option("a", new Property("b")), new Option("a", new Property("b"))),
+            Tuple.Create(new Option("a", new ScoredProperty(Exp.SomeScoredProperty)), new Option("a", new ScoredProperty(Exp.SomeScoredProperty))),
+            Tuple.Create(new Option("a", new Property(Exp.SomeProperty)), new Option("a", new Property(Exp.SomeProperty))),
         };
 
         [Fact]
@@ -29,10 +29,10 @@ namespace Kip.Tests
             Tuple.Create<Option, Option>(null, new Option("a")),
             Tuple.Create<Option, Option>(new Option("a"), null),
             Tuple.Create(new Option("a"), new Option("b")),
-            Tuple.Create(new Option("a"), new Option("a", new ScoredProperty("b"))),
-            Tuple.Create(new Option("a", new ScoredProperty("b")), new Option("a", new ScoredProperty("c"))),
-            Tuple.Create(new Option("a"), new Option("a", new Property("b"))),
-            Tuple.Create(new Option("a", new Property("b")), new Option("a", new Property("c"))),
+            Tuple.Create(new Option("a"), new Option("a", new ScoredProperty(Exp.SomeScoredProperty))),
+            Tuple.Create(new Option("a", new ScoredProperty(Exp.SomeScoredProperty)), new Option("a", new ScoredProperty(Exp.OtherScoredProperty))),
+            Tuple.Create(new Option("a"), new Option("a", new Property(Exp.SomeProperty))),
+            Tuple.Create(new Option("a", new Property(Exp.SomeProperty)), new Option("a", new Property(Exp.OtherProperty))),
         };
 
         [Fact]

@@ -11,10 +11,13 @@ namespace Kip
     /// </summary>
     public sealed class Property : IEquatable<Property>
     {
+
+        #region Constructors
+
         /// <summary>
         /// Constructs with the name and the nested <see cref="Property"/>s.
         /// </summary>
-        public Property(XName name, params Property[] elements)
+        public Property(PropertyName name, params Property[] elements)
             : this(name, null, elements)
         { }
 
@@ -22,7 +25,7 @@ namespace Kip
         /// Constructs with the name, the <see cref="Value"/>, and nested
         /// <see cref="Property"/>s.
         /// </summary>
-        public Property(XName name, Value value, params Property[] elements)
+        public Property(PropertyName name, Value value, params Property[] elements)
         {
             Name = name;
             Value = value;
@@ -36,7 +39,7 @@ namespace Kip
         }
 
         internal Property(
-            XName name,
+            PropertyName name,
             Value value,
             ImmutableNamedElementCollection<Property> properties)
         {
@@ -45,7 +48,9 @@ namespace Kip
             _properties = properties;
         }
 
-        public XName Name
+        #endregion
+
+        public PropertyName Name
         {
             get;
         }
@@ -55,12 +60,43 @@ namespace Kip
             get;
         }
 
+        public Property Set(Value value)
+        {
+            return new Property(Name, value, _properties);
+        }
+
+        #region Nested properties
+
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
         }
+
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
+        public Value Get(PropertyName name)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            return _properties.Get(name)?.Value;
+        }
+
+        public Property Set(PropertyName name, Value value)
+        {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            var p = _properties.Get(name) ?? new Property(name);
+            return new Property(Name, value, _properties.SetItem(p));
+        }
+
+        #endregion
 
         /// <summary>
         /// Adds the specified element to the <see cref="Property"/>.

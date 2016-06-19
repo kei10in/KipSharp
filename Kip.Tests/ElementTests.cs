@@ -5,18 +5,15 @@ namespace Kip.Tests
 {
     public class ElementTests
     {
-        static readonly XName someName1 = "SomeName1";
-        static readonly XName someName2 = "SomeName2";
-
         [Fact]
         public void ThrowsExceptionWhenAddFeatureWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc = pc.Add(new Feature(someName1));
+            pc = pc.Add(new Feature(Exp.SomeFeature));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc = pc.Add(new Feature(someName1));
+                pc = pc.Add(new Feature(Exp.SomeFeature));
             });
         }
 
@@ -24,11 +21,11 @@ namespace Kip.Tests
         public void ThrowsExceptionWhenAddParameterWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc = pc.Add(new ParameterDef(someName1));
+            pc = pc.Add(new ParameterDef(Exp.SomeParameter));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc = pc.Add(new ParameterDef(someName1));
+                pc = pc.Add(new ParameterDef(Exp.SomeParameter));
             });
         }
 
@@ -36,11 +33,11 @@ namespace Kip.Tests
         public void ThrowsExceptionWhenAddPropertyWithExistingNameToCapabilites()
         {
             var pc = new Capabilities();
-            pc = pc.Add(new Property(someName1));
+            pc = pc.Add(new Property(Exp.SomeProperty));
 
             Assert.Throws<DuplicateNameException>(() =>
             {
-                pc = pc.Add(new Property(someName1));
+                pc = pc.Add(new Property(Exp.SomeProperty));
             });
         }
 
@@ -49,9 +46,9 @@ namespace Kip.Tests
         {
             Assert.Throws<DuplicateNameException>(() =>
             {
-                var parent = new Property(someName1,
-                    new Property(someName2),
-                    new Property(someName2));
+                var parent = new Property(Exp.SomeProperty,
+                    new Property(Exp.NestedProperty),
+                    new Property(Exp.NestedProperty));
             });
         }
     }
