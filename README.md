@@ -23,7 +23,7 @@ var displayNames = for op in options
 using Kip;
 
 var pt = Ticket.Load(inputStream);
-pt.SetFeatureOption(Psk.PageMediaSize,
+pt = pt.Set(Psk.PageMediaSize,
     new Option(Psk.ISOA4,
         new ScoredProperty(Psk.MediaSizeWidth, 210000),
         new ScoredProperty(Psk.MediaSizeHeight, 297000)));
