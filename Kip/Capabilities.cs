@@ -84,6 +84,23 @@ namespace Kip
             return new Capabilities(_features.SetItem(ft.Update(func)), _parameters, _properties, _declaredNamespaces);
         }
 
+        public Value this[FeatureName name1, PropertyName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _features[name1][name2];
+            }
+        }
+
+        public Value Get(FeatureName name1, PropertyName name2)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+            return _features.Get(name1)?.Get(name2);
+        }
+
         public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
         {
             get
