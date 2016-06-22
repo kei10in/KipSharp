@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace Kip
@@ -7,6 +8,7 @@ namespace Kip
     /// Represents a ParameterRef element defined in the Print Schema
     /// Specificaiton.
     /// </summary>
+    [DebuggerDisplay("{Name.LocalName}: ParameterRef")]
     public sealed class ParameterRef : IEquatable<ParameterRef>
     {
         /// <summary>

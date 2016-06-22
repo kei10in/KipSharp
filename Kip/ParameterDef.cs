@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -9,6 +10,7 @@ namespace Kip
     /// Represents a ParameterDef element defined in the Print Schema
     /// Specificaiton.
     /// </summary>
+    [DebuggerDisplay("{Name.LocalName}: ParameterDef")]
     public sealed class ParameterDef : IEquatable<ParameterDef>
     {
 

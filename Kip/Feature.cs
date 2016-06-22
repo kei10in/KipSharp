@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Kip
@@ -9,6 +10,7 @@ namespace Kip
     /// Represents an Feature element defined in the Print Schema
     /// Specification.
     /// </summary>
+    [DebuggerDisplay("{Name.LocalName}: Feature")]
     public sealed class Feature : IEquatable<Feature>
     {
         /// <summary>
