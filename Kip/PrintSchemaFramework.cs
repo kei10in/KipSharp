@@ -32,6 +32,7 @@ namespace Kip
         public static readonly PropertyName MinLength = new PropertyName(Namespace + "MinLength");
         public static readonly PropertyName MaxValue = new PropertyName(Namespace + "MaxValue");
         public static readonly PropertyName MinValue = new PropertyName(Namespace + "MinValue");
+        public static readonly PropertyName Multiple = new PropertyName(Namespace + "Multiple");
         public static readonly PropertyName Mandatory = new PropertyName(Namespace + "Mandatory");
         public static readonly PropertyName UnitType = new PropertyName(Namespace + "UnitType");
 
