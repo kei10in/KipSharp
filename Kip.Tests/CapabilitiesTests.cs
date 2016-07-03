@@ -15,7 +15,7 @@ namespace Kip.Tests
                 new Feature(Exp.SomeFeature,
                     new Option(Exp.SomeOption1),
                     new Option(Exp.SomeOption2)));
-            var options = pc.Get(Exp.SomeFeature);
+            var options = pc.Get(Exp.SomeFeature)?.Options();
 
             var expected = new List<XName>() { Exp.SomeOption1, Exp.SomeOption2 };
             Assert.Equal(expected, options.Select(x => x.Name));
@@ -41,7 +41,7 @@ namespace Kip.Tests
                     new Feature(Exp.NestedFeature,
                         new Option(Exp.SomeOption1),
                         new Option(Exp.SomeOption2))));
-            var options = pc.Get(Exp.SomeFeature, Exp.NestedFeature);
+            var options = pc.Get(Exp.SomeFeature, Exp.NestedFeature)?.Options();
 
             var expected = new List<XName>() { Exp.SomeOption1, Exp.SomeOption2 };
             Assert.Equal(expected, options.Select(x => x.Name));

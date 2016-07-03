@@ -20,9 +20,10 @@ namespace Kip.Sample
             var pc = Capabilities.Load(queue.GetPrintCapabilitiesAsXml());
             printTicket = Ticket.Load(queue.DefaultPrintTicket.GetXmlStream());
 
-            MediaSizeDisplayName = pc.Get(Psk.PageMediaSize, Psk.DisplayName).AsString();
+            var mediaSizeFeature = pc.Get(Psk.PageMediaSize);
+            MediaSizeDisplayName = mediaSizeFeature.Get(Psk.DisplayName)?.AsString();
             MediaSizeCapabilities = new ReactiveList<MediaSizeViewModel>(
-                from option in pc.Get(Psk.PageMediaSize)
+                from option in mediaSizeFeature.Options()
                 select new MediaSizeViewModel(option));
 
             MediaSize = MediaSizeCapabilities.First(ms =>

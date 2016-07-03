@@ -62,58 +62,76 @@ namespace Kip
             get { return _features; }
         }
 
-        public IReadOnlyList<Option> this[FeatureName name]
+        public Feature this[FeatureName name]
         {
             get
             {
                 if (name == null) throw new ArgumentNullException(nameof(name));
-                return _features[name].Options();
+                return _features[name];
             }
         }
 
-        public IReadOnlyList<Option> Get(FeatureName name)
+        public Feature Get(FeatureName name)
         {
-            return _features.Get(name)?.Options();
+            return _features.Get(name);
+        }
+
+        public Feature this[FeatureName name1, FeatureName name2]
+        {
+            get
+            {
+                if (name1 == null) throw new ArgumentNullException(nameof(name1));
+                if (name2 == null) throw new ArgumentNullException(nameof(name2));
+                return _features[name1].Features[name2];
+            }
+        }
+
+        public Feature Get(FeatureName name1, FeatureName name2)
+        {
+            return _features.Get(name1)?.Features?.Get(name2);
+        }
+
+        public Capabilities Set(FeatureName name1, PropertyName name2, Value value)
+        {
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
+
+            var ft = _features.Get(name1)?.Set(name2, value) ?? new Feature(name1, new Property(name2, value));
+
+            return new Capabilities(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
 
         public Capabilities Update(FeatureName name, Func<Option, Option> func)
         {
+            if (name == null) throw new ArgumentNullException(nameof(name));
+
             var ft = _features.Get(name);
-             if (ft == null) return this;
+            if (ft == null) return this;
 
             return new Capabilities(_features.SetItem(ft.Update(func)), _parameters, _properties, _declaredNamespaces);
         }
 
-        public Value this[FeatureName name1, PropertyName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _features[name1][name2];
-            }
-        }
-
-        public Value Get(FeatureName name1, PropertyName name2)
+        public Capabilities Set(FeatureName name1, FeatureName name2, PropertyName name3, Value value)
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
             if (name2 == null) throw new ArgumentNullException(nameof(name2));
-            return _features.Get(name1)?.Get(name2);
+            if (name3 == null) throw new ArgumentNullException(nameof(name3));
+
+            var ft = _features.Get(name1)?.Set(name2, name3, value)
+                ?? new Feature(name1, new Feature(name2, new Property(name3, value)));
+
+            return new Capabilities(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
 
-        public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
+        public Capabilities Update(FeatureName name1, FeatureName name2, Func<Option, Option> func)
         {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _features[name1][name2];
-            }
-        }
+            if (name1 == null) throw new ArgumentNullException(nameof(name1));
+            if (name2 == null) throw new ArgumentNullException(nameof(name2));
 
-        public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
-        {
-            return _features.Get(name1)?.Get(name2);
+            var ft = _features.Get(name1);
+            if (ft == null) return this;
+
+            return new Capabilities(_features.SetItem(ft.Update(name2, func)), _parameters, _properties, _declaredNamespaces);
         }
 
         #endregion
