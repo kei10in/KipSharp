@@ -268,9 +268,9 @@ namespace Kip
         /// Add the specified element to the <see cref="Feature"/>.
         /// </summary>
         /// <returns>A new Feature with the element added.</returns>
-        public Feature Add(Property element)
+        public Feature Add(Property property)
         {
-            return new Feature(Name, _properties.Add(element), _options, _features);
+            return new Feature(Name, _properties.Add(property), _options, _features);
         }
 
         /// <summary>
