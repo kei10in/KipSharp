@@ -78,7 +78,7 @@ namespace Kip
             {
                 if (name1 == null) throw new ArgumentNullException(nameof(name1));
                 if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _features[name1][name2];
+                return _features[name1][name2].Options();
             }
         }
 
@@ -115,7 +115,7 @@ namespace Kip
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
             if (name2 == null) throw new ArgumentNullException(nameof(name2));
-            return _features.Get(name1)?.Get(name2);
+            return _features.Get(name1)?.Get(name2)?.Options();
         }
 
         /// <summary>

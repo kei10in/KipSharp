@@ -183,14 +183,14 @@ namespace Kip
             get { return _features; }
         }
 
-        public IReadOnlyList<Option> this[FeatureName name]
+        public Feature this[FeatureName name]
         {
-            get { return _features[name].Options(); }
+            get { return _features[name]; }
         }
 
-        public IReadOnlyList<Option> Get(FeatureName name)
+        public Feature Get(FeatureName name)
         {
-            return _features.Get(name)?.Options();
+            return _features.Get(name);
         }
 
         public Feature Set(FeatureName name, Option selection)
