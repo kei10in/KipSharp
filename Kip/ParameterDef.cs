@@ -53,6 +53,15 @@ namespace Kip
             get { return _properties; }
         }
 
+        public Value this[PropertyName name]
+        {
+            get
+            {
+                if (name == null) throw new ArgumentNullException(nameof(name));
+                return _properties[name].Value;
+            }
+        }
+
         public Value Get(PropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
