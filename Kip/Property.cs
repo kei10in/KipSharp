@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace Kip
 {
@@ -13,20 +12,21 @@ namespace Kip
     [DebuggerDisplay("{Name.LocalName}: Property")]
     public sealed class Property : IEquatable<Property>
     {
-
-        #region Constructors
-
         /// <summary>
-        /// Constructs with the name and the nested <see cref="Property"/>s.
+        /// Initializes a new instance of the <see cref="Property"/> class.
         /// </summary>
+        /// <param name="name">Name of this element.</param>
+        /// <param name="elements">Nested Properties.</param>
         public Property(PropertyName name, params Property[] elements)
             : this(name, null, elements)
         { }
 
         /// <summary>
-        /// Constructs with the name, the <see cref="Value"/>, and nested
-        /// <see cref="Property"/>s.
+        /// Initializes a new instance of the <see cref="Property"/> class.
         /// </summary>
+        /// <param name="name">Name of this element.</param>
+        /// <param name="value">Value element contained by this element</param>
+        /// <param name="elements">Nested Properties</param>
         public Property(PropertyName name, Value value, params Property[] elements)
         {
             Name = name;
@@ -37,6 +37,7 @@ namespace Kip
             {
                 properties.Add(e);
             }
+
             _properties = properties.ToImmutable();
         }
 
@@ -50,8 +51,6 @@ namespace Kip
             _properties = properties;
         }
 
-        #endregion
-
         public PropertyName Name
         {
             get;
@@ -62,15 +61,19 @@ namespace Kip
             get;
         }
 
+        /// <summary>
+        /// Updates value.
+        /// </summary>
+        /// <param name="value">New value.</param>
+        /// <returns>New instance of Property.</returns>
         public Property Set(Value value)
         {
             return new Property(Name, value, _properties);
         }
 
-        #region Nested properties
-
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
+
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
@@ -98,20 +101,19 @@ namespace Kip
             return new Property(Name, value, _properties.SetItem(p));
         }
 
-        #endregion
-
         /// <summary>
         /// Adds the specified element to the <see cref="Property"/>.
         /// </summary>
+        /// <param name="property">The property to add to this instance.</param>
         /// <returns>A new Property with the element added.</returns>
-        public Property Add(Property element)
+        public Property Add(Property property)
         {
-            return new Property(Name, Value, _properties.Add(element));
+            return new Property(Name, Value, _properties.Add(property));
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Property);
+            return this.Equals(obj as Property);
         }
 
         public bool Equals(Property rhs)
