@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace Kip
 {
@@ -12,9 +11,9 @@ namespace Kip
     public sealed class ParameterRef : IEquatable<ParameterRef>
     {
         /// <summary>
-        /// Constructs with the name.
+        /// Initializes a new instance of the <see cref="ParameterRef"/> class.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">Name of ParameterRef element</param>
         public ParameterRef(ParameterName name)
         {
             Name = name;
@@ -27,7 +26,7 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ParameterRef);
+            return this.Equals(obj as ParameterRef);
         }
 
         public bool Equals(ParameterRef rhs)
