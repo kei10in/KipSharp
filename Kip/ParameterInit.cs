@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace Kip
 {
     /// <summary>
-    /// Represents a ParameterInit element defined in the Print Schema
-    /// Specification.
+    /// Represents a <see cref="ParameterInit"/> element defined in the
+    /// PrintSchema Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ParameterInit")]
     public sealed class ParameterInit : IEquatable<ParameterInit>
     {
         /// <summary>
-        /// Constructs with the name and the <see cref="Value"/>.
+        /// Initializes a new instance of the <see cref="ParameterInit"/> class.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
+        /// <param name="name">Name of the element.</param>
+        /// <param name="value">Value of the element.</param>
         public ParameterInit(ParameterName name, Value value)
         {
             Name = name;
@@ -33,9 +32,10 @@ namespace Kip
         }
 
         /// <summary>
-        /// Sets the specified <see cref="Value"/> to the ParameterInit.
+        /// Sets the specified value to the <see cref="ParameterInit"/>.
         /// </summary>
-        /// <returns>A new ParameterInit with the value set.</returns>
+        /// <returns>A new <see cref="ParameterInit"/> with the value set.</returns>
+        /// <param name="value">The value to set .</param>
         public ParameterInit Set(Value value)
         {
             return new ParameterInit(Name, value);
@@ -43,7 +43,7 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ParameterInit);
+            return this.Equals(obj as ParameterInit);
         }
 
         public bool Equals(ParameterInit rhs)
