@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace Kip
 {
     /// <summary>
-    /// Represents a ParameterDef element defined in the Print Schema
-    /// Specification.
+    /// Represents a <see cref="ParameterDef"/> element defined in the
+    /// PrintSchema Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ParameterDef")]
     public sealed class ParameterDef : IEquatable<ParameterDef>
     {
-
-        #region Constructors
-
         /// <summary>
-        /// Constructs with name and the <see cref="Property"/>s.
+        /// Initializes a new instance of the <see cref="ParameterDef"/> class.
         /// </summary>
+        /// <param name="name">Name of this element.</param>
+        /// <param name="elements">Properties of this element.</param>
         public ParameterDef(ParameterName name, params Property[] elements)
         {
             Name = name;
@@ -28,6 +24,7 @@ namespace Kip
             {
                 properties.Add(e);
             }
+
             _properties = properties.ToImmutable();
         }
 
@@ -37,22 +34,25 @@ namespace Kip
             _properties = properties;
         }
 
-        #endregion
-
         public ParameterName Name
         {
             get;
         }
 
-        #region Properties
-
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
+
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
         }
 
+        /// <summary>
+        /// Returns a property for a given name if exists in the element,
+        /// otherwise throws exception.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>The property with name if find, otherwise null.</returns>
         public Value this[PropertyName name]
         {
             get
@@ -62,12 +62,27 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Returns a property for a given name if exists in the element,
+        /// otherwise returns null.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>The property with name if find, otherwise null.</returns>
         public Value Get(PropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _properties.Get(name)?.Value;
         }
 
+        /// <summary>
+        /// Sets specified value to the specified the Property element by name.
+        /// </summary>
+        /// <param name="name">The name of the Property element.</param>
+        /// <param name="value">The value to set to.</param>
+        /// <returns>
+        /// The new <see cref="ParameterDef"/> instance with new Property
+        /// element.
+        /// </returns>
         public ParameterDef Set(PropertyName name, Value value)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -76,12 +91,13 @@ namespace Kip
             return new ParameterDef(Name, _properties.SetItem(p));
         }
 
-        #endregion
-
         /// <summary>
         /// Add the specified property to the <see cref="ParameterDef"/>.
         /// </summary>
-        /// <returns>A new ParameterDef with the property added.</returns>
+        /// <param name="property">The Property element to add.</param>
+        /// <returns>
+        /// A new <see cref="ParameterDef"/> with the property added.
+        /// </returns>
         public ParameterDef Add(Property property)
         {
             return new ParameterDef(Name, _properties);
@@ -89,7 +105,7 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ParameterDef);
+            return this.Equals(obj as ParameterDef);
         }
 
         public bool Equals(ParameterDef rhs)
