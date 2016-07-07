@@ -45,6 +45,7 @@
     <Compile Include="DebugView.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Feature.cs" />
+    <Compile Include="Helper\ScoredPropertyChild.cs" />
     <Compile Include="ImmutableNamedElementCollection.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="ScoredProperty.cs" />
     <Compile Include="Ticket.cs" />
     <Compile Include="Value.cs" />
+    <Compile Include="ValueOrParameterRef.cs" />
     <Compile Include="XmlSchema.cs" />
     <Compile Include="XmlSchemaInstance.cs" />
     <Compile Include="XmlUtils.cs" />

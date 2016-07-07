@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Xml.Linq;
+
+using Kip.Helper;
 
 namespace Kip
 {
     /// <summary>
-    /// Represents a ScoredProeprty element defined in the Print Schema
-    /// Specification.
+    /// Represents a <see cref="ScoredProeprty"/> element defined in the Print
+    /// Schema Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ScoredProperty")]
     public sealed class ScoredProperty : IEquatable<ScoredProperty>
     {
-
-        #region Constructors
-
         /// <summary>
-        /// Constructs with the name and the children:
-        /// <see cref="ScoredProperty"/>s and/or <see cref="Property"/>s.
+        /// Initializes a new instance of the <see cref="ScoredProperty"/> class.
         /// </summary>
+        /// <param name="name">Name of ScoredProperty element.</param>
+        /// <param name="elements">Child Property and/or ScoredProperty.</param>
         public ScoredProperty(ScoredPropertyName name, params ScoredPropertyChild[] elements)
         {
             Name = name;
@@ -38,9 +35,11 @@ namespace Kip
         }
 
         /// <summary>
-        /// Constructs with the name, the <see cref="Value"/> and the children:
-        /// <see cref="ScoredProperty"/>s and/or <see cref="Property"/>s.
+        /// Initializes a new instance of the <see cref="ScoredProperty"/> class.
         /// </summary>
+        /// <param name="name">Name of the ScoredProperty.</param>
+        /// <param name="value">Value of the ScoredProperty.</param>
+        /// <param name="elements">Child Property and/or ScoredProperty.</param>
         public ScoredProperty(ScoredPropertyName name, Value value, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
@@ -48,10 +47,11 @@ namespace Kip
         }
 
         /// <summary>
-        /// Constructs with the name, the <see cref="ParameterRef"/> and the
-        /// children: <see cref="ScoredProperty"/>s and/or <see cref="Property"/>.
-        /// <see cref="Property"/>s.
+        /// Initializes a new instance of the <see cref="ScoredProperty"/> class.
         /// </summary>
+        /// <param name="name">Name of the ScoredProperty.</param>
+        /// <param name="parameter">ParameterRef element of the ScoredProperty.</param>
+        /// <param name="elements">Child Property and/or ScoredProperty.</param>
         public ScoredProperty(ScoredPropertyName name, ParameterRef parameter, params ScoredPropertyChild[] elements)
             : this(name, elements)
         {
@@ -72,14 +72,10 @@ namespace Kip
             _properties = properties;
         }
 
-        #endregion
-
         public ScoredPropertyName Name
         {
             get;
         }
-
-        #region Value or parameter refernce
 
         public Value Value
         {
@@ -101,11 +97,8 @@ namespace Kip
             }
         }
 
-        #endregion
-
-        #region Nested scored properties
-
         private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties;
+
         public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
         {
             get { return _scoredProperties; }
@@ -126,9 +119,8 @@ namespace Kip
             return _scoredProperties.Get(name)?.ValueOrParameterRef;
         }
 
-        #endregion
-
         private readonly ImmutableNamedElementCollection<Property> _properties;
+
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
@@ -137,28 +129,36 @@ namespace Kip
         /// <summary>
         /// Adds the specified element to the <see cref="ScoredProperty"/>.
         /// </summary>
+        /// <param name="element">The ScoredProperty to add.</param>
         /// <returns>A new ScoredProperty with the element added.</returns>
         public ScoredProperty Add(ScoredProperty element)
         {
             return new ScoredProperty(
-                Name, Value, ParameterRef,
-                _scoredProperties.Add(element), _properties);
+                Name,
+                Value,
+                ParameterRef,
+                _scoredProperties.Add(element),
+                _properties);
         }
 
         /// <summary>
         /// Adds the specified element to the <see cref="ScoredProperty"/>.
         /// </summary>
+        /// <param name="property">The Property to add.</param>
         /// <returns>A new ScoredProperty with the element added.</returns>
         public ScoredProperty Add(Property property)
         {
             return new ScoredProperty(
-                Name, Value, ParameterRef,
-                _scoredProperties, _properties.Add(property));
+                Name,
+                Value,
+                ParameterRef,
+                _scoredProperties,
+                _properties.Add(property));
         }
-        
+
         public override bool Equals(object obj)
         {
-            return Equals(obj as ScoredProperty);
+            return this.Equals(obj as ScoredProperty);
         }
 
         public bool Equals(ScoredProperty rhs)
@@ -190,77 +190,6 @@ namespace Kip
         public static bool operator !=(ScoredProperty v1, ScoredProperty v2)
         {
             return !(v1 == v2);
-        }
-    }
-
-    public sealed class ScoredPropertyChild
-    {
-        private Element _holder;
-
-        private ScoredPropertyChild(Element holder) { _holder = holder; }
-
-        internal void Apply(
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
-        {
-            _holder.Apply(
-                onProperty: onProperty,
-                onScoredProperty: onScoredProperty);
-        }
-
-        public static implicit operator ScoredPropertyChild(Property element)
-        {
-            return new ScoredPropertyChild(element);
-        }
-
-        public static implicit operator ScoredPropertyChild(ScoredProperty element)
-        {
-            return new ScoredPropertyChild(element);
-        }
-    }
-
-    public class ValueOrParameterRef
-    {
-        private object _content;
-
-        public ValueOrParameterRef(Value value)
-        {
-            _content = value;
-        }
-
-        public ValueOrParameterRef(ParameterRef paramterRef)
-        {
-            _content = paramterRef;
-        }
-
-        public XName Type
-        {
-            get
-            {
-                var type = _content.GetType();
-                if (type == typeof(Value))
-                {
-                    return Psf.Feature;
-                }
-                else if (type == typeof(ParameterRef))
-                {
-                    return Psf.ParameterRef;
-                }
-                else
-                {
-                    throw new InvalidOperationException("Unexpected type.");
-                }
-            }
-        }
-
-        public Value AsValue()
-        {
-            return _content as Value;
-        }
-
-        public ParameterRef AsParamterRef()
-        {
-            return _content as ParameterRef; ;
         }
     }
 }
