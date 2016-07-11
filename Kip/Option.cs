@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
+using Kip.Helper;
 
 namespace Kip
 {
@@ -10,27 +9,29 @@ namespace Kip
     /// </summary>
     public sealed class Option : IEquatable<Option>
     {
-        #region Constructors
-
         /// <summary>
-        /// Constructs with <see cref="Property"/>s and/or <see cref="ScoredProperty"/>s.
+        /// Initializes a new instance of the <see cref="Option"/> class.
         /// </summary>
+        /// <param name="elements">Children of the Option.</param>
         public Option(params OptionChild[] elements)
             : this(null, null, elements)
         { }
 
         /// <summary>
-        /// Constructs with the name and the children, <see cref="Property"/>s
-        /// and/or <see cref="ScoredProperty"/>s.
+        /// Initializes a new instance of the <see cref="Option"/> class.
         /// </summary>
+        /// <param name="name">Name of the Option.</param>
+        /// <param name="elements">Children of the Option.</param>
         public Option(XName name, params OptionChild[] elements)
             : this(name, null, elements)
         { }
 
         /// <summary>
-        /// Constructs with the name, the constrained value and children,
-        /// <see cref="Property"/> and/or <see cref="ScoredProperty"/>.
+        /// Initializes a new instance of the <see cref="Option"/> class.
         /// </summary>
+        /// <param name="name">Name of the Option.</param>
+        /// <param name="constrained">Constraint value.</param>
+        /// <param name="elements">Children of the Option.</param>
         public Option(XName name, XName constrained, params OptionChild[] elements)
         {
             Name = name;
@@ -62,14 +63,11 @@ namespace Kip
             _scoredProperties = scoredPropertis;
         }
 
-        #endregion
-
         public XName Name
         {
             get;
         }
 
-        #region The constrained value
         public XName Constrained
         {
             get;
@@ -78,23 +76,27 @@ namespace Kip
         /// <summary>
         /// Set constrained value.
         /// </summary>
+        /// <param name="constrained">Constrained value to set.</param>
         /// <returns>A new Option with constrained value set.</returns>
         public Option SetConstrained(XName constrained)
         {
             return new Option(Name, constrained, _properties, _scoredProperties);
         }
 
-        #endregion
-
-        #region Properties
-
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
+
         public IReadOnlyNamedElementCollection<Property> Properties
         {
             get { return _properties; }
         }
 
+        /// <summary>
+        /// Gets the value of the Property specified name. If no property found
+        /// throws exception.
+        /// </summary>
+        /// <param name="name">The name of Property to get the value.</param>
+        /// <returns>Value of the specified Property.</returns>
         public Value this[PropertyName name]
         {
             get
@@ -104,12 +106,26 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of the Property specified name. If no property found
+        /// returns null.
+        /// </summary>
+        /// <param name="name">The name of Property to get the value.</param>
+        /// <returns>
+        /// Value of the specified Property if found, otherwise null.
+        /// </returns>
         public Value Get(PropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _properties.Get(name)?.Value;
         }
 
+        /// <summary>
+        /// Sets the value to the Property specified name.
+        /// </summary>
+        /// <param name="name">The name of the Property to set value.</param>
+        /// <param name="value">The new value of the Property.</param>
+        /// <returns>The new instance with new Property value.</returns>
         public Option Set(PropertyName name, Value value)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -117,16 +133,24 @@ namespace Kip
             return new Option(Name, Constrained, _properties.SetItem(p), _scoredProperties);
         }
 
+        /// <summary>
+        /// Removes the Property specified name.
+        /// </summary>
+        /// <param name="name">The name of the Property to remove.</param>
+        /// <returns>The new instance not contained the Property.</returns>
         public Option Remove(PropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return new Option(Name, Constrained, _properties.Remove(name), _scoredProperties);
         }
 
-        #endregion
-
-        #region Nested properties
-
+        /// <summary>
+        /// Gets the value of the nested Property specified name. Throws
+        /// exception when specified Property not found.
+        /// </summary>
+        /// <param name="name1">The name of the Property.</param>
+        /// <param name="name2">The name of the nested Property.</param>
+        /// <returns>The value of nested Property.</returns>
         public Value this[PropertyName name1, PropertyName name2]
         {
             get
@@ -137,6 +161,14 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of the nested Property specified name.
+        /// </summary>
+        /// <param name="name1">The name of the Property.</param>
+        /// <param name="name2">The name of the nested Property.</param>
+        /// <returns>
+        /// The value of nested Property. If nested Property not found, returns null.
+        /// </returns>
         public Value Get(PropertyName name1, PropertyName name2)
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
@@ -144,6 +176,15 @@ namespace Kip
             return _properties.Get(name1)?.Get(name2);
         }
 
+        /// <summary>
+        /// Sets the value to the Property specified name.
+        /// </summary>
+        /// <param name="name1">The name of Property.</param>
+        /// <param name="name2">The name of nested Property.</param>
+        /// <param name="value">The value to set.</param>
+        /// <returns>
+        /// The new instance of <see cref="Property"/> with new nested Property set.
+        /// </returns>
         public Option Set(PropertyName name1, PropertyName name2, Value value)
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
@@ -153,17 +194,20 @@ namespace Kip
             return new Option(Name, Constrained, _properties.SetItem(p), _scoredProperties);
         }
 
-        #endregion
-
-        #region Scored properties
-
         private readonly ImmutableNamedElementCollection<ScoredProperty> _scoredProperties
             = ImmutableNamedElementCollection.CreateScoredPropertyCollection();
+
         public IReadOnlyNamedElementCollection<ScoredProperty> ScoredProperties
         {
             get { return _scoredProperties; }
         }
 
+        /// <summary>
+        /// Gets the value of <see cref="ScoredProperty"/> specified name. If
+        /// specified ScoredProperty not found, throws exception.
+        /// </summary>
+        /// <param name="name">The name of <see cref="ScoredProperty"/>.</param>
+        /// <returns>The value of specified ScoredProperty.</returns>
         public ValueOrParameterRef this[ScoredPropertyName name]
         {
             get
@@ -173,16 +217,25 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of <see cref="ScoredProperty"/> specified name.
+        /// </summary>
+        /// <param name="name">The name of <see cref="ScoredProperty"/>.</param>
+        /// <returns>
+        /// The value of specified ScoredProperty if found, otherwise return null.
+        /// </returns>
         public ValueOrParameterRef Get(ScoredPropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _scoredProperties.Get(name)?.ValueOrParameterRef;
         }
 
-        #endregion
-
-        #region Nested scored properties
-
+        /// <summary>
+        /// Gets the value of nested <see cref="ScoredProperty"/> specified name.
+        /// </summary>
+        /// <param name="name1">The name of <see cref="ScoredProperty"/>.</param>
+        /// <param name="name2">The name of nested <see cref="ScoredProperty"/>.</param>
+        /// <returns>The value of specified ScoredProperty.</returns>
         public ValueOrParameterRef this[ScoredPropertyName name1, ScoredPropertyName name2]
         {
             get
@@ -193,6 +246,12 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of nested <see cref="ScoredProperty"/> specified name.
+        /// </summary>
+        /// <param name="name1">The name of <see cref="ScoredProperty"/>.</param>
+        /// <param name="name2">The name of nested <see cref="ScoredProperty"/>.</param>
+        /// <returns>The value of specified ScoredProperty.</returns>
         public ValueOrParameterRef Get(ScoredPropertyName name1, ScoredPropertyName name2)
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
@@ -200,11 +259,10 @@ namespace Kip
             return _scoredProperties.Get(name1)?.Get(name2);
         }
 
-        #endregion
-
         /// <summary>
         /// Add the specified element to the <see cref="Option"/>.
         /// </summary>
+        /// <param name="element">The <see cref="Option"/> to add.</param>
         /// <returns>A new Option with the element added.</returns>
         public Option Add(Property element)
         {
@@ -214,6 +272,7 @@ namespace Kip
         /// <summary>
         /// Add the specified element to the <see cref="Option"/>.
         /// </summary>
+        /// <param name="element">The <see cref="ScoredProperty"/> to add.</param>
         /// <returns>A new Option with the element added.</returns>
         public Option Add(ScoredProperty element)
         {
@@ -222,7 +281,7 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Option);
+            return this.Equals(obj as Option);
         }
 
         public bool Equals(Option rhs)
@@ -252,32 +311,6 @@ namespace Kip
         public static bool operator !=(Option v1, Option v2)
         {
             return !(v1 == v2);
-        }
-    }
-
-    public sealed class OptionChild
-    {
-        private Element _holder;
-
-        private OptionChild(Element holder) { _holder = holder; }
-
-        internal void Apply(
-            Action<Property> onProperty,
-            Action<ScoredProperty> onScoredProperty)
-        {
-            _holder.Apply(
-                onProperty: onProperty,
-                onScoredProperty: onScoredProperty);
-        }
-
-        public static implicit operator OptionChild(Property element)
-        {
-            return new OptionChild(element);
-        }
-
-        public static implicit operator OptionChild(ScoredProperty element)
-        {
-            return new OptionChild(element);
         }
     }
 }
