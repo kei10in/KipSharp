@@ -45,6 +45,7 @@
     <Compile Include="DebugView.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Feature.cs" />
+    <Compile Include="Helper\CapabilitiesChild.cs" />
     <Compile Include="Helper\FeatureChild.cs" />
     <Compile Include="Helper\OptionChild.cs" />
     <Compile Include="Helper\ScoredPropertyChild.cs" />
