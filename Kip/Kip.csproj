@@ -49,6 +49,7 @@
     <Compile Include="Helper\FeatureChild.cs" />
     <Compile Include="Helper\OptionChild.cs" />
     <Compile Include="Helper\ScoredPropertyChild.cs" />
+    <Compile Include="Helper\TicketChild.cs" />
     <Compile Include="ImmutableNamedElementCollection.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Extensions.cs" />

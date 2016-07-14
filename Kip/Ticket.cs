@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
+using Kip.Helper;
 
 namespace Kip
 {
     /// <summary>
-    /// Represents a PrintTicket document defined in the Print Schema
-    /// Specification.
+    /// Represents a PrintTicket document defined in the Print Schema Specification.
     /// </summary>
     public sealed class Ticket : IEquatable<Ticket>
     {
-
-        #region Constructors
-
         /// <summary>
-        /// Constructs with children: <see cref="Feature"/>,
-        /// <see cref="ParameterInit"/> and/or <see cref="Property"/>.
+        /// Initializes a new instance of the <see cref="Ticket"/> class.
         /// </summary>
+        /// <param name="elements">The child elements.</param>
         public Ticket(params TicketChild[] elements)
         {
             var features = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
@@ -51,14 +46,9 @@ namespace Kip
             _declaredNamespaces = namespaceDeclarations;
         }
 
-        #endregion
-
-        #region Features
-
-        #region Top level features
-
         private readonly ImmutableNamedElementCollection<Feature> _features
             = ImmutableNamedElementCollection.CreateFeatureCollection();
+
         public IReadOnlyNamedElementCollection<Feature> Features()
         {
             return _features;
@@ -72,6 +62,7 @@ namespace Kip
                 return _features[name].Options();
             }
         }
+
         public IReadOnlyList<Option> this[FeatureName name1, FeatureName name2]
         {
             get
@@ -82,6 +73,11 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the Options containing the Feature specified name.
+        /// </summary>
+        /// <param name="name">The name of the Feature.</param>
+        /// <returns>The Options contained by the Feature specified name.</returns>
         public IReadOnlyList<Option> Get(FeatureName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -107,10 +103,12 @@ namespace Kip
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
 
-        #endregion
-
-        #region Nested Features
-
+        /// <summary>
+        /// Gets the Options containing the nested Feature specified name.
+        /// </summary>
+        /// <param name="name1">The name of the parent Feature.</param>
+        /// <param name="name2">The name of the nested Feature.</param>
+        /// <returns>The Options contained by the Feature specified name.</returns>
         public IReadOnlyList<Option> Get(FeatureName name1, FeatureName name2)
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
@@ -139,8 +137,6 @@ namespace Kip
             return new Ticket(_features.SetItem(ft), _parameters, _properties, _declaredNamespaces);
         }
 
-        #endregion
-
         private Option ToPrintTicketOption(Option option)
         {
             return option.Remove(Psk.DisplayName)
@@ -149,12 +145,9 @@ namespace Kip
                 .SetConstrained(null);
         }
 
-        #endregion
-
-        #region Parameters
-
         private readonly ImmutableNamedElementCollection<ParameterInit> _parameters
             = ImmutableNamedElementCollection.CreateParameterInitCollection();
+
         public IReadOnlyNamedElementCollection<ParameterInit> Parameters()
         {
             return _parameters;
@@ -169,6 +162,13 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of the <see cref="ParameterInit"/> specified name.
+        /// </summary>
+        /// <param name="name">The name of the <see cref="ParameterInit"/>.</param>
+        /// <returns>
+        /// The value of the <see cref="ParameterInit"/> specified name.
+        /// </returns>
         public Value Get(ParameterName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -176,10 +176,12 @@ namespace Kip
         }
 
         /// <summary>
-        /// Set a value to the ParameterInit specified by name.
+        /// Set a value to the <see cref="ParameterInit"/> specified by name.
         /// </summary>
-        /// <param name="name">The name of the ParameterInit to set.</param>
-        /// <param name="value">A value to set to the ParameterInit.</param>
+        /// <param name="name">
+        /// The name of the <see cref="ParameterInit"/> to set.
+        /// </param>
+        /// <param name="value">A value to set to the <see cref="ParameterInit"/>.</param>
         /// <returns>A new Ticket with the value set.</returns>
         public Ticket Set(ParameterName name, Value value)
         {
@@ -191,12 +193,9 @@ namespace Kip
             return new Ticket(_features, _parameters.SetItem(pi), _properties, _declaredNamespaces);
         }
 
-        #endregion
-
-        #region Properties
-
         private readonly ImmutableNamedElementCollection<Property> _properties
             = ImmutableNamedElementCollection.CreatePropertyCollection();
+
         public IReadOnlyNamedElementCollection<Property> Properties()
         {
             return _properties;
@@ -211,6 +210,11 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of the Property specified name.
+        /// </summary>
+        /// <param name="name">The name of the Property.</param>
+        /// <returns>The value of the Property specified name.</returns>
         public Value Get(PropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
@@ -218,7 +222,7 @@ namespace Kip
         }
 
         /// <summary>
-        /// Set a value to the Property specified by name.
+        /// Sets a value to the Property specified by name.
         /// </summary>
         /// <param name="name">The name of the Property to set.</param>
         /// <param name="value">A value to set to the Property.</param>
@@ -233,8 +237,6 @@ namespace Kip
             return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
         }
 
-        #region Nested properties
-
         public Value this[PropertyName name1, PropertyName name2]
         {
             get
@@ -246,6 +248,12 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Gets the value of the nested Property specified name.
+        /// </summary>
+        /// <param name="name1">The name of the parent Property.</param>
+        /// <param name="name2">The name of the nested Property.</param>
+        /// <returns>The value of the nested Property specified name.</returns>
         public Value Get(PropertyName name1, PropertyName name2)
         {
             if (name1 == null) throw new ArgumentNullException(nameof(name1));
@@ -256,8 +264,9 @@ namespace Kip
         /// <summary>
         /// Set a value to the Property specified by name.
         /// </summary>
-        /// <param name="name1">The name of the Property containing the nested
-        /// Property.</param>
+        /// <param name="name1">
+        /// The name of the Property containing the nested Property.
+        /// </param>
         /// <param name="name2">The name of the nested Property to set.</param>
         /// <param name="value">A value to set to the Property.</param>
         /// <returns>A new Ticket with the value set.</returns>
@@ -272,13 +281,8 @@ namespace Kip
             return new Ticket(_features, _parameters, _properties.SetItem(p), _declaredNamespaces);
         }
 
-        #endregion
-
-        #endregion
-
-        #region Namespace declarations
-
         private readonly NamespaceDeclarationCollection _declaredNamespaces;
+
         public IReadOnlyNamespaceDeclarationCollection DeclaredNamespaces
         {
             get { return _declaredNamespaces; }
@@ -293,11 +297,9 @@ namespace Kip
                 _declaredNamespaces.Add(declaration));
         }
 
-        #endregion
-
         public override bool Equals(object obj)
         {
-            return Equals(obj as Ticket);
+            return this.Equals(obj as Ticket);
         }
 
         public bool Equals(Ticket rhs)
@@ -329,6 +331,10 @@ namespace Kip
             return !(v1 == v2);
         }
 
+        /// <summary>
+        /// Outputs this Ticket to the specified <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream">The stream to output this PrintTicket document.</param>
         public void Save(System.IO.Stream stream)
         {
             using (var writer = XmlWriter.Create(stream))
@@ -337,6 +343,12 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Serialize this Ticket to a <see cref="System.IO.TextWriter"/>.
+        /// </summary>
+        /// <param name="textWriter">
+        /// The TextWrite that the Ticket will be written to.
+        /// </param>
         public void Save(System.IO.TextWriter textWriter)
         {
             using (var writer = XmlWriter.Create(textWriter))
@@ -345,11 +357,25 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Serialize this Ticket to an <see cref="XmlWriter"/>.
+        /// </summary>
+        /// <param name="writer">
+        /// The <see cref="XmlWriter"/> that the Ticket will be written to.
+        /// </param>
         public void Save(XmlWriter writer)
         {
             PrintSchemaWriter.Write(writer, this);
         }
 
+        /// <summary>
+        /// Create a new Ticket from a string.
+        /// </summary>
+        /// <param name="text">The string that contains PrintTicket document.</param>
+        /// <returns>
+        /// A <see cref="Ticket"/> populated from the string that contains
+        /// PrintTicket document.
+        /// </returns>
         public static Ticket Parse(string text)
         {
             using (var textReader = new System.IO.StringReader(text))
@@ -358,6 +384,14 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Creates a new Ticket instance from the data contained in the
+        /// specified stream.
+        /// </summary>
+        /// <param name="stream">The stream that contains the XML data.</param>
+        /// <returns>
+        /// A <see cref="Ticket"/> populated from the data contained in the stream.
+        /// </returns>
         public static Ticket Load(System.IO.Stream stream)
         {
             using (var reader = XmlReader.Create(stream))
@@ -366,6 +400,15 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Creates a new Ticket from a <see cref="System.IO.TextReader"/>.
+        /// </summary>
+        /// <param name="input">
+        /// The <see cref="System.IO.TextReader"/> that contains the PrintTicket document.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Ticket"/> containing the content of the specified <see cref="System.IO.TextReader"/>.
+        /// </returns>
         public static Ticket Load(System.IO.TextReader input)
         {
             using (var reader = XmlReader.Create(input))
@@ -374,46 +417,18 @@ namespace Kip
             }
         }
 
+        /// <summary>
+        /// Creates a new Ticket from the <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader">
+        /// The XmlReader that contains the PrintTicket document.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Ticket"/> containing the content of the specified <see cref="XmlReader"/>.
+        /// </returns>
         public static Ticket Load(XmlReader reader)
         {
             return PrintSchemaReader.ReadTicket(reader);
-        }
-    }
-
-    /// <summary>
-    /// Wrapper class that representing a child elements of the PrintTicket
-    /// document.
-    /// </summary>
-    public sealed class TicketChild
-    {
-        private Element _holder;
-
-        private TicketChild(Element holder) { _holder = holder; }
-
-        internal void Apply(
-            Action<Feature> onFeature,
-            Action<ParameterInit> onParameterInit,
-            Action<Property> onProperty)
-        {
-            _holder.Apply(
-                onFeature: onFeature,
-                onParameterInit: onParameterInit,
-                onProperty: onProperty);
-        }
-
-        public static implicit operator TicketChild(Feature element)
-        {
-            return new TicketChild(element);
-        }
-
-        public static implicit operator TicketChild(ParameterInit element)
-        {
-            return new TicketChild(element);
-        }
-
-        public static implicit operator TicketChild(Property element)
-        {
-            return new TicketChild(element);
         }
     }
 }
