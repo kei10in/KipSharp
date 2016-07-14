@@ -6,7 +6,7 @@ namespace Kip
 {
     /// <summary>
     /// Represents a ParameterInit element defined in the Print Schema
-    /// Specificaiton.
+    /// Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ParameterInit")]
     public sealed class ParameterInit : IEquatable<ParameterInit>

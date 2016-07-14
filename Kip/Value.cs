@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace Kip
 {
     /// <summary>
-    /// Represents a Value element defined in the Print Schema Specificaiton.
+    /// Represents a Value element defined in the Print Schema Specification.
     /// </summary>
     public sealed class Value : IEquatable<Value>
     {

@@ -8,7 +8,7 @@ namespace Kip
 {
     /// <summary>
     /// Represents a ScoredProeprty element defined in the Print Schema
-    /// Specificaiton.
+    /// Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ScoredProperty")]
     public sealed class ScoredProperty : IEquatable<ScoredProperty>

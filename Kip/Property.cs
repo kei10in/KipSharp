@@ -8,7 +8,7 @@ namespace Kip
 {
     /// <summary>
     /// Represents a Property element defined in the Print Schema
-    /// Specificaiton.
+    /// Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: Property")]
     public sealed class Property : IEquatable<Property>

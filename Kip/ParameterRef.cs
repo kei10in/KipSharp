@@ -6,7 +6,7 @@ namespace Kip
 {
     /// <summary>
     /// Represents a ParameterRef element defined in the Print Schema
-    /// Specificaiton.
+    /// Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ParameterRef")]
     public sealed class ParameterRef : IEquatable<ParameterRef>

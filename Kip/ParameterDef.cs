@@ -8,7 +8,7 @@ namespace Kip
 {
     /// <summary>
     /// Represents a ParameterDef element defined in the Print Schema
-    /// Specificaiton.
+    /// Specification.
     /// </summary>
     [DebuggerDisplay("{Name.LocalName}: ParameterDef")]
     public sealed class ParameterDef : IEquatable<ParameterDef>

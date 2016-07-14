@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace Kip
 {
     /// <summary>
-    /// Represents an Option element defined in the Print Schema Specificaiton.
+    /// Represents an Option element defined in the Print Schema Specification.
     /// </summary>
     public sealed class Option : IEquatable<Option>
     {
