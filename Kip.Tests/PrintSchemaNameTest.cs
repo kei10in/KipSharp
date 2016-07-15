@@ -4,7 +4,7 @@ namespace Kip.Tests
 {
     public class PrintSchemaNameTest
     {
-        PrintSchemaName basicValue = new PrintSchemaName(Exp.Namespace + "SomeName");
+        private PrintSchemaName basicValue = new PrintSchemaName(Exp.Namespace + "SomeName");
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameValueObject()
@@ -30,7 +30,6 @@ namespace Kip.Tests
             Assert.False(basicValue.Equals(nullReference));
 
             Assert.True(nullReference == null);
-            // Assert.True(nullReference.Equals(null));
         }
 
         [Fact]
@@ -44,7 +43,7 @@ namespace Kip.Tests
 
     public class FeatureNameTest
     {
-        FeatureName basicValue = new FeatureName(Exp.Namespace + "SomeName");
+        private FeatureName basicValue = new FeatureName(Exp.Namespace + "SomeName");
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameValueObject()
@@ -53,7 +52,6 @@ namespace Kip.Tests
             Assert.True(basicValue == sameValue);
             Assert.True(basicValue.Equals(sameValue));
         }
-
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameReference()
@@ -71,7 +69,6 @@ namespace Kip.Tests
             Assert.False(basicValue.Equals(nullReference));
 
             Assert.True(nullReference == null);
-            // Assert.True(nullReference.Equals(null));
         }
 
         [Fact]
@@ -85,7 +82,7 @@ namespace Kip.Tests
 
     public class ParameterNameTest
     {
-        ParameterName basicValue = new ParameterName(Exp.Namespace + "SomeName");
+        private ParameterName basicValue = new ParameterName(Exp.Namespace + "SomeName");
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameValueObject()
@@ -94,7 +91,6 @@ namespace Kip.Tests
             Assert.True(basicValue == sameValue);
             Assert.True(basicValue.Equals(sameValue));
         }
-
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameReference()
@@ -112,7 +108,6 @@ namespace Kip.Tests
             Assert.False(basicValue.Equals(nullReference));
 
             Assert.True(nullReference == null);
-            // Assert.True(nullReference.Equals(null));
         }
 
         [Fact]
@@ -126,7 +121,7 @@ namespace Kip.Tests
 
     public class ScoredPropertyNameTest
     {
-        ScoredPropertyName basicValue = new ScoredPropertyName(Exp.Namespace + "SomeName");
+        private ScoredPropertyName basicValue = new ScoredPropertyName(Exp.Namespace + "SomeName");
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameValueObject()
@@ -135,7 +130,6 @@ namespace Kip.Tests
             Assert.True(basicValue == sameValue);
             Assert.True(basicValue.Equals(sameValue));
         }
-
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameReference()
@@ -153,7 +147,6 @@ namespace Kip.Tests
             Assert.False(basicValue.Equals(nullReference));
 
             Assert.True(nullReference == null);
-            // Assert.True(nullReference.Equals(null));
         }
 
         [Fact]
@@ -167,7 +160,7 @@ namespace Kip.Tests
 
     public class PropertyNameTest
     {
-        PropertyName basicValue = new PropertyName(Exp.Namespace + "SomeName");
+        private PropertyName basicValue = new PropertyName(Exp.Namespace + "SomeName");
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameValueObject()
@@ -176,7 +169,6 @@ namespace Kip.Tests
             Assert.True(basicValue == sameValue);
             Assert.True(basicValue.Equals(sameValue));
         }
-
 
         [Fact]
         public void EqualsReturnTrueWhenCallsWithSameReference()
@@ -194,7 +186,6 @@ namespace Kip.Tests
             Assert.False(basicValue.Equals(nullReference));
 
             Assert.True(nullReference == null);
-            // Assert.True(nullReference.Equals(null));
         }
 
         [Fact]

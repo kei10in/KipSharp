@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Xunit;
-using static Kip.Tests.Utility;
 
 namespace Kip.Tests
 {
+    using static Kip.Tests.Utility;
+
     public class PrintSchemaReaderTests
     {
         [Fact]
@@ -119,7 +119,7 @@ namespace Kip.Tests
                       <psf:Value xsi:type='xsd:string'>some value</psf:Value>
                       <psf:ParameterRef name='exp:SomeParameter'></psf:ParameterRef>
                     </psf:ScoredProperty>
-                  </psf:Option>                  
+                  </psf:Option>
                 </psf:Feature>
                 <psf:ParameterDef name='exp:SomeParameter'></psf:ParameterDef>");
 

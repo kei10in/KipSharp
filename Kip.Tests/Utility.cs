@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Kip.Tests
@@ -18,6 +14,7 @@ namespace Kip.Tests
                 xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
                 xmlns:xsd='http://www.w3.org/2001/XMLSchema'
                 xmlns:exp='http://example.com/2015/printschemakeywords'>";
+
         private static readonly string PrintCapabilitiesFooter = "</psf:PrintCapabilities>";
 
         internal static string PrintCapabilitiesWith(string content)

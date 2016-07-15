@@ -3,7 +3,6 @@ using Xunit;
 
 namespace Kip.Tests
 {
-
     public class ValueTests
     {
         [Fact]

@@ -45,9 +45,9 @@ namespace Kip.Tests
             }
         }
 
-        readonly Ticket EmptyTicket = new Ticket();
-        readonly Option ISOA4 = new Option(Psk.ISOA4);
-        readonly Option NorthAmericaLetter = new Option(Psk.NorthAmericaLetter);
+        private readonly Ticket EmptyTicket = new Ticket();
+        private readonly Option ISOA4 = new Option(Psk.ISOA4);
+        private readonly Option NorthAmericaLetter = new Option(Psk.NorthAmericaLetter);
 
         [Fact]
         public void SetOption()

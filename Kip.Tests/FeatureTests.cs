@@ -31,38 +31,31 @@ namespace Kip.Tests
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature),
-                new Feature(Exp.OtherFeature)
-                ),
+                new Feature(Exp.OtherFeature)),
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature),
-                new Feature(Exp.SomeFeature, new Option("b"))
-                ),
+                new Feature(Exp.SomeFeature, new Option("b"))),
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature, new Option("b")),
-                new Feature(Exp.SomeFeature, new Option("c"))
-                ),
+                new Feature(Exp.SomeFeature, new Option("c"))),
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature),
-                new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty))
-                ),
+                new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty))),
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature, new Property(Exp.SomeProperty)),
-                new Feature(Exp.SomeFeature, new Property(Exp.OtherProperty))
-                ),
+                new Feature(Exp.SomeFeature, new Property(Exp.OtherProperty))),
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature),
-                new Feature(Exp.SomeFeature, new Feature(Exp.NestedFeature))
-                ),
+                new Feature(Exp.SomeFeature, new Feature(Exp.NestedFeature))),
 
             Tuple.Create(
                 new Feature(Exp.SomeFeature, new Feature(Exp.SomeFeature1)),
-                new Feature(Exp.SomeFeature, new Feature(Exp.SomeFeature2))
-                ),
+                new Feature(Exp.SomeFeature, new Feature(Exp.SomeFeature2))),
         };
 
         [Fact]

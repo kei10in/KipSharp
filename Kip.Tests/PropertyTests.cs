@@ -22,18 +22,15 @@ namespace Kip.Tests
             Tuple.Create<Property, Property>(null, null),
             Tuple.Create(
                 new Property(Exp.SomeProperty),
-                new Property(Exp.SomeProperty)
-                ),
+                new Property(Exp.SomeProperty)),
 
             Tuple.Create(
                 new Property(Exp.SomeProperty, 1),
-                new Property(Exp.SomeProperty, 1)
-                ),
+                new Property(Exp.SomeProperty, 1)),
 
             Tuple.Create(
                 new Property(Exp.SomeProperty, new Property(Exp.NestedProperty)),
-                new Property(Exp.SomeProperty, new Property(Exp.NestedProperty))
-                ),
+                new Property(Exp.SomeProperty, new Property(Exp.NestedProperty))),
         };
 
         [Fact]

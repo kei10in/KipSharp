@@ -9,8 +9,8 @@ namespace Kip.Tests
 {
     public class BasicPrintCapabilitiesReadingTests
     {
-        Capabilities _actual;
-        static readonly XNamespace PrivateNamespace = "http://schemas.microsoft.com/windows/printing/oemdriverpt/Printer";
+        private Capabilities _actual;
+        private static readonly XNamespace PrivateNamespace = "http://schemas.microsoft.com/windows/printing/oemdriverpt/Printer";
 
         public BasicPrintCapabilitiesReadingTests()
         {
@@ -25,27 +25,29 @@ namespace Kip.Tests
         [Fact]
         public void ReadFirstElement()
         {
-            // Structure is following:
-            // <psf:ParameterDef name="ns0000:PageDevmodeSnapshot">
-            //   <psf:Property name="psf:DataType">
-            //     <psf:Value xsi:type="xsd:QName">xsd:string</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psf:UnitType">
-            //     <psf:Value xsi:type="xsd:string">base64</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psf:DefaultValue">
-            //     <psf:Value xsi:type="xsd:string">SABlAGwAbABvACEAAAA=</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psf:Mandatory">
-            //     <psf:Value xsi:type="xsd:QName">psk:Optional</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psf:MinLength">
-            //     <psf:Value xsi:type="xsd:integer">0</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psf:MaxLength">
-            //     <psf:Value xsi:type="xsd:integer">174760</psf:Value>
-            //   </psf:Property>
-            // </psf:ParameterDef>
+            /*
+             Structure is following:
+             <psf:ParameterDef name="ns0000:PageDevmodeSnapshot">
+               <psf:Property name="psf:DataType">
+                 <psf:Value xsi:type="xsd:QName">xsd:string</psf:Value>
+               </psf:Property>
+               <psf:Property name="psf:UnitType">
+                 <psf:Value xsi:type="xsd:string">base64</psf:Value>
+               </psf:Property>
+               <psf:Property name="psf:DefaultValue">
+                 <psf:Value xsi:type="xsd:string">SABlAGwAbABvACEAAAA=</psf:Value>
+               </psf:Property>
+               <psf:Property name="psf:Mandatory">
+                 <psf:Value xsi:type="xsd:QName">psk:Optional</psf:Value>
+               </psf:Property>
+               <psf:Property name="psf:MinLength">
+                 <psf:Value xsi:type="xsd:integer">0</psf:Value>
+               </psf:Property>
+               <psf:Property name="psf:MaxLength">
+                 <psf:Value xsi:type="xsd:integer">174760</psf:Value>
+               </psf:Property>
+             </psf:ParameterDef>
+            */
 
             var parameter = _actual.Parameters[PrivateNamespace + "PageDevmodeSnapshot"];
             Assert.NotNull(parameter);
@@ -55,28 +57,30 @@ namespace Kip.Tests
         [Fact]
         public void ReadLastElement()
         {
-            // <psf:Property name="psk:PageImageableSize">
-            //   <psf:Property name="psk:ImageableSizeWidth">
-            //     <psf:Value xsi:type="xsd:integer">215900</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psk:ImageableSizeHeight">
-            //     <psf:Value xsi:type="xsd:integer">279400</psf:Value>
-            //   </psf:Property>
-            //   <psf:Property name="psk:ImageableArea">
-            //     <psf:Property name="psk:OriginWidth">
-            //       <psf:Value xsi:type="xsd:integer">6350</psf:Value>
-            //     </psf:Property>
-            //     <psf:Property name="psk:OriginHeight">
-            //       <psf:Value xsi:type="xsd:integer">1693</psf:Value>
-            //     </psf:Property>
-            //     <psf:Property name="psk:ExtentWidth">
-            //       <psf:Value xsi:type="xsd:integer">203200</psf:Value>
-            //     </psf:Property>
-            //     <psf:Property name="psk:ExtentHeight">
-            //       <psf:Value xsi:type="xsd:integer">264837</psf:Value>
-            //     </psf:Property>
-            //   </psf:Property>
-            // </psf:Property>
+            /*
+             <psf:Property name="psk:PageImageableSize">
+               <psf:Property name="psk:ImageableSizeWidth">
+                 <psf:Value xsi:type="xsd:integer">215900</psf:Value>
+               </psf:Property>
+               <psf:Property name="psk:ImageableSizeHeight">
+                 <psf:Value xsi:type="xsd:integer">279400</psf:Value>
+               </psf:Property>
+               <psf:Property name="psk:ImageableArea">
+                 <psf:Property name="psk:OriginWidth">
+                   <psf:Value xsi:type="xsd:integer">6350</psf:Value>
+                 </psf:Property>
+                 <psf:Property name="psk:OriginHeight">
+                   <psf:Value xsi:type="xsd:integer">1693</psf:Value>
+                 </psf:Property>
+                 <psf:Property name="psk:ExtentWidth">
+                   <psf:Value xsi:type="xsd:integer">203200</psf:Value>
+                 </psf:Property>
+                 <psf:Property name="psk:ExtentHeight">
+                   <psf:Value xsi:type="xsd:integer">264837</psf:Value>
+                 </psf:Property>
+               </psf:Property>
+             </psf:Property>
+            */
 
             var property = _actual.Properties[Psk.PageImageableSize];
             Assert.NotNull(property);

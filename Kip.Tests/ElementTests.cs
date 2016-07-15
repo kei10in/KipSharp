@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Xunit;
+﻿using Xunit;
 
 namespace Kip.Tests
 {
