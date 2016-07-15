@@ -1,15 +1,12 @@
-﻿using ReactiveUI;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Printing;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace Kip.Sample
 {
-    class PrintSettingsViewModel : ReactiveObject
+    internal class PrintSettingsViewModel : ReactiveObject
     {
         private Ticket printTicket;
 
@@ -78,6 +75,7 @@ namespace Kip.Sample
         }
 
         private MediaSizeViewModel _mediaSize;
+
         public MediaSizeViewModel MediaSize
         {
             get { return _mediaSize; }
@@ -85,11 +83,15 @@ namespace Kip.Sample
         }
 
         public string CopiesDisplayName { get; }
+
         public int CopiesMax { get; }
+
         public int CopiesMin { get; }
+
         public int CopiesMultiple { get; }
 
         private int _copies;
+
         public int Copies
         {
             get { return _copies; }
@@ -97,6 +99,7 @@ namespace Kip.Sample
         }
 
         public ReactiveCommand<object> IncreaseCopies { get; }
+
         public ReactiveCommand<object> DecreaseCopies { get; }
     }
 }
