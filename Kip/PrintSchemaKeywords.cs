@@ -580,4 +580,3 @@ namespace Kip
         public static readonly ParameterName DocumentBindingGutter = new ParameterName(Namespace + "DocumentBindingGutter");
     }
 }
-

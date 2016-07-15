@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Xml;
@@ -88,6 +87,7 @@ namespace Kip
             {
                 return null;
             }
+
             var prefix = (reader.LocalName == "xmlns") ? string.Empty : reader.LocalName;
             var uri = reader.Value;
             return new NamespaceDeclaration(prefix, uri);
@@ -256,7 +256,8 @@ namespace Kip
         {
             XName type = null;
 
-            if (reader.MoveToFirstAttribute())  // Read value type
+            // Read value type
+            if (reader.MoveToFirstAttribute())
             {
                 do
                 {
@@ -321,13 +322,18 @@ namespace Kip
     {
         private readonly ImmutableNamedElementCollection<Feature>.Builder _features
             = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
+
         private readonly ImmutableNamedElementCollection<ParameterDef>.Builder _parameters
             = ImmutableNamedElementCollection.CreateParameterDefCollectionBuilder();
+
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+
         private List<NamespaceDeclaration> _namespaceDeclarations;
 
-        public PrintSchemaCapabilities() { }
+        public PrintSchemaCapabilities()
+        {
+        }
 
         public void Add(Element element)
         {
@@ -359,13 +365,18 @@ namespace Kip
     {
         private readonly ImmutableNamedElementCollection<Feature>.Builder _features
             = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
+
         private readonly ImmutableNamedElementCollection<ParameterInit>.Builder _parameters
             = ImmutableNamedElementCollection.CreateParameterInitCollectionBuilder();
+
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+
         private List<NamespaceDeclaration> _namespaceDeclarations;
 
-        public PrintSchemaTicket() { }
+        public PrintSchemaTicket()
+        {
+        }
 
         public void Add(Element element)
         {
@@ -395,11 +406,14 @@ namespace Kip
 
     internal class PrintSchemaFeature : PrintSchemaElement
     {
-        private FeatureName _name;
+        private readonly FeatureName _name;
+
         private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+
         private readonly ImmutableList<Option>.Builder _options
             = ImmutableList.CreateBuilder<Option>();
+
         private readonly ImmutableNamedElementCollection<Feature>.Builder _features
             = ImmutableNamedElementCollection.CreateFeatureCollectionBuilder();
 
@@ -428,11 +442,13 @@ namespace Kip
 
     internal class PrintSchemaOption : PrintSchemaElement
     {
-        private XName _name;
-        private XName _constrained;
-        private ImmutableNamedElementCollection<Property>.Builder _properties
+        private readonly XName _name;
+        private readonly XName _constrained;
+
+        private readonly ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
-        private ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
+
+        private readonly ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
             = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
 
         public PrintSchemaOption(XName name, XName constrained)
@@ -461,6 +477,7 @@ namespace Kip
     internal class PrintSchemaParameterDef : PrintSchemaElement
     {
         private ParameterName _name;
+
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
@@ -472,7 +489,6 @@ namespace Kip
         public void Add(Element element)
         {
             element.Apply(onProperty: x => _properties.Add(x));
-
         }
 
         public Element GetResult()
@@ -526,6 +542,7 @@ namespace Kip
     {
         private PropertyName _name;
         private Value _value;
+
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
 
@@ -553,8 +570,10 @@ namespace Kip
         private ScoredPropertyName _name;
         private Value _value;
         private ParameterRef _parameterRef;
+
         private ImmutableNamedElementCollection<Property>.Builder _properties
             = ImmutableNamedElementCollection.CreatePropertyCollectionBuilder();
+
         private ImmutableNamedElementCollection<ScoredProperty>.Builder _scoredProperties
             = ImmutableNamedElementCollection.CreateScoredPropertyCollectionBuilder();
 

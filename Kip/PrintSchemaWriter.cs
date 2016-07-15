@@ -125,6 +125,7 @@ namespace Kip
                     prefix = string.Format("ns{0:0000}", n);
                     n += 1;
                 }
+
                 result.Add(new NamespaceDeclaration(prefix, uri));
             }
 
@@ -261,7 +262,6 @@ namespace Kip
         }
     }
 
-
     internal static class NamespaceCollector
     {
         internal static HashSet<XNamespace> Collect(Capabilities pc)
@@ -270,6 +270,7 @@ namespace Kip
             Collect(result, pc);
             return result;
         }
+
         internal static HashSet<XNamespace> Collect(Ticket pt)
         {
             var result = new HashSet<XNamespace>();

@@ -13,7 +13,7 @@ namespace Kip
         {
             if (namedElementCollection == null)
             {
-                throw new ArgumentNullException("namedElementCollection");
+                throw new ArgumentNullException(nameof(namedElementCollection));
             }
 
             nec = namedElementCollection;

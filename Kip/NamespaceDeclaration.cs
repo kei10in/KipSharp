@@ -6,6 +6,7 @@ namespace Kip
     public sealed class NamespaceDeclaration : IEquatable<NamespaceDeclaration>
     {
         public string Prefix { get; }
+
         public XNamespace Uri { get; }
 
         public NamespaceDeclaration(string prefix, XNamespace uri)
@@ -16,7 +17,7 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as NamespaceDeclaration);
+            return this.Equals(obj as NamespaceDeclaration);
         }
 
         public bool Equals(NamespaceDeclaration rhs)

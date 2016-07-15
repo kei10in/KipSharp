@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Kip
@@ -35,7 +31,7 @@ namespace Kip
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as PrintSchemaName);
+            return this.Equals(obj as PrintSchemaName);
         }
 
         public bool Equals(PrintSchemaName rhs)
@@ -69,11 +65,13 @@ namespace Kip
 
     public class FeatureName : PrintSchemaName, IEquatable<FeatureName>
     {
-        public FeatureName(XName name) : base(name) { }
+        public FeatureName(XName name) : base(name)
+        {
+        }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as FeatureName);
+            return this.Equals(obj as FeatureName);
         }
 
         public bool Equals(FeatureName rhs)
@@ -85,7 +83,7 @@ namespace Kip
 
         public override int GetHashCode()
         {
-            return GetHashCode();
+            return base.GetHashCode();
         }
 
         public static bool operator ==(FeatureName lhs, FeatureName rhs)
@@ -106,11 +104,13 @@ namespace Kip
 
     public class ParameterName : PrintSchemaName, IEquatable<ParameterName>
     {
-        public ParameterName(XName name) : base(name) { }
+        public ParameterName(XName name) : base(name)
+        {
+        }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ParameterName);
+            return this.Equals(obj as ParameterName);
         }
 
         public bool Equals(ParameterName rhs)
@@ -143,11 +143,13 @@ namespace Kip
 
     public class ScoredPropertyName : PrintSchemaName, IEquatable<ScoredPropertyName>
     {
-        public ScoredPropertyName(XName name) : base(name) { }
+        public ScoredPropertyName(XName name) : base(name)
+        {
+        }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as ScoredPropertyName);
+            return this.Equals(obj as ScoredPropertyName);
         }
 
         public bool Equals(ScoredPropertyName rhs)
@@ -180,11 +182,13 @@ namespace Kip
 
     public class PropertyName : PrintSchemaName, IEquatable<PropertyName>
     {
-        public PropertyName(XName name) : base(name) { }
+        public PropertyName(XName name) : base(name)
+        {
+        }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as PropertyName);
+            return this.Equals(obj as PropertyName);
         }
 
         public bool Equals(PropertyName rhs)
@@ -205,6 +209,7 @@ namespace Kip
             {
                 return (object)v2 == null;
             }
+
             return v1.Equals(v2);
         }
 
@@ -213,5 +218,4 @@ namespace Kip
             return !(v1 == v2);
         }
     }
-
 }

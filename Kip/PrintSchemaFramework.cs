@@ -22,6 +22,7 @@ namespace Kip
 
         // Property for Feature
         public static readonly PropertyName SelectionType = new PropertyName(Namespace + "SelectionType");
+
         // Property for Option
         public static readonly PropertyName IdentityOption = new PropertyName(Namespace + "IdentityOpiton");
 
@@ -35,6 +36,5 @@ namespace Kip
         public static readonly PropertyName Multiple = new PropertyName(Namespace + "Multiple");
         public static readonly PropertyName Mandatory = new PropertyName(Namespace + "Mandatory");
         public static readonly PropertyName UnitType = new PropertyName(Namespace + "UnitType");
-
     }
 }

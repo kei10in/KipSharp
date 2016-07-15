@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Kip
@@ -48,7 +44,7 @@ namespace Kip
 
         public ParameterRef AsParamterRef()
         {
-            return _content as ParameterRef; ;
+            return _content as ParameterRef;
         }
     }
 }
