@@ -53,7 +53,7 @@ namespace Kip.Tests
         public void SetOption()
         {
             var pt = EmptyTicket.Set(Psk.PageMediaSize, ISOA4);
-            var op = pt[Psk.PageMediaSize];
+            var op = pt.Get(Psk.PageMediaSize);
             Assert.NotNull(op);
             Assert.Equal(1, op.Count);
             Assert.Equal(Psk.ISOA4, op[0].Name);
@@ -65,7 +65,7 @@ namespace Kip.Tests
             var pt = EmptyTicket.Set(Psk.PageMediaSize, ISOA4);
 
             var overwitten = pt.Set(Psk.PageMediaSize, NorthAmericaLetter);
-            var op = overwitten[Psk.PageMediaSize];
+            var op = overwitten.Get(Psk.PageMediaSize);
             Assert.NotNull(op);
             Assert.Equal(1, op.Count);
             Assert.Equal(Psk.NorthAmericaLetter, op[0].Name);
@@ -76,7 +76,7 @@ namespace Kip.Tests
         {
             var pd = new Option(Psk.LeftBottom);
             var pt = EmptyTicket.Set(Psk.JobNUpAllDocumentsContiguously, Psk.PresentationDirection, pd);
-            var op = pt[Psk.JobNUpAllDocumentsContiguously, Psk.PresentationDirection];
+            var op = pt.Get(Psk.JobNUpAllDocumentsContiguously, Psk.PresentationDirection);
             Assert.NotNull(op);
             Assert.Equal(1, op.Count);
             Assert.Equal(Psk.LeftBottom, op[0].Name);
@@ -86,7 +86,7 @@ namespace Kip.Tests
         public void SetValueToParameter()
         {
             var pt = EmptyTicket.Set(Psk.JobCopiesAllDocuments, 2);
-            var copies = pt[Psk.JobCopiesAllDocuments];
+            var copies = pt.Get(Psk.JobCopiesAllDocuments);
             Assert.NotNull(copies);
             Assert.Equal(copies, 2);
         }
@@ -97,7 +97,7 @@ namespace Kip.Tests
             var pt = EmptyTicket.Set(Psk.JobCopiesAllDocuments, 2);
 
             var overwitten = pt.Set(Psk.JobCopiesAllDocuments, 3);
-            var copies = overwitten[Psk.JobCopiesAllDocuments];
+            var copies = overwitten.Get(Psk.JobCopiesAllDocuments);
             Assert.NotNull(copies);
             Assert.Equal(copies, 3);
         }
@@ -106,7 +106,7 @@ namespace Kip.Tests
         public void SetValueToProperty()
         {
             var pt = EmptyTicket.Set(Psk.JobID, "Some job name");
-            var prop = pt[Psk.JobID];
+            var prop = pt.Get(Psk.JobID);
             Assert.NotNull(prop);
             Assert.Equal(prop, "Some job name");
         }
@@ -117,7 +117,7 @@ namespace Kip.Tests
             var pt = EmptyTicket.Set(Psk.JobID, "Some job name");
 
             var overwitten = pt.Set(Psk.JobCopiesAllDocuments, "New job name");
-            var prop = overwitten[Psk.JobCopiesAllDocuments];
+            var prop = overwitten.Get(Psk.JobCopiesAllDocuments);
             Assert.NotNull(prop);
             Assert.Equal(prop, "New job name");
         }

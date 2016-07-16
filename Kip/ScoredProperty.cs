@@ -104,15 +104,6 @@ namespace Kip
             get { return _scoredProperties; }
         }
 
-        public ValueOrParameterRef this[ScoredPropertyName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _scoredProperties[name].ValueOrParameterRef;
-            }
-        }
-
         public ValueOrParameterRef Get(ScoredPropertyName name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));

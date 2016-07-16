@@ -74,21 +74,6 @@ namespace Kip
         }
 
         /// <summary>
-        /// Gets the value of the Property specified name. Throws exception when
-        /// the Property specified name is not found.
-        /// </summary>
-        /// <param name="name">The name of the Property.</param>
-        /// <returns>The value of the Property.</returns>
-        public Value this[PropertyName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _properties[name].Value;
-            }
-        }
-
-        /// <summary>
         /// Gets the value of the Property specified name. Returns null when the
         /// Property specified name is not found.
         /// </summary>
@@ -118,22 +103,6 @@ namespace Kip
                 ?? new Property(name, value);
 
             return new Feature(Name, _properties.SetItem(p), _options, _features);
-        }
-
-        /// <summary>
-        /// Gets a value of the nested Property specified name.
-        /// </summary>
-        /// <param name="name1">The name of Property.</param>
-        /// <param name="name2">The name of nested Property.</param>
-        /// <returns>The value of nested Property.</returns>
-        public Value this[PropertyName name1, PropertyName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _properties[name1][name2];
-            }
         }
 
         /// <summary>
@@ -214,16 +183,6 @@ namespace Kip
         /// </summary>
         /// <param name="name">The name of the nested <see cref="Feature"/>.</param>
         /// <returns>The Feature specified name.</returns>
-        public Feature this[FeatureName name]
-        {
-            get { return _features[name]; }
-        }
-
-        /// <summary>
-        /// Gets the nested <see cref="Feature"/>.
-        /// </summary>
-        /// <param name="name">The name of the nested <see cref="Feature"/>.</param>
-        /// <returns>The Feature specified name.</returns>
         public Feature Get(FeatureName name)
         {
             return _features.Get(name);
@@ -261,23 +220,6 @@ namespace Kip
             if (ft == null) return this;
 
             return new Feature(Name, _properties, _options, _features.SetItem(ft));
-        }
-
-        /// <summary>
-        /// The value of the Property of the nested Feature specified name.
-        /// </summary>
-        /// <param name="name1">The name of nested Feature.</param>
-        /// <param name="name2">The name of Property.</param>
-        /// <returns>The value of the Property of the nested Feature.</returns>
-        public Value this[FeatureName name1, PropertyName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-
-                return _features[name1][name2];
-            }
         }
 
         /// <summary>

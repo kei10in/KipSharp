@@ -49,21 +49,6 @@ namespace Kip
 
         /// <summary>
         /// Returns a property for a given name if exists in the element,
-        /// otherwise throws exception.
-        /// </summary>
-        /// <param name="name">The name to search for.</param>
-        /// <returns>The property with name if find, otherwise null.</returns>
-        public Value this[PropertyName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _properties[name].Value;
-            }
-        }
-
-        /// <summary>
-        /// Returns a property for a given name if exists in the element,
         /// otherwise returns null.
         /// </summary>
         /// <param name="name">The name to search for.</param>

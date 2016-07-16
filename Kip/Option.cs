@@ -93,21 +93,6 @@ namespace Kip
 
         /// <summary>
         /// Gets the value of the Property specified name. If no property found
-        /// throws exception.
-        /// </summary>
-        /// <param name="name">The name of Property to get the value.</param>
-        /// <returns>Value of the specified Property.</returns>
-        public Value this[PropertyName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _properties[name].Value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the value of the Property specified name. If no property found
         /// returns null.
         /// </summary>
         /// <param name="name">The name of Property to get the value.</param>
@@ -142,23 +127,6 @@ namespace Kip
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return new Option(Name, Constrained, _properties.Remove(name), _scoredProperties);
-        }
-
-        /// <summary>
-        /// Gets the value of the nested Property specified name. Throws
-        /// exception when specified Property not found.
-        /// </summary>
-        /// <param name="name1">The name of the Property.</param>
-        /// <param name="name2">The name of the nested Property.</param>
-        /// <returns>The value of nested Property.</returns>
-        public Value this[PropertyName name1, PropertyName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _properties[name1][name2];
-            }
         }
 
         /// <summary>
@@ -203,21 +171,6 @@ namespace Kip
         }
 
         /// <summary>
-        /// Gets the value of <see cref="ScoredProperty"/> specified name. If
-        /// specified ScoredProperty not found, throws exception.
-        /// </summary>
-        /// <param name="name">The name of <see cref="ScoredProperty"/>.</param>
-        /// <returns>The value of specified ScoredProperty.</returns>
-        public ValueOrParameterRef this[ScoredPropertyName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _scoredProperties[name].ValueOrParameterRef;
-            }
-        }
-
-        /// <summary>
         /// Gets the value of <see cref="ScoredProperty"/> specified name.
         /// </summary>
         /// <param name="name">The name of <see cref="ScoredProperty"/>.</param>
@@ -228,22 +181,6 @@ namespace Kip
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _scoredProperties.Get(name)?.ValueOrParameterRef;
-        }
-
-        /// <summary>
-        /// Gets the value of nested <see cref="ScoredProperty"/> specified name.
-        /// </summary>
-        /// <param name="name1">The name of <see cref="ScoredProperty"/>.</param>
-        /// <param name="name2">The name of nested <see cref="ScoredProperty"/>.</param>
-        /// <returns>The value of specified ScoredProperty.</returns>
-        public ValueOrParameterRef this[ScoredPropertyName name1, ScoredPropertyName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _scoredProperties[name1][name2];
-            }
         }
 
         /// <summary>

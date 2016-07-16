@@ -53,15 +53,6 @@ namespace Kip
             get { return _features; }
         }
 
-        public Feature this[FeatureName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _features[name];
-            }
-        }
-
         /// <summary>
         /// Gets the Feature specified name.
         /// </summary>
@@ -70,16 +61,6 @@ namespace Kip
         public Feature Get(FeatureName name)
         {
             return _features.Get(name);
-        }
-
-        public Feature this[FeatureName name1, FeatureName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-                return _features[name1].Features[name2];
-            }
         }
 
         /// <summary>
@@ -172,15 +153,6 @@ namespace Kip
             get { return _parameters; }
         }
 
-        public ParameterDef this[ParameterName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _parameters[name];
-            }
-        }
-
         /// <summary>
         /// Gets the <see cref="ParameterDef"/> specified name.
         /// </summary>
@@ -200,15 +172,6 @@ namespace Kip
             get { return _properties; }
         }
 
-        public Value this[PropertyName name]
-        {
-            get
-            {
-                if (name == null) throw new ArgumentNullException(nameof(name));
-                return _properties[name].Value;
-            }
-        }
-
         /// <summary>
         /// Gets the value of the Property specified name.
         /// </summary>
@@ -218,17 +181,6 @@ namespace Kip
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             return _properties.Get(name)?.Value;
-        }
-
-        public Value this[PropertyName name1, PropertyName name2]
-        {
-            get
-            {
-                if (name1 == null) throw new ArgumentNullException(nameof(name1));
-                if (name2 == null) throw new ArgumentNullException(nameof(name2));
-
-                return _properties[name1][name2];
-            }
         }
 
         /// <summary>
