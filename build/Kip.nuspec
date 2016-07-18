@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Kip</id>
+    <version>0.1.0</version>
+    <title>Kip: PrintSchema library for .NET Framework</title>
+    <authors>kei10in</authors>
+    <owners>kei10in</owners>
+    <licenseUrl>https://github.com/kei10in/KipSharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/kei10in/KipSharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>Print Schema Library</summary>
+    <description>Kip is the Print Schema library to handle the PrintTicket document and the PrintCapabilities documents.</description>
+    <tags>Print Printing PrintSchema PrintTicket PrintCapabilities</tags>
+    <dependencies>
+      <dependency id="System.Collections.Immutable" version="1.2.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin/Kip.dll" target="lib/netstandard1.1" />
+  </files>
+</package>
