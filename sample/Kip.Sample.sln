@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kip", "Kip\Kip.csproj", "{81D77FC2-4E63-4991-BC20-0A6FD744FD93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kip.Sample", "Kip.Sample\Kip.Sample.csproj", "{5D3502E6-FC9A-4BA4-A3A3-15FDC177CB4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kip.Tests", "Kip.Tests\Kip.Tests.csproj", "{FB881285-BD91-4846-89F9-ECC785A3129A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kip", "..\src\Kip\Kip.csproj", "{81D77FC2-4E63-4991-BC20-0A6FD744FD93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D3502E6-FC9A-4BA4-A3A3-15FDC177CB4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3502E6-FC9A-4BA4-A3A3-15FDC177CB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3502E6-FC9A-4BA4-A3A3-15FDC177CB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3502E6-FC9A-4BA4-A3A3-15FDC177CB4E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81D77FC2-4E63-4991-BC20-0A6FD744FD93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81D77FC2-4E63-4991-BC20-0A6FD744FD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81D77FC2-4E63-4991-BC20-0A6FD744FD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81D77FC2-4E63-4991-BC20-0A6FD744FD93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB881285-BD91-4846-89F9-ECC785A3129A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB881285-BD91-4846-89F9-ECC785A3129A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB881285-BD91-4846-89F9-ECC785A3129A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB881285-BD91-4846-89F9-ECC785A3129A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
