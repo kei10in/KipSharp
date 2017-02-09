@@ -12,9 +12,9 @@ Handle PrintCapabilities and PrintTicket documents on .NET Framework.
 using Kip;
 
 var pc = Capabiliites.Load(inputStream);
-var options = for op in Feature(Psf.PageMediaSize).Options()
+var options = for op in pc.Get(Psf.PageMediaSize).Options()
 var displayNames = for op in options
-                   select op.Property(Psk.DisplayName).Value.AsStirng();
+                   select op.Property(Psk.DisplayName).Value.AsString();
 ```
 
 ### Set option to Print Ticket document
